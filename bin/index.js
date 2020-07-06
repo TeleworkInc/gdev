@@ -46,7 +46,7 @@ const PROJECT_NAME = path.basename(CWD);
 
 console.log('\n')
 console.log(chalk.blueBright(
-    `${PROJECT_NAME}    |    Source Tree`,
+    `    ${PROJECT_NAME}   [source tree]`,
     LINE,
     TREE,
     '\n',

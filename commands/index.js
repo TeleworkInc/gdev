@@ -1,5 +1,6 @@
 const chokidar = require('chokidar');
 const fs = require('fs');
+const sha256 = require('js-sha256');
 const process = require('process');
 const touch = require('touch');
 const path = require('path');
