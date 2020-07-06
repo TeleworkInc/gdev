@@ -1,11 +1,19 @@
 const chokidar = require('chokidar');
 const fs = require('fs');
+const process = require('process');
 const touch = require('touch');
 const path = require('path');
 const chalk = require('chalk');
 const npm = require('npm');
 
-const checkProject = (dir) => fs.existsSync(path.resolve(dir, '.gproj'));
+/**
+ * Bail out if not inside a project directory.
+ */
+const insideProject = () => fs.existsSync(
+    path.resolve(process.cwd(), '.gproj')
+);
+
+const CWD = process.cwd();
 
 /**
  * Slightly stylized logging utils. 
@@ -42,7 +50,7 @@ const introTemplate = `
  */
 const PRODUCTION = false;
 
-console.log('Hello world!');
+console.log('Welcome to GProject!');
 `;
 
 const createProject = (rootDir) => {
@@ -103,52 +111,59 @@ const callCompiler = (...customFlags) => npm.load(
 /**
  * Public functions.
  */
+
 const create = (name) => {
     const abs = path.resolve(name);
 
-    if (fs.existsSync(abs))
+    if (!insideProject())
+        return error('Directory is not a gproject workspace.');
+
+    else if (fs.existsSync(abs))
         error('File or directory already exists.');
-        
-    else createProject(abs); 
+
+    else createProject(abs);
 }
 
-const develop = (dir = '.', program) => {
-    dir = path.resolve(dir);
+const develop = (program) => {
 
-    if (!checkProject(dir))
+    if (!insideProject())
         return error('Directory is not a gproject workspace.');
-        
+
     chokidar.watch(
-        `${dir}/src/**.js`).on('all', 
+        `${CWD}/src/**/*.js`,
+        {
+            ignoreInitial: true
+        }
+    ).on('all',
         (event, path) => {
             console.log('Building dev bundle...');
-            compile(dir, { dev: true });
+            compile(program);
         }
     );
 }
 
-const compile = (dir = '.', program) => {
-    dir = path.resolve(dir);
+const compile = (program) => {
 
-    if (!checkProject(dir))
+    if (!insideProject())
         return error('Directory is not a gproject workspace.');
 
-    else if (program.dev)
-        callCompiler(
-            ...devFlags,
-            `--js="${dir}/src/**.js"`,
-            `--js_output_file="${dir}/.build/dev.js"`,
-        );
+    console.log('Building development freeze...');
+    callCompiler(
+        ...devFlags,
+        `--js="${CWD}/src/**.js"`,
+        `--js_output_file="${CWD}/.build/dev.js"`,
+    );
 
-    else 
-        callCompiler(
-            ...releaseFlags,
-            `--js="${dir}/src/**.js"`,
-            `--js_output_file="${dir}/.build/compiled.js"`,
-        );
+    console.log('Building release freeze...');
+    callCompiler(
+        ...releaseFlags,
+        `--js="${CWD}/src/**.js"`,
+        `--js_output_file="${CWD}/.build/compiled.js"`,
+    );
 }
 
 module.exports = {
+    insideProject,
     create,
     compile,
     develop,

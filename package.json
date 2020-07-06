@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/TeleworkInc/gproject#readme",
   "dependencies": {
+    "ascii-file-tree": "^1.2.2",
     "chalk": "^4.1.0",
     "chokidar": "^3.4.0",
     "commander": "^5.1.0",

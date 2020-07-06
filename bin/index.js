@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 const { program } = require('commander');
+const path = require('path');
+const aft = require('ascii-file-tree');
+
 const chalk = require('chalk');
 const figlet = require('figlet');
 
@@ -7,17 +10,11 @@ const figlet = require('figlet');
  * Imports from index.js.
  */
 const {
+    insideProject,
     create,
     compile,
     develop,
 } = require('..');
-
-/**
- * Obligatory h4x0r l33t intro.
- */
-console.log(chalk.blueBright(
-    figlet.textSync('gproject'), '\n'
-));
 
 /**
  * Define commands and assign actions to them.
@@ -28,15 +25,32 @@ program
     .action(create);
 
 program
-    .command('develop [directory]')
+    .command('develop')
     .description('Start the workspace in development mode.')
     .action(develop);
 
 program
-    .command('compile [directory]')
-    .option('-d, --dev')
-    .description('Compile the distribution file for this workspace.')
+    .command('compile')
+    .description('Compile this workspace and output in [.build].')
     .action(compile);
+
+const LINE = `\n${'-'.repeat(32)}\n`;
+const TREE = insideProject()
+    ? aft.generate({
+        globs: ['src/**/*.js']
+    })
+    : '';
+
+const CWD = process.cwd();
+const PROJECT_NAME = path.basename(CWD);
+
+console.log('\n')
+console.log(chalk.blueBright(
+    `${PROJECT_NAME}    |    Source Tree`,
+    LINE,
+    TREE,
+    '\n',
+));
 
 /**
  * Parse process arguments.
