@@ -5,6 +5,7 @@
   "main": "commands/index.js",
   "bin": "bin/index.js",
   "scripts": {
+    "compiler": "google-closure-compiler",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

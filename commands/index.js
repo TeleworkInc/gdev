@@ -2,6 +2,7 @@ const fs = require('fs');
 const touch = require('touch');
 const path = require('path');
 const chalk = require('chalk');
+const npm = require('npm');
 
 /**
  * Slightly stylized logging utils. 
@@ -32,11 +33,11 @@ const error = (...msgs) => console.log(
 const createProject = (rootDir) => {
 
     const srcDir = path.resolve(rootDir, 'src');
-    const buildDir = path.resolve(rootDir, 'build');
+    const compileDir = path.resolve(rootDir, 'compile');
 
     fs.mkdirSync(rootDir);
     fs.mkdirSync(srcDir);
-    fs.mkdirSync(buildDir);
+    fs.mkdirSync(compileDir);
 
     fs.writeFileSync(
         path.resolve(srcDir, 'index.js'),
@@ -68,18 +69,18 @@ const
     ],
 
     releaseFlags = [
-        '-O ADVANCED',
-        '--language_out ECMASCRIPT5_STRICT',
-        '--define PRODUCTION=true',
-        '--isolation_mode IIFE',
+        '-O=ADVANCED',
+        '--language_out=ECMASCRIPT5_STRICT',
+        '--define="PRODUCTION=true"',
+        '--isolation_mode=IIFE',
         '--assume_function_wrapper',
     ];
 
 /**
  * Public functions.
  */
-const build = () => {
-    console.log('Hello world!');
+const compile = () => {
+    npm.load(() => npm.run('compiler', ...releaseFlags));
 }
 
 const create = (name) => {
@@ -104,5 +105,5 @@ module.exports = {
     create,
     debug,
     dev,
-    build
+    compile
 };

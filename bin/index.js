@@ -10,7 +10,7 @@ const {
     create,
     debug,
     dev,
-    build
+    compile
 } = require('..');
 
 /**
@@ -39,9 +39,9 @@ program
     .action(dev);
 
 program
-    .command('build [directory]')
-    .description('Build the distribution file for this workspace.')
-    .action(build);
+    .command('compile [directory]')
+    .description('Compile the distribution file for this workspace.')
+    .action(compile);
 
 /**
  * Parse process arguments.
