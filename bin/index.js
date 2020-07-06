@@ -44,10 +44,10 @@ const TREE = insideProject()
 const CWD = process.cwd();
 const PROJECT_NAME = path.basename(CWD);
 
-console.log('\n')
+console.log(chalk.bgBlue(
+    `\n [${PROJECT_NAME}] source tree`
+))
 console.log(chalk.blueBright(
-    `    ${PROJECT_NAME}   [source tree]`,
-    LINE,
     TREE,
     '\n',
 ));
@@ -56,3 +56,4 @@ console.log(chalk.blueBright(
  * Parse process arguments.
  */
 program.parse(process.argv);
+void 0;
