@@ -31,9 +31,14 @@ const error = (...msgs) => console.log(
 
 const createProject = (abs) => {
 
+    const devDir = path.resolve(abs, 'dev');
+    const distDir = path.resolve(abs, 'dist');
+
     fs.mkdirSync(abs);
-    fs.mkdirSync(path.resolve(abs, 'dev'));
-    fs.mkdirSync(path.resolve(abs, 'dist'));
+    fs.mkdirSync(devDir);
+    fs.mkdirSync(distDir);
+
+    fs.writeFileSync();
 
     touch(path.resolve(abs, '.gproj'));
     success(
@@ -53,6 +58,7 @@ const create = (name) => {
         createProject(abs);
 
     else error('File or directory already exists.');
+
 }
 
 const debug = () => {
