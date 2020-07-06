@@ -29,28 +29,55 @@ const error = (...msgs) => console.log(
  * Internal functions.
  */
 
-const createProject = (abs) => {
+const createProject = (rootDir) => {
 
-    const devDir = path.resolve(abs, 'dev');
-    const distDir = path.resolve(abs, 'dist');
+    const devDir = path.resolve(rootDir, 'dev');
+    const distDir = path.resolve(rootDir, 'dist');
 
-    fs.mkdirSync(abs);
+    fs.mkdirSync(rootDir);
     fs.mkdirSync(devDir);
     fs.mkdirSync(distDir);
 
-    fs.writeFileSync();
+    fs.writeFileSync(
+        path.resolve(devDir, 'index.js'), 
+        'console.log("Hello world!");'
+    );
 
-    touch(path.resolve(abs, '.gproj'));
+    touch(path.resolve(rootDir, '.gproj'));
     success(
         'Created project at:',
-        blue(abs),
+        blue(rootDir),
     );
 }
+
+const 
+    defaultFlags = [
+        '-W VERBOSE',
+        '--language_in ECMASCRIPT_NEXT',
+        '--jscomp_off nonStandardJsDocs',
+        '--rewrite_polyfills --use_types_for_optimization',
+    ],
+
+    devFlags = [
+        '-O SIMPLE'
+    ],
+    
+    debugFlags = [
+        ...devFlags, 
+        '--debug'
+    ],
+
+    releaseFlags = [
+        '-O ADVANCED',
+        '--language_out ECMASCRIPT5_STRICT',
+        '--define PRODUCTION=true',
+        '--isolation_mode IIFE',
+        '--assume_function_wrapper',
+    ];
 
 /**
  * Public functions.
  */
-
 const create = (name) => {
     const abs = path.resolve(name);
     
@@ -70,6 +97,8 @@ const dev = () => {
 }
 
 const dist = () => {
+    
+    
     console.log('Hello world!');
 }
 
