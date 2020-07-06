@@ -4,19 +4,48 @@ const path = require('path');
 const chalk = require('chalk');
 
 /**
- * Define any core logic here.
+ * Slightly stylized logging utils. 
+ */
+const blue = (...msgs) => chalk.blueBright(...msgs);
+
+const log = (...msgs) => console.log(
+    chalk.bgBlueBright(' MSG '),
+    ...msgs
+);
+
+const success = (...msgs) => console.log(
+    chalk.bgGreen(' SUCCESS '),
+    ...msgs
+);
+
+const error = (...msgs) => console.log(
+    chalk.bgRed(' ERROR '),
+    ...msgs
+);
+
+/**
+ * 
+ * Internal functions.
+ */
+
+const createProject = (abs) => {
+    fs.mkdirSync(abs);
+    touch(path.resolve(abs, '.gproj'));
+    success(
+        'Created project at:',
+        blue(abs),
+    );
+}
+
+/**
+ * Public functions.
  */
 
 const create = (name) => {
 
     const abs = path.resolve(name);
     if (!fs.existsSync(abs))
-        fs.mkdirSync(abs),
-            touch(path.resolve(abs, '.gproj')),
-            success(
-                'Created project at:',
-                blue(abs),
-            );
+        createProject(abs);
 
     else error('File or directory already exists.');
 
