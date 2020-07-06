@@ -1,8 +1,11 @@
 const fs = require('fs');
 const touch = require('touch');
+const process = require('process');
 const path = require('path');
 const chalk = require('chalk');
 const npm = require('npm');
+
+const CWD = process.cwd();
 
 /**
  * Slightly stylized logging utils. 
@@ -69,11 +72,13 @@ const
     ],
 
     releaseFlags = [
-        '-O=ADVANCED',
-        '--language_out=ECMASCRIPT5_STRICT',
+        '-O="ADVANCED"',
+        `--js="${CWD}/src/**.js"`,
+        '--language_out="ECMASCRIPT5_STRICT"',
         '--define="PRODUCTION=true"',
-        '--isolation_mode=IIFE',
+        '--isolation_mode="IIFE"',
         '--assume_function_wrapper',
+        `--js_output_file="${CWD}/build/compiled.js"`,
     ];
 
 /**
