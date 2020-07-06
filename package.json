@@ -1,0 +1,25 @@
+{
+  "name": "gproject",
+  "version": "1.0.0",
+  "description": "Javascript development workspaces built around Closure Compiler.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TeleworkInc/gproject.git"
+  },
+  "keywords": [
+    "closure",
+    "compiler",
+    "google",
+    "javascript"
+  ],
+  "author": "Christian Lewis <hello@trytelework.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TeleworkInc/gproject/issues"
+  },
+  "homepage": "https://github.com/TeleworkInc/gproject#readme"
+}
