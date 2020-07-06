@@ -8,8 +8,8 @@ const figlet = require('figlet');
  */
 const {
     create,
-    dev,
-    compile
+    compile,
+    develop,
 } = require('..');
 
 /**
@@ -28,9 +28,9 @@ program
     .action(create);
 
 program
-    .command('dev [directory]')
+    .command('develop [directory]')
     .description('Start the workspace in development mode.')
-    .action(dev);
+    .action(develop);
 
 program
     .command('compile [directory]')

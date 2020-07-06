@@ -106,13 +106,13 @@ const callCompiler = (...customFlags) => npm.load(
 const create = (name) => {
     const abs = path.resolve(name);
 
-    if (!fs.existsSync(abs))
-        createProject(abs);
-
-    else error('File or directory already exists.');
+    if (fs.existsSync(abs))
+        error('File or directory already exists.');
+        
+    else createProject(abs); 
 }
 
-const dev = (dir = '.', program) => {
+const develop = (dir = '.', program) => {
     dir = path.resolve(dir);
 
     if (!checkProject(dir))
@@ -150,6 +150,6 @@ const compile = (dir = '.', program) => {
 
 module.exports = {
     create,
-    dev,
-    compile
+    compile,
+    develop,
 };
