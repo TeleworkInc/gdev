@@ -6,6 +6,7 @@ const chalk = require('chalk');
 /**
  * Slightly stylized logging utils. 
  */
+
 const blue = (...msgs) => chalk.blueBright(...msgs);
 
 const log = (...msgs) => console.log(
@@ -29,7 +30,11 @@ const error = (...msgs) => console.log(
  */
 
 const createProject = (abs) => {
+
     fs.mkdirSync(abs);
+    fs.mkdirSync(path.resolve(abs, 'dev'));
+    fs.mkdirSync(path.resolve(abs, 'dist'));
+
     touch(path.resolve(abs, '.gproj'));
     success(
         'Created project at:',
@@ -42,13 +47,12 @@ const createProject = (abs) => {
  */
 
 const create = (name) => {
-
     const abs = path.resolve(name);
+    
     if (!fs.existsSync(abs))
         createProject(abs);
 
     else error('File or directory already exists.');
-
 }
 
 const debug = () => {
