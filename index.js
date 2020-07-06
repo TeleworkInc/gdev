@@ -6,6 +6,10 @@ const create = () => {
     console.log('Hello world!');
 }
 
+const debug = () => {
+    console.log('Hello world!');
+}
+
 const dev = () => {
     console.log('Hello world!');
 }
@@ -20,6 +24,7 @@ const dist = () => {
  */
 module.exports = {
     create,
+    debug,
     dev,
     dist
 };

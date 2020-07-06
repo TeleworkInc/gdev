@@ -8,6 +8,7 @@ const figlet = require('figlet');
  */
 const {
     create,
+    debug,
     dev,
     dist
 } = require('..');
@@ -23,17 +24,22 @@ console.log(chalk.blueBright(
  * Define commands and assign actions to them.
  */
 program
-    .command('create')
+    .command('create <project>')
     .description('Create a new gproject workspace.')
     .action(create);
 
 program
-    .command('dev')
+    .command('debug [directory]')
+    .description('Start the workspace in debug mode.')
+    .action(debug);
+
+program
+    .command('dev [directory]')
     .description('Start the workspace in development mode.')
     .action(dev);
 
 program
-    .command('dist')
+    .command('dist [directory]')
     .description('Build the distribution file for this workspace.')
     .action(dist);
 
