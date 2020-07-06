@@ -140,11 +140,12 @@ const compile = (dir = '.', program) => {
             `--js_output_file="${dir}/.build/dev.js"`,
         );
 
-    else callCompiler(
-        ...releaseFlags,
-        `--js="${dir}/src/**.js"`,
-        `--js_output_file="${dir}/.build/compiled.js"`,
-    );
+    else 
+        callCompiler(
+            ...releaseFlags,
+            `--js="${dir}/src/**.js"`,
+            `--js_output_file="${dir}/.build/compiled.js"`,
+        );
 }
 
 module.exports = {
