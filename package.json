@@ -2,7 +2,7 @@
   "name": "gproject",
   "version": "1.1.0",
   "description": "Javascript development workspaces built around Closure Compiler.",
-  "main": "index.js",
+  "main": "commands/index.js",
   "bin": "bin/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -27,6 +27,7 @@
     "chalk": "^4.1.0",
     "commander": "^5.1.0",
     "figlet": "^1.4.0",
-    "npm-watch": "^0.6.0"
+    "npm-watch": "^0.6.0",
+    "touch": "^3.1.0"
   }
 }
