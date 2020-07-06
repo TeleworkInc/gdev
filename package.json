@@ -29,5 +29,8 @@
     "figlet": "^1.4.0",
     "npm-watch": "^0.6.0",
     "touch": "^3.1.0"
+  },
+  "devDependencies": {
+    "google-closure-compiler": "^20200614.0.0"
   }
 }

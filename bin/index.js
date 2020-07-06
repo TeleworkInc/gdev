@@ -10,7 +10,7 @@ const {
     create,
     debug,
     dev,
-    dist
+    build
 } = require('..');
 
 /**
@@ -39,9 +39,9 @@ program
     .action(dev);
 
 program
-    .command('dist [directory]')
+    .command('build [directory]')
     .description('Build the distribution file for this workspace.')
-    .action(dist);
+    .action(build);
 
 /**
  * Parse process arguments.

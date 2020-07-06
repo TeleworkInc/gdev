@@ -31,15 +31,15 @@ const error = (...msgs) => console.log(
 
 const createProject = (rootDir) => {
 
-    const devDir = path.resolve(rootDir, 'dev');
-    const distDir = path.resolve(rootDir, 'dist');
+    const srcDir = path.resolve(rootDir, 'src');
+    const buildDir = path.resolve(rootDir, 'build');
 
     fs.mkdirSync(rootDir);
-    fs.mkdirSync(devDir);
-    fs.mkdirSync(distDir);
+    fs.mkdirSync(srcDir);
+    fs.mkdirSync(buildDir);
 
     fs.writeFileSync(
-        path.resolve(devDir, 'index.js'), 
+        path.resolve(srcDir, 'index.js'),
         'console.log("Hello world!");'
     );
 
@@ -50,7 +50,7 @@ const createProject = (rootDir) => {
     );
 }
 
-const 
+const
     defaultFlags = [
         '-W VERBOSE',
         '--language_in ECMASCRIPT_NEXT',
@@ -61,9 +61,9 @@ const
     devFlags = [
         '-O SIMPLE'
     ],
-    
+
     debugFlags = [
-        ...devFlags, 
+        ...devFlags,
         '--debug'
     ],
 
@@ -78,9 +78,13 @@ const
 /**
  * Public functions.
  */
+const build = () => {
+    console.log('Hello world!');
+}
+
 const create = (name) => {
     const abs = path.resolve(name);
-    
+
     if (!fs.existsSync(abs))
         createProject(abs);
 
@@ -96,15 +100,9 @@ const dev = () => {
     console.log('Hello world!');
 }
 
-const dist = () => {
-    
-    
-    console.log('Hello world!');
-}
-
 module.exports = {
     create,
     debug,
     dev,
-    dist
+    build
 };
