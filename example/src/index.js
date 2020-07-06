@@ -1,1 +1,7 @@
-console.log("Hello world!");
+
+/**
+ * @define {boolean}
+ */
+const PRODUCTION = false;
+
+console.log('Hello world!');

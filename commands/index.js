@@ -33,6 +33,15 @@ const error = (...msgs) => console.log(
  * Internal functions.
  */
 
+const introTemplate = `
+/**
+ * @define {boolean}
+ */
+const PRODUCTION = false;
+
+console.log('Hello world!');
+`;
+
 const createProject = (rootDir) => {
 
     const srcDir = path.resolve(rootDir, 'src');
@@ -44,7 +53,7 @@ const createProject = (rootDir) => {
 
     fs.writeFileSync(
         path.resolve(srcDir, 'index.js'),
-        'console.log("Hello world!");'
+        introTemplate
     );
 
     touch(path.resolve(rootDir, '.gproj'));
@@ -81,11 +90,15 @@ const
         `--js_output_file="${CWD}/build/compiled.js"`,
     ];
 
+const callCompiler = (...flags) => npm.load(
+    () => npm.run('compiler', ...flags)
+); 
+
 /**
  * Public functions.
  */
 const compile = () => {
-    npm.load(() => npm.run('compiler', ...releaseFlags));
+    callCompiler(...releaseFlags);
 }
 
 const create = (name) => {
