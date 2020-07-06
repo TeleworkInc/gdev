@@ -8,7 +8,6 @@ const figlet = require('figlet');
  */
 const {
     create,
-    debug,
     dev,
     compile
 } = require('..');
@@ -27,11 +26,6 @@ program
     .command('create <project>')
     .description('Create a new gproject workspace.')
     .action(create);
-
-program
-    .command('debug [directory]')
-    .description('Start the workspace in debug mode.')
-    .action(debug);
 
 program
     .command('dev [directory]')

@@ -48,7 +48,7 @@ console.log('Hello world!');
 const createProject = (rootDir) => {
 
     const srcDir = path.resolve(rootDir, 'src');
-    const compileDir = path.resolve(rootDir, 'build');
+    const compileDir = path.resolve(rootDir, '.build');
 
     fs.mkdirSync(rootDir);
     fs.mkdirSync(srcDir);
@@ -112,10 +112,6 @@ const create = (name) => {
     else error('File or directory already exists.');
 }
 
-const debug = () => {
-    console.log('Hello world!');
-}
-
 const dev = (dir = '.', program) => {
     dir = path.resolve(dir);
 
@@ -141,19 +137,18 @@ const compile = (dir = '.', program) => {
         callCompiler(
             ...devFlags,
             `--js="${dir}/src/**.js"`,
-            `--js_output_file="${dir}/build/dev.js"`,
+            `--js_output_file="${dir}/.build/dev.js"`,
         );
 
     else callCompiler(
         ...releaseFlags,
         `--js="${dir}/src/**.js"`,
-        `--js_output_file="${dir}/build/compiled.js"`,
+        `--js_output_file="${dir}/.build/compiled.js"`,
     );
 }
 
 module.exports = {
     create,
-    debug,
     dev,
     compile
 };
