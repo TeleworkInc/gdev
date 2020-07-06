@@ -33,3 +33,10 @@ const dev = () => {
 const dist = () => {
     console.log('Hello world!');
 }
+
+module.exports = {
+    create,
+    debug,
+    dev,
+    dist
+};
