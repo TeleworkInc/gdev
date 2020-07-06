@@ -17,7 +17,7 @@ const {
  * Obligatory h4x0r l33t intro.
  */
 console.log(chalk.blueBright(
-    figlet.textSync('gproject'), '\n' 
+    figlet.textSync('gproject'), '\n'
 ));
 
 /**
@@ -40,6 +40,7 @@ program
 
 program
     .command('compile [directory]')
+    .option('-d, --dev')
     .description('Compile the distribution file for this workspace.')
     .action(compile);
 

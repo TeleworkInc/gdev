@@ -1,6 +1,6 @@
+const chokidar = require('chokidar');
 const fs = require('fs');
 const touch = require('touch');
-const process = require('process');
 const path = require('path');
 const chalk = require('chalk');
 const npm = require('npm');
@@ -48,7 +48,7 @@ console.log('Hello world!');
 const createProject = (rootDir) => {
 
     const srcDir = path.resolve(rootDir, 'src');
-    const compileDir = path.resolve(rootDir, 'compile');
+    const compileDir = path.resolve(rootDir, 'build');
 
     fs.mkdirSync(rootDir);
     fs.mkdirSync(srcDir);
@@ -76,7 +76,7 @@ const
     ],
 
     devFlags = [
-        '-O SIMPLE'
+        '-O="SIMPLE"'
     ],
 
     debugFlags = [
@@ -84,14 +84,12 @@ const
         '--debug'
     ],
 
-    releaseFlags = (dir) => [
+    releaseFlags = [
         '-O="ADVANCED"',
-        `--js="${dir}/src/**.js"`,
         '--language_out="ECMASCRIPT5_STRICT"',
         '--define="PRODUCTION=true"',
         '--isolation_mode="IIFE"',
         '--assume_function_wrapper',
-        `--js_output_file="${dir}/build/compiled.js"`,
     ];
 
 const callCompiler = (...customFlags) => npm.load(
@@ -100,21 +98,11 @@ const callCompiler = (...customFlags) => npm.load(
         ...defaultFlags,
         ...customFlags
     )
-); 
+);
 
 /**
  * Public functions.
  */
-const compile = (...args) => {
-    const dir = path.resolve(args[0] || '.');
-
-    if (!checkProject(dir)) 
-        return error('Directory is not a gproject workspace.');
-
-    else callCompiler(...releaseFlags(dir));
-
-}
-
 const create = (name) => {
     const abs = path.resolve(name);
 
@@ -122,15 +110,45 @@ const create = (name) => {
         createProject(abs);
 
     else error('File or directory already exists.');
-
 }
 
 const debug = () => {
     console.log('Hello world!');
 }
 
-const dev = () => {
-    console.log('Hello world!');
+const dev = (dir = '.', program) => {
+    dir = path.resolve(dir);
+
+    if (!checkProject(dir))
+        return error('Directory is not a gproject workspace.');
+        
+    chokidar.watch(
+        `${dir}/src/**.js`).on('all', 
+        (event, path) => {
+            console.log('Building dev bundle...');
+            compile(dir, { dev: true });
+        }
+    );
+}
+
+const compile = (dir = '.', program) => {
+    dir = path.resolve(dir);
+
+    if (!checkProject(dir))
+        return error('Directory is not a gproject workspace.');
+
+    else if (program.dev)
+        callCompiler(
+            ...devFlags,
+            `--js="${dir}/src/**.js"`,
+            `--js_output_file="${dir}/build/dev.js"`,
+        );
+
+    else callCompiler(
+        ...releaseFlags,
+        `--js="${dir}/src/**.js"`,
+        `--js_output_file="${dir}/build/compiled.js"`,
+    );
 }
 
 module.exports = {

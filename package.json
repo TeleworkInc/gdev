@@ -26,8 +26,10 @@
   "homepage": "https://github.com/TeleworkInc/gproject#readme",
   "dependencies": {
     "chalk": "^4.1.0",
+    "chokidar": "^3.4.0",
     "commander": "^5.1.0",
     "figlet": "^1.4.0",
+    "npm": "^6.14.5",
     "npm-watch": "^0.6.0",
     "touch": "^3.1.0"
   },
