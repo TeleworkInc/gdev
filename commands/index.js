@@ -5,7 +5,7 @@ const path = require('path');
 const chalk = require('chalk');
 const npm = require('npm');
 
-const CWD = process.cwd();
+const checkProject = (dir) => fs.existsSync(path.resolve(dir, '.gproj'));
 
 /**
  * Slightly stylized logging utils. 
@@ -15,17 +15,20 @@ const blue = (...msgs) => chalk.blueBright(...msgs);
 
 const log = (...msgs) => console.log(
     chalk.bgBlueBright(' MSG '),
-    ...msgs
+    ...msgs,
+    '\n',
 );
 
 const success = (...msgs) => console.log(
     chalk.bgGreen(' SUCCESS '),
-    ...msgs
+    ...msgs,
+    '\n',
 );
 
 const error = (...msgs) => console.log(
     chalk.bgRed(' ERROR '),
-    ...msgs
+    ...msgs,
+    '\n',
 );
 
 /**
@@ -65,10 +68,11 @@ const createProject = (rootDir) => {
 
 const
     defaultFlags = [
-        '-W VERBOSE',
-        '--language_in ECMASCRIPT_NEXT',
-        '--jscomp_off nonStandardJsDocs',
-        '--rewrite_polyfills --use_types_for_optimization',
+        '-W="VERBOSE"',
+        '--language_in="ECMASCRIPT_NEXT"',
+        '--jscomp_off="nonStandardJsDocs"',
+        '--rewrite_polyfills',
+        '--use_types_for_optimization',
     ],
 
     devFlags = [
@@ -80,25 +84,35 @@ const
         '--debug'
     ],
 
-    releaseFlags = [
+    releaseFlags = (dir) => [
         '-O="ADVANCED"',
-        `--js="${CWD}/src/**.js"`,
+        `--js="${dir}/src/**.js"`,
         '--language_out="ECMASCRIPT5_STRICT"',
         '--define="PRODUCTION=true"',
         '--isolation_mode="IIFE"',
         '--assume_function_wrapper',
-        `--js_output_file="${CWD}/build/compiled.js"`,
+        `--js_output_file="${dir}/build/compiled.js"`,
     ];
 
-const callCompiler = (...flags) => npm.load(
-    () => npm.run('compiler', ...flags)
+const callCompiler = (...customFlags) => npm.load(
+    () => npm.run(
+        'compiler',
+        ...defaultFlags,
+        ...customFlags
+    )
 ); 
 
 /**
  * Public functions.
  */
-const compile = () => {
-    callCompiler(...releaseFlags);
+const compile = (...args) => {
+    const dir = path.resolve(args[0] || '.');
+
+    if (!checkProject(dir)) 
+        return error('Directory is not a gproject workspace.');
+
+    else callCompiler(...releaseFlags(dir));
+
 }
 
 const create = (name) => {
