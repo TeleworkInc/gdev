@@ -11,6 +11,7 @@ const figlet = require('figlet');
  */
 const {
     insideProject,
+    displayBuildInfo,
     create,
     compile,
     develop,
@@ -34,23 +35,33 @@ program
     .description('Compile this workspace and output in [.build].')
     .action(compile);
 
-const LINE = `\n${'-'.repeat(32)}\n`;
+const CWD = process.cwd();
+const PROJECT_NAME = path.basename(CWD);
+const VERSION_INFO = require('../package.json').version;
+
 const TREE = insideProject()
     ? aft.generate({
         globs: ['src/**/*.js']
     })
     : '';
 
-const CWD = process.cwd();
-const PROJECT_NAME = path.basename(CWD);
+const HEAD = insideProject()
+    ? ` ${PROJECT_NAME} `
+    : '';
 
-console.log(chalk.bgBlue(
-    `\n [${PROJECT_NAME}] source tree`
-))
-console.log(chalk.blueBright(
-    TREE,
-    '\n',
-));
+if (VERSION_INFO)
+    console.log('\n', chalk.white(`GProject v${VERSION_INFO}`), '\n');
+
+if (HEAD)
+    console.log(chalk.bgBlue(HEAD));
+
+if (TREE)
+    console.log(chalk.blueBright(TREE), '\n');
+
+/**
+ * Display the location of the dev and production files.
+ */
+displayBuildInfo();
 
 /**
  * Parse process arguments.

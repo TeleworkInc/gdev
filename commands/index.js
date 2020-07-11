@@ -1,11 +1,12 @@
 const chokidar = require('chokidar');
 const fs = require('fs');
-const sha256 = require('js-sha256');
 const process = require('process');
 const touch = require('touch');
 const path = require('path');
 const chalk = require('chalk');
-const npm = require('npm');
+const { spawn } = require('child_process');
+const ora = require('ora');
+
 
 /**
  * Bail out if not inside a project directory.
@@ -45,7 +46,7 @@ const error = (...msgs) => console.log(
  * Internal functions.
  */
 
-const introTemplate = `
+const INTRO_TEMPLATE = `
 /**
  * @define {boolean}
  */
@@ -65,7 +66,7 @@ const createProject = (rootDir) => {
 
     fs.writeFileSync(
         path.resolve(srcDir, 'index.js'),
-        introTemplate
+        INTRO_TEMPLATE
     );
 
     touch(path.resolve(rootDir, '.gproj'));
@@ -76,7 +77,7 @@ const createProject = (rootDir) => {
 }
 
 const
-    defaultFlags = [
+    DEFAULT_FLAGS = [
         '-W="VERBOSE"',
         '--language_in="ECMASCRIPT_NEXT"',
         '--jscomp_off="nonStandardJsDocs"',
@@ -84,16 +85,11 @@ const
         '--use_types_for_optimization',
     ],
 
-    devFlags = [
+    DEV_FLAGS = [
         '-O="SIMPLE"'
     ],
 
-    debugFlags = [
-        ...devFlags,
-        '--debug'
-    ],
-
-    releaseFlags = [
+    RELEASE_FLAGS = [
         '-O="ADVANCED"',
         '--language_out="ECMASCRIPT5_STRICT"',
         '--define="PRODUCTION=true"',
@@ -101,13 +97,25 @@ const
         '--assume_function_wrapper',
     ];
 
-const callCompiler = (...customFlags) => npm.load(
-    () => npm.run(
-        'compiler',
-        ...defaultFlags,
+let pendingLock = false;
+
+const callCompiler = (...customFlags) => {
+    const child = spawn('google-closure-compiler', [
+        ...DEFAULT_FLAGS,
         ...customFlags
-    )
-);
+    ]);
+
+    if (!pendingLock) {
+
+        const spinner = ora('Compiling...').start();
+        pendingLock = true;
+
+        child.on('exit', () => {
+            spinner.stop();
+            pendingLock = false;
+        });
+    }
+}
 
 /**
  * Public functions.
@@ -125,46 +133,52 @@ const create = (name) => {
     else createProject(abs);
 }
 
-const develop = (program) => {
+
+const compile = () => {
 
     if (!insideProject())
-        return error('Directory is not a gproject workspace.');
+        return error('\nDirectory is not a gproject workspace.');
 
-    chokidar.watch(
-        `${CWD}/src/**/*.js`,
-        {
-            ignoreInitial: true
-        }
-    ).on('all',
-        (event, path) => {
-            console.log('Building dev bundle...');
-            compile(program);
-        }
-    );
-}
-
-const compile = (program) => {
-
-    if (!insideProject())
-        return error('Directory is not a gproject workspace.');
-
-    console.log('Building development freeze...');
     callCompiler(
-        ...devFlags,
+        ...DEV_FLAGS,
         `--js="${CWD}/src/**.js"`,
         `--js_output_file="${CWD}/.build/dev.js"`,
     );
 
-    console.log('Building release freeze...');
     callCompiler(
-        ...releaseFlags,
+        ...RELEASE_FLAGS,
         `--js="${CWD}/src/**.js"`,
         `--js_output_file="${CWD}/.build/compiled.js"`,
     );
 }
 
+const develop = (program) => {
+
+    if (!insideProject())
+        return error('\nDirectory is not a gproject workspace.');
+
+    chokidar.watch(
+        `${CWD}/src/**/*.js`,
+        {
+            ignoreInitial: true,
+            awaitWriteFinish: true
+        }
+    ).on('all',
+        (event, path) => compile(program),
+    );
+
+    compile();
+}
+
+const displayBuildInfo = () => {
+    if (insideProject())
+        console.log(chalk.bgBlue(' DEV  '), path.resolve('.build', 'dev.js')),
+        console.log(chalk.bgCyan(' PROD '), path.resolve('.build', 'compiled.js'));
+}
+
 module.exports = {
     insideProject,
+    displayBuildInfo,
     create,
     compile,
     develop,
