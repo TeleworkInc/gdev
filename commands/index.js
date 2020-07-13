@@ -173,7 +173,8 @@ const develop = (program) => {
 const displayBuildInfo = () => {
     if (insideProject())
         console.log(chalk.bgBlue(' DEV  '), path.resolve('.build', 'dev.js')),
-        console.log(chalk.bgCyan(' PROD '), path.resolve('.build', 'compiled.js'));
+        console.log(chalk.bgCyan(' PROD '), path.resolve('.build', 'compiled.js')),
+        console.log();
 }
 
 module.exports = {
