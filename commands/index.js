@@ -4,9 +4,9 @@ const process = require('process');
 const touch = require('touch');
 const path = require('path');
 const chalk = require('chalk');
-const { spawn } = require('child_process');
+const { promisfy } = require('util');
+const { spawn, spawnSync } = require('child_process');
 const ora = require('ora');
-
 
 /**
  * Bail out if not inside a project directory.
@@ -30,7 +30,7 @@ const log = (...msgs) => console.log(
 );
 
 const success = (...msgs) => console.log(
-    chalk.bgGreen(' SUCCESS '),
+    chalk.bgGreenBright(' SUCCESS '),
     ...msgs,
     '\n',
 );
@@ -45,36 +45,6 @@ const error = (...msgs) => console.log(
  * 
  * Internal functions.
  */
-
-const INTRO_TEMPLATE = `
-/**
- * @define {boolean}
- */
-const PRODUCTION = false;
-
-console.log('Welcome to GProject!');
-`;
-
-const createProject = (rootDir) => {
-
-    const srcDir = path.resolve(rootDir, 'src');
-    const compileDir = path.resolve(rootDir, '.build');
-
-    fs.mkdirSync(rootDir);
-    fs.mkdirSync(srcDir);
-    fs.mkdirSync(compileDir);
-
-    fs.writeFileSync(
-        path.resolve(srcDir, 'index.js'),
-        INTRO_TEMPLATE
-    );
-
-    touch(path.resolve(rootDir, '.gproj'));
-    success(
-        'Created project at:',
-        blue(rootDir),
-    );
-}
 
 const
     DEFAULT_FLAGS = [
@@ -99,56 +69,86 @@ const
 
 let pendingLock = false;
 
-const callCompiler = (...customFlags) => {
-    const child = spawn('google-closure-compiler', [
-        ...DEFAULT_FLAGS,
-        ...customFlags
-    ]);
+const callCompiler = async (...customFlags) => {
+    
+    const spinner = ora('Compiling...').start();
 
-    if (!pendingLock) {
+    const FLAGS = [...DEFAULT_FLAGS, ...customFlags];
+    const childPromise = new Promise((resolve, reject) => {
+        spawnSync('google-closure-compiler', FLAGS);
+        resolve();
+    }, () => {
+        spinner.fail('Something went wrong.')
+    });
 
-        const spinner = ora('Compiling...').start();
-        pendingLock = true;
-
-        child.on('exit', () => {
-            spinner.stop();
-            pendingLock = false;
-        });
-    }
+    spinner.succeed('Compiled!');
 }
+
+const INTRO_TEMPLATE = `
+/**
+ * @define {boolean}
+ */
+const PRODUCTION = false;
+
+console.log('Welcome to GProject!');
+`;
+
+const createProject = (name) => {
+
+    const srcDir = path.resolve(name, 'lib');
+    const compileDir = path.resolve(name, 'dist');
+
+    fs.mkdirSync(name);
+    fs.mkdirSync(srcDir);
+    fs.mkdirSync(compileDir);
+
+    process.chdir(name);
+    spawnSync('yarn', [
+        'init -y',
+    ]);
+    process.chdir('..');
+
+    fs.writeFileSync(
+        path.resolve(srcDir, 'index.js'),
+        INTRO_TEMPLATE
+    );
+
+    touch(path.resolve(name, '.gproj'));
+    success(
+        'Created project at:',
+        blue(name),
+    );
+}
+
 
 /**
  * Public functions.
  */
 
 const create = (name) => {
-    const abs = path.resolve(name);
 
-    if (!insideProject())
-        return error('Directory is not a gproject workspace.');
-
-    else if (fs.existsSync(abs))
+    if (fs.existsSync(name))
         error('File or directory already exists.');
 
-    else createProject(abs);
+    else createProject(name);
 }
 
 
-const compile = () => {
+const compile = async () => {
 
     if (!insideProject())
         return error('\nDirectory is not a gproject workspace.');
 
-    callCompiler(
+    await callCompiler(
         ...DEV_FLAGS,
         `--js="${CWD}/src/**.js"`,
-        `--js_output_file="${CWD}/.build/dev.js"`,
+        `--js_output_file="${CWD}/dist/dev.js"`,
     );
 
-    callCompiler(
+    await callCompiler(
         ...RELEASE_FLAGS,
         `--js="${CWD}/src/**.js"`,
-        `--js_output_file="${CWD}/.build/compiled.js"`,
+        `--js_output_file="${CWD}/dist/compiled.js"`,
     );
 }
 
@@ -171,10 +171,20 @@ const develop = (program) => {
 }
 
 const displayBuildInfo = () => {
-    if (insideProject())
-        console.log(chalk.bgBlue(' DEV  '), path.resolve('.build', 'dev.js')),
-        console.log(chalk.bgCyan(' PROD '), path.resolve('.build', 'compiled.js')),
+    if (insideProject()) {
+
+        console.log(
+            chalk.bgBlue(chalk.white(' DEV  ')),
+            path.resolve('dist', 'dev.js')
+        );
+
+        console.log(
+            chalk.bgGreen(chalk.white(' PROD ')),
+            path.resolve('dist', 'compiled.js')
+        );
+
         console.log();
+    }
 }
 
 module.exports = {

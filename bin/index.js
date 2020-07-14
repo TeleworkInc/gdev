@@ -32,7 +32,7 @@ program
 
 program
     .command('compile')
-    .description('Compile this workspace and output in [.build].')
+    .description('Compile this workspace and output in [dist].')
     .action(compile);
 
 const CWD = process.cwd();
@@ -41,7 +41,7 @@ const VERSION_INFO = require('../package.json').version;
 
 const TREE = insideProject()
     ? aft.generate({
-        globs: ['src/**/*.js']
+        globs: ['lib/**/*.js']
     })
     : '';
 
@@ -53,7 +53,7 @@ if (VERSION_INFO)
     console.log('\n', chalk.white(`GProject v${VERSION_INFO}`), '\n');
 
 if (HEAD)
-    console.log(chalk.bgBlue(HEAD));
+    console.log(chalk.bgBlueBright(chalk.white(HEAD)));
 
 if (TREE)
     console.log(chalk.blueBright(TREE), '\n');
