@@ -105,14 +105,16 @@ parserOptions:
 rules: {}
 `;
 
-const initializeDirectory = async (name) => {
+const initialize = async (dir = '.') => {
 
-    const srcDir = path.resolve(name, 'lib');
-    const compileDir = path.resolve(name, 'dist');
+    const dirExists = fs.existsSync(dir);
 
-    fs.mkdirSync(name);
-    fs.mkdirSync(srcDir);
-    fs.mkdirSync(compileDir);
+    const srcDir = path.resolve(dir, 'lib');
+    const compileDir = path.resolve(dir, 'dist');
+
+    if (!dirExists) fs.mkdirSync(dir);
+    if (!fs.existsSync(srcDir)) fs.mkdirSync(srcDir);
+    if (!fs.existsSync(compileDir)) fs.mkdirSync(compileDir);
 
     fs.writeFileSync(
         path.resolve(srcDir, 'index.js'),
@@ -120,13 +122,13 @@ const initializeDirectory = async (name) => {
     );
 
     fs.writeFileSync(
-        path.resolve(name, '.gitignore'),
+        path.resolve(dir, '.gitignore'),
         'node_modules',
         'utf-8'
     )
 
-    touch(path.resolve(name, '.gproj'));
-    fs.writeFileSync(path.resolve(name, '.eslintrc.yaml'), ESLINT_TEMPLATE, 'utf-8');
+    touch(path.resolve(dir, '.gproj'));
+    fs.writeFileSync(path.resolve(dir, '.eslintrc.yaml'), ESLINT_TEMPLATE, 'utf-8');
 
     const cmds = [
         'npm init -y',
@@ -137,12 +139,12 @@ const initializeDirectory = async (name) => {
         `git commit -m init`,
     ];
 
-    await callBashSequential(cmds, { cwd: name, stdio: 'inherit' });
+    await callBashSequential(cmds, { cwd: dir, stdio: 'inherit' });
 }
 
 const createProject = async (name) => {
 
-    await initializeDirectory(name);
+    await initialize(name);
     success(
         'Created project at:',
         blue(name),
@@ -169,6 +171,8 @@ const compile = async () => {
 
     if (!insideProject())
         return error('\nDirectory is not a gproject workspace.');
+
+    await callBash('npx eslint lib/**/*.js');
 
     await callCompiler(
         'dev',
@@ -225,4 +229,5 @@ module.exports = {
     create,
     compile,
     develop,
+    initialize,
 };

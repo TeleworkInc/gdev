@@ -15,6 +15,7 @@ const {
     create,
     compile,
     develop,
+    initialize,
 } = require('..');
 
 /**
@@ -34,6 +35,11 @@ program
     .command('compile')
     .description('Compile this workspace and output in [dist].')
     .action(compile);
+
+program
+    .command('init <directory>')
+    .description('Initialize a GProject workspace inside an existing directory.')
+    .action(initialize)
 
 const CWD = process.cwd();
 const PROJECT_NAME = path.basename(CWD);
