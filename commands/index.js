@@ -70,7 +70,7 @@ const
 let pendingLock = false;
 
 const callCompiler = (mode = 'dev', ...customFlags) => {
-    
+
     const spinner = ora('Compiling...').start();
 
     const FLAGS = [...DEFAULT_FLAGS, ...customFlags];
@@ -78,11 +78,11 @@ const callCompiler = (mode = 'dev', ...customFlags) => {
         stdio: 'ignore',
         detached: true
     });
-    
+
     return new Promise((resolve, reject) => {
         child
             .on('exit', () => {
-                spinner.succeed(`Compiled ${mode}.js.`);
+                spinner.succeed('Compiled ' + blue(`${mode}.js`));
                 resolve();
             })
             .on('error', () => {
@@ -101,7 +101,15 @@ const PRODUCTION = false;
 console.log('Welcome to GProject!');
 `;
 
-const createProject = (name) => {
+const spawnPromise = (...args) => {
+    return new Promise((resolve, reject) => {
+        spawn(...args)
+            .on('exit', resolve)
+            .on('error', reject);
+    });
+}
+
+const initializeDirectory = (name) => {
 
     const srcDir = path.resolve(name, 'lib');
     const compileDir = path.resolve(name, 'dist');
@@ -110,18 +118,28 @@ const createProject = (name) => {
     fs.mkdirSync(srcDir);
     fs.mkdirSync(compileDir);
 
-    process.chdir(name);
-    spawnSync('yarn', [
-        'init -y',
-    ]);
-    process.chdir('..');
-
     fs.writeFileSync(
         path.resolve(srcDir, 'index.js'),
         INTRO_TEMPLATE
     );
 
     touch(path.resolve(name, '.gproj'));
+
+    const cmds = [
+        ['npm', ['init', '-y'], { cwd: name }],
+    ];
+
+    return Promise.all(
+        cmds.map(
+            cmd => spawnPromise(...cmd)
+        )
+    );
+}
+
+const createProject = async (name) => {
+
+    await initializeDirectory(name);
+
     success(
         'Created project at:',
         blue(name),
@@ -144,6 +162,8 @@ const create = (name) => {
 
 const compile = async () => {
 
+    console.log();
+
     if (!insideProject())
         return error('\nDirectory is not a gproject workspace.');
 
@@ -162,13 +182,13 @@ const compile = async () => {
     );
 }
 
-const develop = (program) => {
+const develop = async (program) => {
 
     if (!insideProject())
         return error('\nDirectory is not a gproject workspace.');
 
     chokidar.watch(
-        `${CWD}/src/**/*.js`,
+        `${CWD}/lib/**/*.js`,
         {
             ignoreInitial: true,
             awaitWriteFinish: true
@@ -177,12 +197,12 @@ const develop = (program) => {
         (event, path) => compile(program),
     );
 
-    compile();
+    await compile();
+    console.log('\nListening for file changes in', blue('lib/'));
 }
 
 const displayBuildInfo = () => {
     if (insideProject()) {
-
         console.log(
             chalk.bgBlue(chalk.white(' DEV  ')),
             path.resolve('dist', 'dev.js')
@@ -192,8 +212,6 @@ const displayBuildInfo = () => {
             chalk.bgGreen(chalk.white(' PROD ')),
             path.resolve('dist', 'release.js')
         );
-
-        console.log();
     }
 }
 
