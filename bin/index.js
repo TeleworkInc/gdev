@@ -67,4 +67,3 @@ displayBuildInfo();
  * Parse process arguments.
  */
 program.parse(process.argv);
-void 0;

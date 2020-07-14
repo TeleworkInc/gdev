@@ -119,16 +119,25 @@ const initializeDirectory = async (name) => {
         INTRO_TEMPLATE
     );
 
+    fs.writeFileSync(
+        path.resolve(name, '.gitignore'),
+        'node_modules',
+        'utf-8'
+    )
+
     touch(path.resolve(name, '.gproj'));
+    fs.writeFileSync(path.resolve(name, '.eslintrc.yaml'), ESLINT_TEMPLATE, 'utf-8');
 
     const cmds = [
         'npm init -y',
         'npm install --save-dev eslint eslint-config-google',
+        'git init .',
+        'git add --all .',
+        'git stage --all',
+        `git commit -m init`,
     ];
 
-    fs.writeFileSync(path.resolve(name, '.eslintrc.yaml'), ESLINT_TEMPLATE, 'utf-8');
     await callBashSequential(cmds, { cwd: name, stdio: 'inherit' });
-
 }
 
 const createProject = async (name) => {
@@ -184,8 +193,7 @@ const develop = async (program) => {
     chokidar.watch(
         `${CWD}/lib/**/*.js`,
         {
-            ignoreInitial: true,
-            awaitWriteFinish: true
+            ignoreInitial: true
         }
     ).on('all',
         (event, path) => compile(program),
