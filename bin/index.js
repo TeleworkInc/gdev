@@ -50,10 +50,10 @@ const HEAD = insideProject()
     : '';
 
 if (VERSION_INFO)
-    console.log('\n', chalk.white(`GProject v${VERSION_INFO}`), '\n');
+    console.log('\n', chalk.grey(`GProject v${VERSION_INFO}`), '\n');
 
 if (HEAD)
-    console.log(chalk.bgBlueBright(chalk.white(HEAD)));
+    console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
 
 if (TREE)
     console.log(chalk.blueBright(TREE), '\n');

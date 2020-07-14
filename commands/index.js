@@ -30,7 +30,7 @@ const log = (...msgs) => console.log(
 );
 
 const success = (...msgs) => console.log(
-    chalk.bgGreenBright(' SUCCESS '),
+    chalk.bgCyan(chalk.whiteBright(' SUCCESS ')),
     ...msgs,
     '\n',
 );
@@ -67,8 +67,6 @@ const
         '--assume_function_wrapper',
     ];
 
-let pendingLock = false;
-
 const callCompiler = (mode = 'dev', ...customFlags) => {
 
     const spinner = ora('Compiling...').start();
@@ -101,15 +99,38 @@ const PRODUCTION = false;
 console.log('Welcome to GProject!');
 `;
 
-const spawnPromise = (...args) => {
-    return new Promise((resolve, reject) => {
-        spawn(...args)
+const ESLINT_TEMPLATE = `
+env:
+  browser: true
+  commonjs: true
+  es2020: true
+  node: true
+extends:
+  - google
+parserOptions:
+  ecmaVersion: 11
+rules: {}
+`;
+
+const spawnPromise = (cmd, options) => new Promise(
+    (resolve, reject) => {
+        cmd = cmd.split(' ');
+        const cmdName = cmd[0];
+        const argv = cmd.slice(1);
+
+        spawn(cmdName, argv, options)
             .on('exit', resolve)
             .on('error', reject);
-    });
+    }
+);
+
+const spawnPromiseAll = async (cmds, options) => {
+    for (const cmd of cmds) {
+        await spawnPromise(cmd, options);
+    }
 }
 
-const initializeDirectory = (name) => {
+const initializeDirectory = async (name) => {
 
     const srcDir = path.resolve(name, 'lib');
     const compileDir = path.resolve(name, 'dist');
@@ -126,14 +147,23 @@ const initializeDirectory = (name) => {
     touch(path.resolve(name, '.gproj'));
 
     const cmds = [
-        ['npm', ['init', '-y'], { cwd: name }],
+        'npm init -y',
+        'npm install --save-dev eslint eslint-config-google',
     ];
 
-    return Promise.all(
-        cmds.map(
-            cmd => spawnPromise(...cmd)
-        )
-    );
+    fs.writeFileSync(path.resolve(name, '.eslintrc.yaml'), ESLINT_TEMPLATE, 'utf-8');
+    await spawnPromiseAll(cmds, { cwd: name, stdio: 'inherit' });
+
+    // for (const cmd of cmds)
+    //     await spawnPromise(...cmd);
+
+    console.log();
+
+    // return Promise.all(
+    //     cmds.map(
+    //         cmd => spawnPromise(...cmd)
+    //     )
+    // );
 }
 
 const createProject = async (name) => {
@@ -204,14 +234,16 @@ const develop = async (program) => {
 const displayBuildInfo = () => {
     if (insideProject()) {
         console.log(
-            chalk.bgBlue(chalk.white(' DEV  ')),
+            chalk.bgBlue(chalk.whiteBright(' DEV  ')),
             path.resolve('dist', 'dev.js')
         );
 
         console.log(
-            chalk.bgGreen(chalk.white(' PROD ')),
+            chalk.bgCyan(chalk.whiteBright(' PROD ')),
             path.resolve('dist', 'release.js')
         );
+
+        console.log();
     }
 }
 
