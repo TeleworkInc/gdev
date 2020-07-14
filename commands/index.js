@@ -69,7 +69,7 @@ const
 
 let pendingLock = false;
 
-const callCompiler = (...customFlags) => {
+const callCompiler = (mode = 'dev', ...customFlags) => {
     
     const spinner = ora('Compiling...').start();
 
@@ -82,7 +82,7 @@ const callCompiler = (...customFlags) => {
     return new Promise((resolve, reject) => {
         child
             .on('exit', () => {
-                spinner.succeed('Compiled!');
+                spinner.succeed(`Compiled ${mode}.js.`);
                 resolve();
             })
             .on('error', () => {
@@ -90,16 +90,6 @@ const callCompiler = (...customFlags) => {
                 reject();
             });
     });
-    // const childPromise = new Promise((resolve, reject) => {
-    //     await spawn('google-closure-compiler', FLAGS, {
-    //         stdio: 'ignore',
-    //         detached: true
-    //     });
-    //     spinner.succeed('Compiled!');
-    // }, () => {
-    //     spinner.fail('Something went wrong.')
-    // });
-
 }
 
 const INTRO_TEMPLATE = `
@@ -158,15 +148,17 @@ const compile = async () => {
         return error('\nDirectory is not a gproject workspace.');
 
     await callCompiler(
+        'dev',
         ...DEV_FLAGS,
         `--js="${CWD}/src/**.js"`,
         `--js_output_file="${CWD}/dist/dev.js"`,
     );
 
     await callCompiler(
+        'release',
         ...RELEASE_FLAGS,
         `--js="${CWD}/src/**.js"`,
-        `--js_output_file="${CWD}/dist/compiled.js"`,
+        `--js_output_file="${CWD}/dist/release.js"`,
     );
 }
 
@@ -198,7 +190,7 @@ const displayBuildInfo = () => {
 
         console.log(
             chalk.bgGreen(chalk.white(' PROD ')),
-            path.resolve('dist', 'compiled.js')
+            path.resolve('dist', 'release.js')
         );
 
         console.log();
