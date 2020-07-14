@@ -401,10 +401,10 @@ cache-base@^1.0.1:
     union-value "^1.0.0"
     unset-value "^1.0.0"
 
-call-bash@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/call-bash/-/call-bash-1.3.0.tgz#9c38e3fbccc73a6cccc787ac7a20f35f5309d457"
-  integrity sha512-zMtj5cxaxmx0n/ONFI0M9YMoit3Qp3C3rDPOtFtE/bS1He4K3SL0ekpbW4gyxmP1adw1NUK9+O7K+0blcz0dEw==
+call-bash@^1.4.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/call-bash/-/call-bash-1.8.0.tgz#ad41bc858bafe77fe5985bf0a8326e64a3659df6"
+  integrity sha512-M6GQQX2wpmqJupH+E3upzJjEno1hwHdyupm7JWsHWKgPQAsNGOEIEOgInP7nWn+TX/c2cmRG5rTkb9NN1w5o9Q==
   dependencies:
     ora "^4.0.4"
 

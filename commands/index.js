@@ -5,7 +5,7 @@ const touch = require('touch');
 const path = require('path');
 const chalk = require('chalk');
 const ora = require('ora');
-const { callBashSequential } = require('call-bash');
+const { callBash, callBashSequential } = require('call-bash');
 
 /**
  * Bail out if not inside a project directory.
@@ -66,27 +66,21 @@ const
         '--assume_function_wrapper',
     ];
 
-const callCompiler = (mode = 'dev', ...customFlags) => {
+const callCompiler = async (mode = 'dev', ...customFlags) => {
 
     const spinner = ora('Compiling...').start();
-
     const FLAGS = [...DEFAULT_FLAGS, ...customFlags];
-    const child = spawn('google-closure-compiler', FLAGS, {
-        stdio: 'ignore',
-        detached: true
-    });
 
-    return new Promise((resolve, reject) => {
-        child
-            .on('exit', () => {
-                spinner.succeed('Compiled ' + blue(`${mode}.js`));
-                resolve();
-            })
-            .on('error', () => {
-                spinner.fail('Something went wrong!');
-                reject();
-            });
-    });
+    try {
+        await callBash(
+            `google-closure-compiler ${FLAGS.join(' ')}`,
+            { stdio: ['ignore', 'ignore', 'inherit'] }
+        );
+    } catch(e) {
+        spinner.fail('Oops! Something went wrong.')
+    }
+
+    spinner.succeed('Compiled ' + blue(`${mode}.js`));
 }
 
 const INTRO_TEMPLATE = `
@@ -133,24 +127,13 @@ const initializeDirectory = async (name) => {
     ];
 
     fs.writeFileSync(path.resolve(name, '.eslintrc.yaml'), ESLINT_TEMPLATE, 'utf-8');
-    await spawnPromiseAll(cmds, { cwd: name, stdio: 'inherit' });
+    await callBashSequential(cmds, { cwd: name, stdio: 'inherit' });
 
-    // for (const cmd of cmds)
-    //     await spawnPromise(...cmd);
-
-    console.log();
-
-    // return Promise.all(
-    //     cmds.map(
-    //         cmd => spawnPromise(...cmd)
-    //     )
-    // );
 }
 
 const createProject = async (name) => {
 
     await initializeDirectory(name);
-
     success(
         'Created project at:',
         blue(name),
@@ -181,14 +164,14 @@ const compile = async () => {
     await callCompiler(
         'dev',
         ...DEV_FLAGS,
-        `--js="${CWD}/src/**.js"`,
+        `--js="${CWD}/lib/**.js"`,
         `--js_output_file="${CWD}/dist/dev.js"`,
     );
 
     await callCompiler(
         'release',
         ...RELEASE_FLAGS,
-        `--js="${CWD}/src/**.js"`,
+        `--js="${CWD}/lib/**.js"`,
         `--js_output_file="${CWD}/dist/release.js"`,
     );
 }
