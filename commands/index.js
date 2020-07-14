@@ -4,9 +4,8 @@ const process = require('process');
 const touch = require('touch');
 const path = require('path');
 const chalk = require('chalk');
-const { promisfy } = require('util');
-const { spawn, spawnSync } = require('child_process');
 const ora = require('ora');
+const { callBashSequential } = require('call-bash');
 
 /**
  * Bail out if not inside a project directory.
@@ -111,24 +110,6 @@ parserOptions:
   ecmaVersion: 11
 rules: {}
 `;
-
-const spawnPromise = (cmd, options) => new Promise(
-    (resolve, reject) => {
-        cmd = cmd.split(' ');
-        const cmdName = cmd[0];
-        const argv = cmd.slice(1);
-
-        spawn(cmdName, argv, options)
-            .on('exit', resolve)
-            .on('error', reject);
-    }
-);
-
-const spawnPromiseAll = async (cmds, options) => {
-    for (const cmd of cmds) {
-        await spawnPromise(cmd, options);
-    }
-}
 
 const initializeDirectory = async (name) => {
 
