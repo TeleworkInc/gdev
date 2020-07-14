@@ -4,19 +4,18 @@ const path = require('path');
 const aft = require('ascii-file-tree');
 
 const chalk = require('chalk');
-const figlet = require('figlet');
 
 /**
  * Imports from index.js.
  */
 const {
-    insideProject,
-    displayBuildInfo,
-    create,
-    compile,
-    develop,
-    initialize,
-} = require('..');
+  insideProject,
+  displayBuildInfo,
+  create,
+  compile,
+  develop,
+  initialize,
+} = require('../commands');
 
 /**
  * Define commands and assign actions to them.
@@ -37,32 +36,35 @@ program
     .action(compile);
 
 program
-    .command('init <directory>')
-    .description('Initialize a GProject workspace inside an existing directory.')
-    .action(initialize)
+    .command('init [directory]')
+    .description('Initialize a workspace inside an existing directory.')
+    .action(initialize);
 
 const CWD = process.cwd();
 const PROJECT_NAME = path.basename(CWD);
 const VERSION_INFO = require('../package.json').version;
 
 const TREE = insideProject()
-    ? aft.generate({
-        globs: ['lib/**/*.js']
-    })
-    : '';
+  ? aft.generate({
+    globs: ['lib/**/*.js'],
+  })
+  : '';
 
 const HEAD = insideProject()
-    ? ` ${PROJECT_NAME} `
-    : '';
+  ? ` ${PROJECT_NAME} `
+  : '';
 
-if (VERSION_INFO)
-    console.log('\n', chalk.grey(`GProject v${VERSION_INFO}`), '\n');
+if (VERSION_INFO) {
+  console.log('\n', chalk.grey(`GProject v${VERSION_INFO}`), '\n');
+}
 
-if (HEAD)
-    console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
+if (HEAD) {
+  console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
+}
 
-if (TREE)
-    console.log(chalk.blueBright(TREE), '\n');
+if (TREE) {
+  console.log(chalk.blueBright(TREE), '\n');
+}
 
 /**
  * Display the location of the dev and production files.

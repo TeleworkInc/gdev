@@ -3,7 +3,9 @@
   "version": "1.1.0",
   "description": "Javascript development workspaces built around Closure Compiler.",
   "main": "commands/index.js",
-  "bin": "bin/index.js",
+  "bin": {
+    "gproject": "bin/index.js"
+  },
   "scripts": {
     "compiler": "google-closure-compiler",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -39,6 +41,12 @@
     "touch": "^3.1.0"
   },
   "devDependencies": {
+    "eslint": "^7.4.0",
+    "eslint-config-google": "^0.14.0",
     "google-closure-compiler": "^20200614.0.0"
+  },
+  "directories": {
+    "example": "example",
+    "lib": "lib"
   }
 }
