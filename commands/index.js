@@ -69,19 +69,37 @@ const
 
 let pendingLock = false;
 
-const callCompiler = async (...customFlags) => {
+const callCompiler = (...customFlags) => {
     
     const spinner = ora('Compiling...').start();
 
     const FLAGS = [...DEFAULT_FLAGS, ...customFlags];
-    const childPromise = new Promise((resolve, reject) => {
-        spawnSync('google-closure-compiler', FLAGS);
-        resolve();
-    }, () => {
-        spinner.fail('Something went wrong.')
+    const child = spawn('google-closure-compiler', FLAGS, {
+        stdio: 'ignore',
+        detached: true
     });
+    
+    return new Promise((resolve, reject) => {
+        child
+            .on('exit', () => {
+                spinner.succeed('Compiled!');
+                resolve();
+            })
+            .on('error', () => {
+                spinner.fail('Something went wrong!');
+                reject();
+            });
+    });
+    // const childPromise = new Promise((resolve, reject) => {
+    //     await spawn('google-closure-compiler', FLAGS, {
+    //         stdio: 'ignore',
+    //         detached: true
+    //     });
+    //     spinner.succeed('Compiled!');
+    // }, () => {
+    //     spinner.fail('Something went wrong.')
+    // });
 
-    spinner.succeed('Compiled!');
 }
 
 const INTRO_TEMPLATE = `
