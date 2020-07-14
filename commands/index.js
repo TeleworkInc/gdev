@@ -6,6 +6,7 @@ const path = require('path');
 const chalk = require('chalk');
 const ora = require('ora');
 const { callBash, callBashSequential } = require('call-bash');
+const filetouch = require('filetouch');
 
 /**
  * Bail out if not inside a project directory.
@@ -85,11 +86,13 @@ const callCompiler = async (mode = 'dev', ...customFlags) => {
 
 const INTRO_TEMPLATE = `
 /**
+ * This variable is overridden by Closure Compiler during compilation.
  * @define {boolean}
  */
 const PRODUCTION = false;
 
 console.log('Welcome to GProject!');
+console.log('Production mode:', PRODUCTION);
 `;
 
 const ESLINT_TEMPLATE = `
@@ -112,31 +115,27 @@ const initialize = async (dir = '.') => {
     const srcDir = path.resolve(dir, 'lib');
     const compileDir = path.resolve(dir, 'dist');
 
-    if (!dirExists) fs.mkdirSync(dir);
-    if (!fs.existsSync(srcDir)) fs.mkdirSync(srcDir);
-    if (!fs.existsSync(compileDir)) fs.mkdirSync(compileDir);
+    filetouch.dir(dir);
+    filetouch.dir(srcDir);
+    filetouch.dir(compileDir);
 
-    fs.writeFileSync(
+    filetouch.file(
         path.resolve(srcDir, 'index.js'),
         INTRO_TEMPLATE
     );
 
-    fs.writeFileSync(
+    filetouch.file(
         path.resolve(dir, '.gitignore'),
         'node_modules',
         'utf-8'
     )
 
-    touch(path.resolve(dir, '.gproj'));
-    fs.writeFileSync(path.resolve(dir, '.eslintrc.yaml'), ESLINT_TEMPLATE, 'utf-8');
+    filetouch.file(path.resolve(dir, '.gproj'));
+    filetouch.file(path.resolve(dir, '.eslintrc.yaml'), ESLINT_TEMPLATE);
 
     const cmds = [
         'npm init -y',
-        'npm install --save-dev eslint eslint-config-google',
-        'git init .',
-        'git add --all .',
-        'git stage --all',
-        `git commit -m init`,
+        'npm install --save-dev eslint eslint-config-google'
     ];
 
     await callBashSequential(cmds, { cwd: dir, stdio: 'inherit' });
