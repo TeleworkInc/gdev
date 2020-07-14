@@ -186,6 +186,8 @@ const compile = async () => {
         `--js="${CWD}/lib/**.js"`,
         `--js_output_file="${CWD}/dist/release.js"`,
     );
+
+    console.log();
 }
 
 const develop = async (program) => {
