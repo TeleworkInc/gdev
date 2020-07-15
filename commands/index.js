@@ -92,42 +92,36 @@ env:
   commonjs: true
   es2020: true
   node: true
+
 extends:
   - google
+  - plugin:jsdoc/recommended
+
 parserOptions:
   ecmaVersion: 11
-rules: {}
+
+rules:
+  require-jsdoc:
+    - error
+    - require:
+        ClassDeclaration: true
+        FunctionDeclaration: false
+        MethodDefinition: false
+        ArrowFunctionExpression: false
+        FunctionExpression: false
+
+  operator-linebreak:
+    - error
+    - before
+
+  object-curly-spacing:
+    - error
+    - always
+
+settings:
+  jsdoc:
+    mode: closure
 `;
-
-const initialize = async (dir = '.') => {
-  const srcDir = path.resolve(dir, 'lib');
-  const compileDir = path.resolve(dir, 'dist');
-
-  filetouch.dir(dir);
-  filetouch.dir(srcDir);
-  filetouch.dir(compileDir);
-
-  filetouch.file(
-      path.resolve(srcDir, 'index.js'),
-      INTRO_TEMPLATE,
-  );
-
-  filetouch.file(
-      path.resolve(dir, '.gitignore'),
-      'node_modules',
-      'utf-8',
-  );
-
-  filetouch.file(path.resolve(dir, '.gproj'));
-  filetouch.file(path.resolve(dir, '.eslintrc.yaml'), ESLINT_TEMPLATE);
-
-  const cmds = [
-    'npm init -y',
-    'npm install --save-dev eslint eslint-config-google',
-  ];
-
-  await callBashSequential(cmds, { cwd: dir, stdio: 'inherit' });
-};
 
 const createProject = async (name) => {
   await initialize(name);
@@ -156,7 +150,7 @@ const compile = async () => {
     return error('\nDirectory is not a gproject workspace.');
   }
 
-  await callBash('npx eslint lib/**/*.js');
+  await callBash('yarn run eslint lib/**/*.js');
 
   await callCompiler(
       'dev',
@@ -175,6 +169,7 @@ const compile = async () => {
   console.log();
 };
 
+
 const develop = async (program) => {
   if (!insideProject()) {
     return error('\nDirectory is not a gproject workspace.');
@@ -192,6 +187,38 @@ const develop = async (program) => {
   await compile();
   console.log('\nListening for file changes in', blue('lib/'));
 };
+
+const initialize = async (dir = '.') => {
+  const srcDir = path.resolve(dir, 'lib');
+  const compileDir = path.resolve(dir, 'dist');
+
+  filetouch.dir(dir);
+  filetouch.dir(srcDir);
+  filetouch.dir(compileDir);
+
+  filetouch.file(
+      path.resolve(srcDir, 'index.js'),
+      INTRO_TEMPLATE,
+  );
+
+  filetouch.file(
+      path.resolve(dir, '.gitignore'),
+      'node_modules',
+      'utf-8',
+  );
+
+  filetouch.file(path.resolve(dir, '.gproj'));
+  filetouch.file(path.resolve(dir, '.eslintrc.yaml'), ESLINT_TEMPLATE);
+
+  const cmds = [
+    'yarn init -y',
+    'yarn add -D eslint eslint-config-google',
+    'yarn add -D eslint-plugin-jsdoc',
+  ];
+
+  await callBashSequential(cmds, { cwd: dir, stdio: 'inherit' });
+};
+
 
 const displayBuildInfo = () => {
   if (insideProject()) {

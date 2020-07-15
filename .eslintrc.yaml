@@ -1,14 +1,34 @@
-
 env:
   browser: true
   commonjs: true
   es2020: true
   node: true
+
 extends:
   - google
+  - plugin:jsdoc/recommended
+
 parserOptions:
   ecmaVersion: 11
-rules: {
-  'operator-linebreak': ['error', 'before'],
-  'object-curly-spacing': ['error', 'always']
-}
+
+rules:
+  require-jsdoc:
+    - error
+    - require:
+        ClassDeclaration: true
+        FunctionDeclaration: false
+        MethodDefinition: false
+        ArrowFunctionExpression: false
+        FunctionExpression: false
+
+  operator-linebreak:
+    - error
+    - before
+
+  object-curly-spacing:
+    - error
+    - always
+
+settings:
+  jsdoc:
+    mode: closure

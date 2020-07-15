@@ -1,6 +1,7 @@
 
 /**
  * This variable is overridden by Closure Compiler during compilation.
+ *
  * @define {boolean}
  */
 const PRODUCTION = false;
