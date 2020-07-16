@@ -455,9 +455,9 @@ cache-base@^1.0.1:
     unset-value "^1.0.0"
 
 call-bash@^1.4.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/call-bash/-/call-bash-1.9.0.tgz#9ba0164144e3ca1bbfb3090a8cc4ca0079c57dd4"
-  integrity sha512-I+R/3FSUtnoC1h9wSfOriK5EIgomYzl5nzJakoF7amwnhkzezHFRsNMqym+md5SV2F60pG1kaj8n1oBMsCMoNw==
+  version "1.17.0"
+  resolved "https://registry.yarnpkg.com/call-bash/-/call-bash-1.17.0.tgz#60c1c793aa8abcf3fc6fc6e1f285ab7553ce3eda"
+  integrity sha512-kgrmVrGFujd/JhlJoUvhj3ihJ4i5YqqGju+VaLEXB/8vE9V9CtRLNGS94gUkAKfYaAVkV7wfNB1Wa8V0bwjmeg==
   dependencies:
     ora "^4.0.4"
 

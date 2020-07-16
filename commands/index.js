@@ -13,6 +13,7 @@ import filetouch from 'filetouch';
 const CWD = cwd();
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
+
 /**
  * Templates and constants.
  */
@@ -58,6 +59,7 @@ const RELEASE_FLAGS = [
   '--assume_function_wrapper',
 ];
 
+
 /**
  * Logging utils.
  */
@@ -84,7 +86,7 @@ const error = (...msgs) => console.log(
  */
 
 export const callCompiler = async (mode = 'dev', ...customFlags) => {
-  const FLAGS = [...DEFAULT_FLAGS, ...customFlags];
+  const FLAGS = [...customFlags, ...DEFAULT_FLAGS];
   const commandArg = `google-closure-compiler ${FLAGS.join(' ')}`;
   const spinner = ora('Compiling...');
   console.log('\n' + chalk.grey(commandArg));
