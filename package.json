@@ -2,10 +2,11 @@
   "name": "gdev",
   "version": "1.1.0",
   "description": "Javascript development workspaces built around Closure Compiler.",
-  "main": "commands/index.js",
+  "main": "./index.cjs",
+  "module": "./index.mjs",
   "type": "module",
   "bin": {
-    "gdev": "lib/cli/index.js"
+    "gdev": "lib/cli.js"
   },
   "scripts": {
     "compiler": "google-closure-compiler",
@@ -43,9 +44,12 @@
     "touch": "^3.1.0"
   },
   "devDependencies": {
+    "create-esm": "^1.0.18",
     "eslint": "^7.4.0",
     "eslint-config-google": "^0.14.0",
     "google-closure-compiler": "^20200614.0.0",
+    "rollup": "^2.21.0",
+    "rollup-plugin-preserve-shebang": "^1.0.1",
     "yarn": "latest"
   },
   "directories": {
