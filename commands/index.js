@@ -86,7 +86,12 @@ const error = (...msgs) => console.log(
  */
 
 export const callCompiler = async (mode = 'dev', ...customFlags) => {
-  const FLAGS = [...customFlags, ...DEFAULT_FLAGS];
+  const FLAGS = [
+    ...customFlags,
+    ...DEFAULT_FLAGS,
+    `--js_output_file="dist/${mode}.js"`,
+  ];
+
   const commandArg = `google-closure-compiler ${FLAGS.join(' ')}`;
   const spinner = ora('Compiling...');
   console.log('\n' + chalk.grey(commandArg));
@@ -136,19 +141,13 @@ export const compile = async () => {
   await callCompiler(
       'dev',
       ...DEV_FLAGS,
-      // include defs and src
       ...COMPILER_INCLUDES,
-      // output to dev.js
-      `--js_output_file="dist/dev.js"`,
   );
 
   await callCompiler(
       'release',
       ...RELEASE_FLAGS,
-      // include defs and src
       ...COMPILER_INCLUDES,
-      // output to release.js
-      `--js_output_file="dist/release.js"`,
   );
 
   console.log();
