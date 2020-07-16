@@ -51,12 +51,12 @@ const DEFAULT_FLAGS = [
 ];
 
 const DEV_FLAGS = [
-  '--define="gproject.FLAGS.PRODUCTION=false"',
+  '--define="gdev.FLAGS.PRODUCTION=false"',
   '-O="SIMPLE"',
 ];
 
 const RELEASE_FLAGS = [
-  '--define="gproject.FLAGS.PRODUCTION=true"',
+  '--define="gdev.FLAGS.PRODUCTION=true"',
   '-O="ADVANCED"',
   '--language_out="ECMASCRIPT5_STRICT"',
   '--isolation_mode="IIFE"',
@@ -90,7 +90,7 @@ const INTRO_TEMPLATE = `
  */
 const PRODUCTION = false;
 
-console.log('Welcome to GProject!');
+console.log('Welcome to gdev!');
 console.log('Production mode:', PRODUCTION);
 `;
 
@@ -121,7 +121,7 @@ export const create = (name) => {
 
 export const compile = async () => {
   if (!insideProject()) {
-    return error('\nDirectory is not a gproject workspace.');
+    return error('\nDirectory is not a gdev workspace.');
   }
 
   const COMPILER_INCLUDES = [
@@ -157,7 +157,7 @@ export const compile = async () => {
 
 export const develop = async (program) => {
   if (!insideProject()) {
-    return error('\nDirectory is not a gproject workspace.');
+    return error('\nDirectory is not a gdev workspace.');
   }
 
   chokidar.watch(

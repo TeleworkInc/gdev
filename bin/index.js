@@ -30,7 +30,7 @@ import {
 
 program
     .command('create <project>')
-    .description('Create a new gproject workspace.')
+    .description('Create a new gdev workspace.')
     .action(create);
 
 program
@@ -82,7 +82,7 @@ const HEAD = (
 );
 
 if (VERSION_INFO) {
-  console.log('\n', chalk.grey(`GProject v${VERSION_INFO}`), '\n');
+  console.log('\n', chalk.grey(`gdev v${VERSION_INFO}`), '\n');
 }
 
 if (HEAD) {

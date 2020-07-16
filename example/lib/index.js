@@ -6,8 +6,8 @@ import { testVar } from './test/test';
  *
  * @define {boolean}
  */
-const PRODUCTION = goog.define('gproject.FLAGS.PRODUCTION', false);
+const PRODUCTION = goog.define('gdev.FLAGS.PRODUCTION', false);
 
-console.log('Welcome to GProject!');
+console.log('Welcome to gdev!');
 console.log('Production mode:', PRODUCTION);
 console.log({ testVar });
