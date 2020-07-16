@@ -1,25 +1,29 @@
 #!/usr/bin/env node
-const { program } = require('commander');
-const path = require('path');
-const aft = require('ascii-file-tree');
 
-const chalk = require('chalk');
+import program from 'commander';
+import fs from 'fs';
+import { basename } from 'path';
+import aft from 'ascii-file-tree';
+import chalk from 'chalk';
+
 
 /**
  * Imports from index.js.
  */
-const {
-  insideProject,
-  displayBuildInfo,
-  create,
+import {
   compile,
+  create,
   develop,
+  displayBuildInfo,
   initialize,
-} = require('../commands');
+  insideProject,
+} from '../commands/index.js';
+
 
 /**
  * Define commands and assign actions to them.
  */
+
 program
     .command('create <project>')
     .description('Create a new gproject workspace.')
@@ -40,19 +44,33 @@ program
     .description('Initialize a workspace inside an existing directory.')
     .action(initialize);
 
+
+/**
+ * Get the version of this npm package.
+ *
+ * @return {string} versionString
+ */
+function getVersion() {
+  return JSON.parse(fs.readFileSync('../package.json', 'utf-8')).version;
+}
+
+
 const CWD = process.cwd();
-const PROJECT_NAME = path.basename(CWD);
-const VERSION_INFO = require('../package.json').version;
+const PROJECT_NAME = basename(CWD);
+const VERSION_INFO = getVersion();
 
-const TREE = insideProject()
-  ? aft.generate({
-    globs: ['lib/**/*.js'],
-  })
-  : '';
 
-const HEAD = insideProject()
+const TREE = (
+  insideProject()
+  ? aft.generate({ globs: ['lib/**/*.js'] })
+  : ''
+);
+
+const HEAD = (
+  insideProject()
   ? ` ${PROJECT_NAME} `
-  : '';
+  : ''
+);
 
 if (VERSION_INFO) {
   console.log('\n', chalk.grey(`GProject v${VERSION_INFO}`), '\n');
@@ -66,10 +84,12 @@ if (TREE) {
   console.log(chalk.blueBright(TREE), '\n');
 }
 
+
 /**
  * Display the location of the dev and production files.
  */
 displayBuildInfo();
+
 
 /**
  * Parse process arguments.

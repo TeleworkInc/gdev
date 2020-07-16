@@ -1,16 +1,20 @@
-const chokidar = require('chokidar');
-const fs = require('fs');
-const process = require('process');
-const path = require('path');
-const chalk = require('chalk');
-const ora = require('ora');
-const { callBash, callBashSequential } = require('call-bash');
-const filetouch = require('filetouch');
+import 'chokidar';
+import { existsSync } from 'fs';
+import { cwd } from 'process';
+import { resolve } from 'path';
 
-const CWD = process.cwd();
+import path from 'path';
+import fs from 'fs';
+import chalk from 'chalk';
+import ora from 'ora';
+import callBash from 'call-bash';
+import filetouch from 'filetouch';
 
-const insideProject = () => fs.existsSync(
-    path.resolve(process.cwd(), '.gproj'),
+const CWD = cwd();
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+export const insideProject = () => existsSync(
+    resolve(cwd(), '.gproj'),
 );
 
 /**
@@ -20,7 +24,7 @@ const insideProject = () => fs.existsSync(
 const blue = (...msgs) => chalk.blueBright(...msgs);
 
 const success = (...msgs) => console.log(
-    chalk.bgCyan(chalk.whiteBright(' SUCCESS ')),
+    chalk.bgCyan(whiteBright(' SUCCESS ')),
     ...msgs,
     '\n',
 );
@@ -36,39 +40,43 @@ const error = (...msgs) => console.log(
  * Internal functions.
  */
 
-const
-  DEFAULT_FLAGS = [
-    '-W="VERBOSE"',
-    '--process_common_js_modules',
-    '--module_resolution="NODE"',
-    '--language_in="ECMASCRIPT_NEXT"',
-    '--jscomp_off="nonStandardJsDocs"',
-    '--rewrite_polyfills',
-    '--use_types_for_optimization',
-  ];
+const DEFAULT_FLAGS = [
+  '-W="VERBOSE"',
+  '--process_common_js_modules',
+  '--module_resolution="NODE"',
+  '--language_in="ECMASCRIPT_NEXT"',
+  '--jscomp_off="nonStandardJsDocs"',
+  '--rewrite_polyfills',
+  '--use_types_for_optimization',
+];
 
 const DEV_FLAGS = [
+  '--define="PRODUCTION=false"',
   '-O="SIMPLE"',
 ];
 
 const RELEASE_FLAGS = [
+  '--define="PRODUCTION=true"',
   '-O="ADVANCED"',
   '--language_out="ECMASCRIPT5_STRICT"',
-  '--define="PRODUCTION=true"',
   '--isolation_mode="IIFE"',
   '--assume_function_wrapper',
 ];
 
-const callCompiler = async (mode = 'dev', ...customFlags) => {
-  const spinner = ora('Compiling...').start();
+export const callCompiler = async (mode = 'dev', ...customFlags) => {
   const FLAGS = [...DEFAULT_FLAGS, ...customFlags];
+  const commandArg = `google-closure-compiler ${FLAGS.join(' ')}`;
+  const spinner = ora('Compiling...');
+  console.log('\n' + chalk.grey(commandArg));
 
   try {
-    await callBash(
-        `google-closure-compiler ${FLAGS.join(' ')}`,
+    spinner.start();
+    await callBash.call(
+        commandArg,
         { stdio: ['ignore', 'ignore', 'inherit'] },
     );
   } catch (e) {
+    console.log(e);
     spinner.fail('Oops! Something went wrong.');
   }
 
@@ -86,42 +94,10 @@ console.log('Welcome to GProject!');
 console.log('Production mode:', PRODUCTION);
 `;
 
-const ESLINT_TEMPLATE = `
-env:
-  browser: true
-  commonjs: true
-  es2020: true
-  node: true
-
-extends:
-  - google
-  - plugin:jsdoc/recommended
-
-parserOptions:
-  ecmaVersion: 11
-
-rules:
-  require-jsdoc:
-    - error
-    - require:
-        ClassDeclaration: true
-        FunctionDeclaration: false
-        MethodDefinition: false
-        ArrowFunctionExpression: false
-        FunctionExpression: false
-
-  operator-linebreak:
-    - error
-    - before
-
-  object-curly-spacing:
-    - error
-    - always
-
-settings:
-  jsdoc:
-    mode: closure
-`;
+const ESLINT_TEMPLATE = fs.readFileSync(
+    path.resolve(__dirname, '../.eslintrc.yaml'),
+    'utf-8',
+);
 
 const createProject = async (name) => {
   await initialize(name);
@@ -136,21 +112,19 @@ const createProject = async (name) => {
  * Public functions.
  */
 
-const create = (name) => {
-  if (fs.existsSync(name)) {
+export const create = (name) => {
+  if (existsSync(name)) {
     error('File or directory already exists.');
   } else createProject(name);
 };
 
 
-const compile = async () => {
-  console.log();
-
+export const compile = async () => {
   if (!insideProject()) {
     return error('\nDirectory is not a gproject workspace.');
   }
 
-  await callBash('yarn run eslint lib/**/*.js');
+  await callBash.call('yarn run eslint lib/**/*.js');
 
   await callCompiler(
       'dev',
@@ -170,12 +144,12 @@ const compile = async () => {
 };
 
 
-const develop = async (program) => {
+export const develop = async (program) => {
   if (!insideProject()) {
     return error('\nDirectory is not a gproject workspace.');
   }
 
-  chokidar.watch(
+  watch(
       `${CWD}/lib/**/*.js`,
       {
         ignoreInitial: true,
@@ -188,27 +162,45 @@ const develop = async (program) => {
   console.log('\nListening for file changes in', blue('lib/'));
 };
 
-const initialize = async (dir = '.') => {
-  const srcDir = path.resolve(dir, 'lib');
-  const compileDir = path.resolve(dir, 'dist');
+
+export const displayBuildInfo = () => {
+  if (insideProject()) {
+    console.log(
+        chalk.bgBlue(chalk.whiteBright(' DEV  ')),
+        resolve('dist', 'dev.js'),
+    );
+
+    console.log(
+        chalk.bgCyan(chalk.whiteBright(' PROD ')),
+        resolve('dist', 'release.js'),
+    );
+
+    console.log();
+  }
+};
+
+
+export const initialize = async (dir = '.') => {
+  const srcDir = resolve(dir, 'lib');
+  const compileDir = resolve(dir, 'dist');
 
   filetouch.dir(dir);
   filetouch.dir(srcDir);
   filetouch.dir(compileDir);
 
   filetouch.file(
-      path.resolve(srcDir, 'index.js'),
+      resolve(srcDir, 'index.js'),
       INTRO_TEMPLATE,
   );
 
   filetouch.file(
-      path.resolve(dir, '.gitignore'),
+      resolve(dir, '.gitignore'),
       'node_modules',
       'utf-8',
   );
 
-  filetouch.file(path.resolve(dir, '.gproj'));
-  filetouch.file(path.resolve(dir, '.eslintrc.yaml'), ESLINT_TEMPLATE);
+  filetouch.file(resolve(dir, '.gproj'));
+  filetouch.file(resolve(dir, '.eslintrc.yaml'), ESLINT_TEMPLATE);
 
   const cmds = [
     'yarn init -y',
@@ -216,31 +208,5 @@ const initialize = async (dir = '.') => {
     'yarn add -D eslint-plugin-jsdoc',
   ];
 
-  await callBashSequential(cmds, { cwd: dir, stdio: 'inherit' });
-};
-
-
-const displayBuildInfo = () => {
-  if (insideProject()) {
-    console.log(
-        chalk.bgBlue(chalk.whiteBright(' DEV  ')),
-        path.resolve('dist', 'dev.js'),
-    );
-
-    console.log(
-        chalk.bgCyan(chalk.whiteBright(' PROD ')),
-        path.resolve('dist', 'release.js'),
-    );
-
-    console.log();
-  }
-};
-
-module.exports = {
-  insideProject,
-  displayBuildInfo,
-  create,
-  compile,
-  develop,
-  initialize,
+  await callBash.sequential(cmds, { cwd: dir, stdio: 'inherit' });
 };
