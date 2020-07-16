@@ -5,7 +5,7 @@
   "main": "commands/index.js",
   "type": "module",
   "bin": {
-    "gdev": "bin/index.js"
+    "gdev": "lib/cli/index.js"
   },
   "scripts": {
     "compiler": "google-closure-compiler",
