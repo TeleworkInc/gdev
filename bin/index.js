@@ -2,9 +2,13 @@
 
 import program from 'commander';
 import fs from 'fs';
-import { basename } from 'path';
+import { basename, resolve } from 'path';
 import aft from 'ascii-file-tree';
 import chalk from 'chalk';
+
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 
 /**
@@ -51,7 +55,12 @@ program
  * @return {string} versionString
  */
 function getVersion() {
-  return JSON.parse(fs.readFileSync('../package.json', 'utf-8')).version;
+  return JSON.parse(
+      fs.readFileSync(
+          resolve(__dirname, '../package.json'),
+          'utf-8',
+      ),
+  ).version;
 }
 
 

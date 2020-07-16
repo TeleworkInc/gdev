@@ -1,5 +1,1 @@
-const testVar = 5;
-
-module.exports = {
-  testVar,
-};
+export const testVar = 5;

@@ -1,4 +1,4 @@
-import 'chokidar';
+import chokidar from 'chokidar';
 import { existsSync } from 'fs';
 import { cwd } from 'process';
 import { resolve } from 'path';
@@ -51,12 +51,12 @@ const DEFAULT_FLAGS = [
 ];
 
 const DEV_FLAGS = [
-  '--define="PRODUCTION=false"',
+  '--define="gproject.FLAGS.PRODUCTION=false"',
   '-O="SIMPLE"',
 ];
 
 const RELEASE_FLAGS = [
-  '--define="PRODUCTION=true"',
+  '--define="gproject.FLAGS.PRODUCTION=true"',
   '-O="ADVANCED"',
   '--language_out="ECMASCRIPT5_STRICT"',
   '--isolation_mode="IIFE"',
@@ -124,20 +124,31 @@ export const compile = async () => {
     return error('\nDirectory is not a gproject workspace.');
   }
 
+  const COMPILER_INCLUDES = [
+    // include defs
+    `--js="defs/**.js"`,
+    // include src files
+    `--js="lib/**.js"`,
+  ];
+
   await callBash.call('yarn run eslint lib/**/*.js');
 
   await callCompiler(
       'dev',
       ...DEV_FLAGS,
-      `--js="${CWD}/lib/**.js"`,
-      `--js_output_file="${CWD}/dist/dev.js"`,
+      // include defs and src
+      ...COMPILER_INCLUDES,
+      // output to dev.js
+      `--js_output_file="dist/dev.js"`,
   );
 
   await callCompiler(
       'release',
       ...RELEASE_FLAGS,
-      `--js="${CWD}/lib/**.js"`,
-      `--js_output_file="${CWD}/dist/release.js"`,
+      // include defs and src
+      ...COMPILER_INCLUDES,
+      // output to release.js
+      `--js_output_file="dist/release.js"`,
   );
 
   console.log();
@@ -149,7 +160,7 @@ export const develop = async (program) => {
     return error('\nDirectory is not a gproject workspace.');
   }
 
-  watch(
+  chokidar.watch(
       `${CWD}/lib/**/*.js`,
       {
         ignoreInitial: true,
@@ -203,7 +214,7 @@ export const initialize = async (dir = '.') => {
   filetouch.file(resolve(dir, '.eslintrc.yaml'), ESLINT_TEMPLATE);
 
   const cmds = [
-    'yarn init -y',
+    'yarn init esm -y',
     'yarn add -D eslint eslint-config-google',
     'yarn add -D eslint-plugin-jsdoc',
   ];

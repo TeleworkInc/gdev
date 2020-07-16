@@ -1,10 +1,12 @@
-const testVar = require('./test/test');
+import { testVar } from './test/test';
+
 /**
- * This variable is overridden by Closure Compiler during compilation.
+ * The Production flag will be overwritten to `true` when the project is
+ * compiled in release mode.
  *
  * @define {boolean}
  */
-const PRODUCTION = false;
+const PRODUCTION = goog.define('gproject.FLAGS.PRODUCTION', false);
 
 console.log('Welcome to GProject!');
 console.log('Production mode:', PRODUCTION);
