@@ -1,14 +1,18 @@
-import chokidar from 'chokidar';
 import { existsSync } from 'fs';
 import { cwd } from 'process';
 import { resolve } from 'path';
 
+import chokidar from 'chokidar';
 import path from 'path';
 import fs from 'fs';
 import chalk from 'chalk';
 import ora from 'ora';
 import callBash from 'call-bash';
 import filetouch from 'filetouch';
+
+/**
+ * Global working directory and script dirname respectively.
+ */
 
 const CWD = cwd();
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
