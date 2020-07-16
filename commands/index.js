@@ -13,32 +13,27 @@ import filetouch from 'filetouch';
 const CWD = cwd();
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
-export const insideProject = () => existsSync(
-    resolve(cwd(), '.gproj'),
-);
-
 /**
- * Slightly stylized logging utils.
+ * Templates and constants.
  */
 
-const blue = (...msgs) => chalk.blueBright(...msgs);
-
-const success = (...msgs) => console.log(
-    chalk.bgCyan(whiteBright(' SUCCESS ')),
-    ...msgs,
-    '\n',
-);
-
-const error = (...msgs) => console.log(
-    chalk.bgRed(' ERROR '),
-    ...msgs,
-    '\n',
-);
-
+const INTRO_TEMPLATE = `
 /**
+ * The Production flag will be overwritten to \`true\` when the project is
+ * compiled in release mode.
  *
- * Internal functions.
+ * @define {boolean}
  */
+const PRODUCTION = goog.define('gdev.FLAGS.PRODUCTION', false);
+
+console.log('Welcome to gdev!');
+console.log('Production mode:', PRODUCTION);
+`;
+
+const ESLINT_TEMPLATE = fs.readFileSync(
+    path.resolve(__dirname, '../.eslintrc.yaml'),
+    'utf-8',
+);
 
 const DEFAULT_FLAGS = [
   '-W="VERBOSE"',
@@ -63,6 +58,31 @@ const RELEASE_FLAGS = [
   '--assume_function_wrapper',
 ];
 
+/**
+ * Logging utils.
+ */
+
+const blue = (...msgs) => chalk.blueBright(...msgs);
+
+const success = (...msgs) => console.log(
+    chalk.bgCyan(
+        chalk.whiteBright(' SUCCESS '),
+    ),
+    ...msgs,
+    '\n',
+);
+
+const error = (...msgs) => console.log(
+    chalk.bgRed(' ERROR '),
+    ...msgs,
+    '\n',
+);
+
+
+/**
+ * Public functions.
+ */
+
 export const callCompiler = async (mode = 'dev', ...customFlags) => {
   const FLAGS = [...DEFAULT_FLAGS, ...customFlags];
   const commandArg = `google-closure-compiler ${FLAGS.join(' ')}`;
@@ -83,39 +103,17 @@ export const callCompiler = async (mode = 'dev', ...customFlags) => {
   spinner.succeed('Compiled ' + blue(`${mode}.js`));
 };
 
-const INTRO_TEMPLATE = `
-/**
- * This variable is overridden by Closure Compiler during compilation.
- * @define {boolean}
- */
-const PRODUCTION = false;
 
-console.log('Welcome to gdev!');
-console.log('Production mode:', PRODUCTION);
-`;
-
-const ESLINT_TEMPLATE = fs.readFileSync(
-    path.resolve(__dirname, '../.eslintrc.yaml'),
-    'utf-8',
-);
-
-const createProject = async (name) => {
-  await initialize(name);
-  success(
-      'Created project at:',
-      blue(name),
-  );
-};
-
-
-/**
- * Public functions.
- */
-
-export const create = (name) => {
+export const create = async (name) => {
   if (existsSync(name)) {
     error('File or directory already exists.');
-  } else createProject(name);
+  } else {
+    await initialize(name);
+    success(
+        'Created project at:',
+        blue(name),
+    );
+  }
 };
 
 
@@ -192,21 +190,30 @@ export const displayBuildInfo = () => {
 
 
 export const initialize = async (dir = '.') => {
-  const srcDir = resolve(dir, 'lib');
+  const libDir = resolve(dir, 'lib');
   const compileDir = resolve(dir, 'dist');
 
+  /**
+   * Ensure all necessary dirs exist using `filetouch`.
+   */
   filetouch.dir(dir);
-  filetouch.dir(srcDir);
+  filetouch.dir(libDir);
   filetouch.dir(compileDir);
 
+  /**
+   * Add `lib/index.js` if it doesn't exist.
+   */
   filetouch.file(
-      resolve(srcDir, 'index.js'),
+      resolve(libDir, 'index.js'),
       INTRO_TEMPLATE,
   );
 
+  /**
+   * Add `node_modules` and `dist` to project `.gitignore`.
+   */
   filetouch.file(
       resolve(dir, '.gitignore'),
-      'node_modules',
+      'node_modules\/\ndist\/',
       'utf-8',
   );
 
@@ -221,3 +228,8 @@ export const initialize = async (dir = '.') => {
 
   await callBash.sequential(cmds, { cwd: dir, stdio: 'inherit' });
 };
+
+
+export const insideProject = () => fs.existsSync(
+    path.resolve(process.cwd(), '.gproj'),
+);
