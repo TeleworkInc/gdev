@@ -25,7 +25,7 @@ const INTRO_TEMPLATE = `
  *
  * @define {boolean}
  */
-const PRODUCTION = goog.define('gdev.FLAGS.PRODUCTION', false);
+export const PRODUCTION = goog.define('gdev.FLAGS.PRODUCTION', false);
 
 console.log('Welcome to gdev!');
 console.log('Production mode:', PRODUCTION);
