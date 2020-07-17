@@ -1,9 +1,13 @@
-import { bin } from './package.json';
+// import { bin } from './package.json';
+import shebang from 'rollup-plugin-preserve-shebang';
 
 export default {
-  input: bin,
+  input: './exports.js',
   output: {
-    file: 'bundle.js',
+    file: 'bundle.cjs',
     format: 'cjs',
   },
+  plugins: [
+    shebang(),
+  ],
 };
