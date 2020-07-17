@@ -50,8 +50,7 @@
     "eslint-config-google": "^0.14.0",
     "google-closure-compiler": "^20200614.0.0",
     "rollup": "^2.21.0",
-    "rollup-plugin-preserve-shebang": "^1.0.1",
-    "yarn": "latest"
+    "rollup-plugin-preserve-shebang": "^1.0.1"
   },
   "directories": {
     "example": "example",

@@ -1,19 +1,24 @@
 'use strict';
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+/**
+ * @param ex
+ */
+function _interopDefault(ex) {
+  return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex;
+}
 
-var program = _interopDefault(require('commander'));
-var fs = require('fs');
-var fs__default = _interopDefault(fs);
-var path = require('path');
-var path__default = _interopDefault(path);
-var aft = _interopDefault(require('ascii-file-tree'));
-var chalk = _interopDefault(require('chalk'));
-var url = require('url');
-var chokidar = _interopDefault(require('chokidar'));
-var ora = _interopDefault(require('ora'));
-var callBash = _interopDefault(require('call-bash'));
-var filetouch = _interopDefault(require('filetouch'));
+const program = _interopDefault(require('commander'));
+const fs = require('fs');
+const fs__default = _interopDefault(fs);
+const path = require('path');
+const path__default = _interopDefault(path);
+const aft = _interopDefault(require('ascii-file-tree'));
+const chalk = _interopDefault(require('chalk'));
+const url = require('url');
+const chokidar = _interopDefault(require('chokidar'));
+const ora = _interopDefault(require('ora'));
+const callBash = _interopDefault(require('call-bash'));
+const filetouch = _interopDefault(require('filetouch'));
 
 /**
  * Dirname of script.
@@ -232,7 +237,8 @@ const initialize = async (dir = '.') => {
     'yarn create esm -y',
     'mv main.js index.mjs',
     'mv index.js index.cjs',
-    'yarn add -D eslint eslint-config-google eslint-plugin-jsdoc rollup',
+    'yarn add -D eslint eslint-config-google eslint-plugin-jsdoc',
+    'yarn add -D rollup rollup-plugin-preserve-shebang',
   ];
 
   await callBash.sequential(cmds, { cwd: dir, stdio: 'inherit' });
