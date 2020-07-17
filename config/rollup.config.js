@@ -1,4 +1,5 @@
 import shebang from 'rollup-plugin-preserve-shebang';
+import executable from 'rollup-plugin-executable-output';
 
 export default [
   {
@@ -13,24 +14,22 @@ export default [
         format: 'esm',
       },
     ],
-    plugins: [
-      shebang(),
-    ],
   },
   {
     input: 'lib/cli.js',
     output: [
       {
-        file: 'dist/cli.cjs',
-        format: 'cjs',
-      },
-      {
         file: 'dist/cli.mjs',
         format: 'esm',
+      },
+      {
+        file: 'dist/cli.cjs',
+        format: 'cjs',
       },
     ],
     plugins: [
       shebang(),
+      executable(),
     ],
   },
 ];

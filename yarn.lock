@@ -1697,11 +1697,6 @@ google-closure-compiler@^20200614.0.0:
     google-closure-compiler-osx "^20200614.0.0"
     google-closure-compiler-windows "^20200614.0.0"
 
-google-closure-library@^20200628.0.0:
-  version "20200628.0.0"
-  resolved "https://registry.yarnpkg.com/google-closure-library/-/google-closure-library-20200628.0.0.tgz#0a1b6f40a4b1dc408832d33bfe3494a2ef212f3f"
-  integrity sha512-G+PoGe8vtcjxszr1ie3GSrlxjO+gZDuOZClanGJMWHsefUynzPqJeIGh3zMpSsCAXZXtO6DpB59l99DVvRVcVQ==
-
 got@^6.7.1:
   version "6.7.1"
   resolved "https://registry.yarnpkg.com/got/-/got-6.7.1.tgz#240cd05785a9a18e561dc1b44b41c763ef1e8db0"
@@ -3884,6 +3879,11 @@ rimraf@^2.5.2, rimraf@^2.5.4, rimraf@^2.6.2, rimraf@^2.6.3, rimraf@^2.7.1:
   dependencies:
     glob "^7.1.3"
 
+rollup-plugin-executable-output@^1.1.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-executable-output/-/rollup-plugin-executable-output-1.3.0.tgz#e1b90d78d90ff629d7540efa40958469a5fc9381"
+  integrity sha512-0EeXeCSqLC5L/i+XAZWMT7vydQAxrNuir8JZQVyf5kBuoQYGA6eIpQgetfEmI54WvCrpB8qnIfI9QmAP/2neYw==
+
 rollup-plugin-preserve-shebang@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/rollup-plugin-preserve-shebang/-/rollup-plugin-preserve-shebang-1.0.1.tgz#17109cdb4ed12c3cac9379b802182427cdbee5a1"
@@ -4802,8 +4802,3 @@ yargs@^8.0.2:
     which-module "^2.0.0"
     y18n "^3.2.1"
     yargs-parser "^7.0.0"
-
-yarn@latest:
-  version "1.22.4"
-  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.22.4.tgz#01c1197ca5b27f21edc8bc472cd4c8ce0e5a470e"
-  integrity sha512-oYM7hi/lIWm9bCoDMEWgffW8aiNZXCWeZ1/tGy0DWrN6vmzjCXIKu2Y21o8DYVBUtiktwKcNoxyGl/2iKLUNGA==

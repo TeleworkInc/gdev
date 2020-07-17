@@ -6,7 +6,7 @@ import { testVar } from './test/test';
  *
  * @define {boolean}
  */
-const PRODUCTION = goog.define('gdev.FLAGS.PRODUCTION', false);
+const PRODUCTION = goog.define('PRODUCTION', false);
 
 console.log('Welcome to gdev!');
 console.log('Production mode:', PRODUCTION);

@@ -36,7 +36,6 @@
     "eslint-plugin-jsdoc": "^29.2.0",
     "figlet": "^1.4.0",
     "filetouch": "^1.4.0",
-    "google-closure-library": "^20200628.0.0",
     "js-sha256": "^0.9.0",
     "npm": "^6.14.5",
     "npm-watch": "^0.6.0",
@@ -49,6 +48,7 @@
     "eslint-config-google": "^0.14.0",
     "google-closure-compiler": "^20200614.0.0",
     "rollup": "^2.21.0",
+    "rollup-plugin-executable-output": "^1.1.0",
     "rollup-plugin-preserve-shebang": "^1.0.1"
   },
   "directories": {

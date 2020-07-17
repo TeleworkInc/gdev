@@ -16,15 +16,6 @@ ignorePatterns:
   - "**/dist/**"
 
 rules:
-  require-jsdoc:
-    - error
-    - require:
-        ClassDeclaration: true
-        FunctionDeclaration: false
-        MethodDefinition: false
-        ArrowFunctionExpression: false
-        FunctionExpression: false
-
   operator-linebreak:
     - error
     - before
