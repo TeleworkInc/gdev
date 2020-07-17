@@ -10,7 +10,9 @@ export const INSTALL_DIR = path.resolve(
     path.dirname(new URL(import.meta.url).pathname),
     '..',
 );
+
 export const PACKAGE_INFO = JSON.parse(
     fs.readFileSync(path.resolve(INSTALL_DIR, 'package.json')),
 );
+
 export const PACKAGE_VERSION = PACKAGE_INFO.version;

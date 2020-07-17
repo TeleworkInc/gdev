@@ -2,11 +2,11 @@
   "name": "gdev",
   "version": "1.1.0",
   "description": "Javascript development workspaces built around Closure Compiler.",
-  "main": "./index.cjs",
-  "module": "./index.mjs",
+  "main": "dist/exports.cjs",
+  "module": "dist/exports.cjs",
   "type": "module",
   "bin": {
-    "gdev": "release/cli.cjs"
+    "gdev": "dist/cli.cjs"
   },
   "scripts": {
     "compiler": "google-closure-compiler",
