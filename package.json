@@ -6,7 +6,7 @@
   "module": "./index.mjs",
   "type": "module",
   "bin": {
-    "gdev": "lib/cli.js"
+    "gdev": "release/cli.cjs"
   },
   "scripts": {
     "compiler": "google-closure-compiler",
