@@ -4,7 +4,7 @@ import shebang from 'rollup-plugin-preserve-shebang';
 export default {
   input: './exports.js',
   output: {
-    file: 'bundle.cjs',
+    file: 'dist/node.cjs',
     format: 'cjs',
   },
   plugins: [
