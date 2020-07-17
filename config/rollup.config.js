@@ -1,9 +1,8 @@
-// import { bin } from './package.json';
 import shebang from 'rollup-plugin-preserve-shebang';
 
 export default [
   {
-    input: './config/exports.js',
+    input: 'config/exports.js',
     output: [
       {
         file: 'dist/exports.cjs',
