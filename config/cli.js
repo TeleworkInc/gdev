@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { basename } from 'path';
-import { PACKAGE_VERSION } from '../config/package.js';
+import { PACKAGE_VERSION } from './package.js';
 
 import program from 'commander';
 import aft from 'ascii-file-tree';
@@ -10,7 +10,7 @@ import chalk from 'chalk';
 /**
  * Imports from /commands.
  */
-import * as commands from './commands.js';
+import * as commands from '../lib/commands.js';
 
 
 /**

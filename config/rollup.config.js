@@ -16,7 +16,7 @@ export default [
     ],
   },
   {
-    input: 'lib/cli.js',
+    input: 'config/cli.js',
     output: [
       {
         file: 'dist/cli.mjs',
