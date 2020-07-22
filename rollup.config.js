@@ -6,11 +6,31 @@ import fs from 'fs';
 import path from 'path';
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import resolve from '@rollup/plugin-node-resolve';
+import nodePolyfills from 'rollup-plugin-node-polyfills';
+
+
+const DEFAULT_FLAGS = {
+  // isolation_mode: 'iife',
+  // assume_function_wrapper: true,
+  language_in: 'ES_NEXT',
+  language_out: 'ECMASCRIPT5_STRICT',
+  compilation_level: 'SIMPLE',
+  // jscomp_off: '*',
+  // process_common_js_modules: true,
+  // module_resolution: 'NODE',
+};
+
+const closurePlugin = (options = {}) => compiler({
+  ...DEFAULT_FLAGS,
+  ...options,
+});
 
 const DEFAULT_PLUGINS = [
-  common(),
+  resolve(),
+  nodePolyfills(),
+  // common(),
   importJson(),
-  // resolve(),
+  closurePlugin(),
 ];
 
 const EXE_PLUGINS = [
@@ -18,29 +38,6 @@ const EXE_PLUGINS = [
   ...DEFAULT_PLUGINS,
   executable(),
 ];
-
-const DEFAULT_FLAGS = {
-  // isolation_mode: 'iife',
-  // assume_function_wrapper: true,
-  language_in: 'ES_NEXT',
-  language_out: 'ECMASCRIPT5_STRICT',
-  compilation_level: 'ADVANCED',
-  externs: 'externs.js',
-  jscomp_off: '*',
-  process_common_js_modules: true,
-  module_resolution: 'NODE',
-};
-
-const NODE_FLAGS = {
-  process_common_js_modules: true,
-  module_resolution: 'NODE',
-  // externs: 'externs.js',
-};
-
-const closurePlugin = (options = {}) => compiler({
-  ...DEFAULT_FLAGS,
-  ...options,
-});
 
 const generateSplit = (name, plugins = DEFAULT_PLUGINS) => {
   switch (name) {
@@ -53,7 +50,7 @@ const generateSplit = (name, plugins = DEFAULT_PLUGINS) => {
       break;
     case 'universal':
       plugins = [
-        resolve(),
+        resolve({ browser: true }),
         closurePlugin({
           compilation_level: 'ADVANCED',
         }),
@@ -70,6 +67,10 @@ const generateSplit = (name, plugins = DEFAULT_PLUGINS) => {
       {
         file: `dist/${name}.mjs`,
         format: 'esm',
+      },
+      {
+        file: `dist/${name}.js`,
+        format: 'iife',
       },
     ],
     plugins: plugins,

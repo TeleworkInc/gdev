@@ -2,7 +2,7 @@
 import * as commands from '../lib/commands.js';
 
 import { basename } from 'path';
-import { version as PACKAGE_VERSION } from '../package.json';
+import { PACKAGE_VERSION } from '../package.js';
 
 import program from 'commander';
 import aft from 'ascii-file-tree';

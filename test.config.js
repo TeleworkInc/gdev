@@ -8,11 +8,11 @@ const DEFAULT_FLAGS = {
   // assume_function_wrapper: true,
   language_in: 'ES_NEXT',
   language_out: 'ECMASCRIPT5_STRICT',
-  compilation_level: 'ADVANCED',
-  externs: 'externs.js',
-  jscomp_off: '*',
+  compilation_level: 'SIMPLE',
+  // jscomp_off: '*',
   process_common_js_modules: true,
   module_resolution: 'NODE',
+  js_output_file: 'dist/testing.js',
 };
 
 const closurePlugin = (options = {}) => compiler({
@@ -20,15 +20,13 @@ const closurePlugin = (options = {}) => compiler({
   ...options,
 });
 
-export default [
-  {
-    input: 'exports/universal.js',
-    output: 'dist/testing.js',
-    plugins: [
-      shebang(),
-      common(),
-      importJson(),
-      closurePlugin(),
-    ],
-  },
-];
+export default {
+  input: 'exports/node.js',
+  output: 'dist/testing.js',
+  plugins: [
+    shebang(),
+    common(),
+    importJson(),
+    closurePlugin(),
+  ],
+};
