@@ -1,12 +1,12 @@
 import shebang from 'rollup-plugin-preserve-shebang';
 import executable from 'rollup-plugin-executable-output';
 import common from '@rollup/plugin-commonjs';
-import importJson from '@rollup/plugin-json';
+// import importJson from '@rollup/plugin-json';
 import fs from 'fs';
 import path from 'path';
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import resolve from '@rollup/plugin-node-resolve';
-import nodePolyfills from 'rollup-plugin-node-polyfills';
+// import nodePolyfills from 'rollup-plugin-node-polyfills';
 
 
 const DEFAULT_FLAGS = {
@@ -20,11 +20,11 @@ const DEFAULT_FLAGS = {
   // module_resolution: 'NODE',
 };
 
-const NODE_FLAGS = {
-  ...DEFAULT_FLAGS,
-  process_common_js_modules: true,
-  module_resolution: 'NODE',
-};
+// const NODE_FLAGS = {
+//   ...DEFAULT_FLAGS,
+//   process_common_js_modules: true,
+//   module_resolution: 'NODE',
+// };
 
 const closurePlugin = (options = {}) => compiler({
   ...DEFAULT_FLAGS,

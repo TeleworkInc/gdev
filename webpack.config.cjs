@@ -2,50 +2,44 @@ const ClosurePlugin = require('closure-webpack-plugin');
 const { BannerPlugin } = require('webpack');
 const path = require('path');
 
-const closureCompilerSettings = {
-  optimization: {
-    minimizer: [
-      new ClosurePlugin({ mode: 'STANDARD' }, {
-        // compiler flags here
-        //
-        // for debugging help, try these:
-        //
-        // formatting: 'PRETTY_PRINT'
-        // debug: true,
-        // renaming: false
-      }),
-    ],
-  },
-};
+const compilerPlugin = new ClosurePlugin({ mode: 'STANDARD' }, {
+  // compiler flags here
+  //
+  // for debugging help, try these:
+  //
+  // formatting: 'PRETTY_PRINT'
+  // debug: true,
+  // renaming: false
+});
+
+const bannerPlugin = new BannerPlugin({
+  banner: '#!/usr/bin/env node',
+  raw: true,
+});
 
 const serverConfig = {
   entry: {
-    es: './exports/cli.js',
+    cli: './exports/cli.js',
   },
   target: 'node',
+  resolve: {
+    extensions: ['.js'],
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'cli.js',
+    filename: '[name].cjs',
   },
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-proposal-object-rest-spread'],
-          },
-        },
       },
     ],
   },
   plugins: [
-    new BannerPlugin('#!/usr/bin/env node'),
+    bannerPlugin,
   ],
-  // ...closureCompilerSettings,
 };
 
 module.exports = [
