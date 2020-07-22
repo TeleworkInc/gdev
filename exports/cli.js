@@ -1,9 +1,6 @@
-#!/usr/bin/env node
 import * as commands from '../lib/commands.js';
 
 import { basename } from 'path';
-import { PACKAGE_VERSION } from '../package.js';
-
 import program from 'commander';
 import aft from 'ascii-file-tree';
 import chalk from 'chalk';
@@ -52,10 +49,7 @@ const HEAD = (
   : ''
 );
 
-
-if (PACKAGE_VERSION) {
-  console.log('\n', chalk.grey(`gdev v${PACKAGE_VERSION}`), '\n');
-}
+console.log('\n', chalk.grey('--- 𝓰𝓭𝓮𝓿 env ---'), '\n');
 
 if (HEAD) console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
 if (TREE) console.log(chalk.blueBright(TREE), '\n');

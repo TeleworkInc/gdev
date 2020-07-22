@@ -20,16 +20,24 @@ const DEFAULT_FLAGS = {
   // module_resolution: 'NODE',
 };
 
+const NODE_FLAGS = {
+  ...DEFAULT_FLAGS,
+  process_common_js_modules: true,
+  module_resolution: 'NODE',
+};
+
 const closurePlugin = (options = {}) => compiler({
   ...DEFAULT_FLAGS,
   ...options,
 });
 
 const DEFAULT_PLUGINS = [
-  resolve(),
-  nodePolyfills(),
-  // common(),
-  importJson(),
+  // resolve({ browser: true }),
+  // importJson(),
+  common({
+    transformMixedEsModules: true,
+  }),
+  // nodePolyfills(),
   closurePlugin(),
 ];
 
@@ -42,13 +50,10 @@ const EXE_PLUGINS = [
 const generateSplit = (name, plugins = DEFAULT_PLUGINS) => {
   switch (name) {
     case 'cli':
-      plugins = [
-        shebang(),
-        closurePlugin(),
-        ...EXE_PLUGINS,
-      ];
+      plugins = EXE_PLUGINS;
       break;
     case 'universal':
+      break;
       plugins = [
         resolve({ browser: true }),
         closurePlugin({
