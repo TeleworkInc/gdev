@@ -1,5 +1,7 @@
 import gulp from 'gulp';
 import Closure from 'google-closure-compiler';
+import fs from 'fs';
+import EventEmitter from 'events';
 
 const Compiler = Closure.compiler;
 
@@ -9,8 +11,10 @@ const Compiler = Closure.compiler;
  *
  * @param {?object} options
  * Options to pass to the compiler.
+ *
+ * @return {void}
  */
-const doCompile = async (name, options = {}) => {
+const doCompile = (name, options = {}) => {
   const instance = new Compiler({
     js: `dist/${name}.cjs`,
     js_output_file: `dist/${name}.min.cjs`,
@@ -18,31 +22,50 @@ const doCompile = async (name, options = {}) => {
     ...options,
   });
 
+  const emitter = new EventEmitter();
+
   instance.run((exitCode, stdOut, stdErr) => {
     console.log(exitCode, stdOut, stdErr);
+    emitter.emit('finish');
   });
+
+  return emitter;
 };
 
 /**
  * Compile a script for `node-async` target.
+ *
+ * @return {EventEmitter}
+ * An EventEmitter that will fire when Closure Compiler is done.
  */
-const nodeCompile = async () => {
-  await doCompile('node');
-};
-
+const nodeCompile = () => doCompile('node');
 
 /**
  * Compile the exports/cli.js script.
+ *
+ * @return {EventEmitter}
+ * An EventEmitter that will fire when Closure Compiler is done.
  */
-const cliCompile = async () => {
-  await doCompile('cli');
+const cliCompile = () => doCompile('cli');
+
+/**
+ * Make CLI files executable and include shebang.
+ */
+const cliExecutable = async () => {
+  const currentCode = fs.readFileSync('dist/cli.min.cjs');
+  if (currentCode[0] !== '#') {
+    fs.writeFileSync('dist/cli.min.cjs', `#!/usr/bin/env node\n${currentCode}`);
+  }
 };
 
 /**
  * Compile the exports/universal.js script.
+ *
+ * @return {EventEmitter}
+ * An EventEmitter that will fire when Closure Compiler is done.
  */
-const universalCompile = async () => {
-  await doCompile('universal', {
+const universalCompile = () => {
+  return doCompile('universal', {
     entry_point: 'dist/universal.cjs',
     compilation_level: 'ADVANCED',
     isolation_mode: 'iife',
@@ -53,28 +76,11 @@ const universalCompile = async () => {
   });
 };
 
-const RESERVED_EXPORTS = [
-  'cli',
-  'node',
-  'universal',
-];
-
-const compileReservedExports = async () => {
-  for (const reservedExport of RESERVED_EXPORTS) {
-    switch (reservedExport) {
-      case 'cli':
-        await cliCompile();
-        break;
-      case 'universal':
-        await universalCompile();
-        break;
-      case 'node':
-        await nodeCompile();
-        break;
-    }
-  }
-};
-
-export default gulp.parallel(
-    compileReservedExports,
+export default gulp.series(
+    gulp.parallel(
+        cliCompile,
+        universalCompile,
+        nodeCompile,
+    ),
+    cliExecutable,
 );
