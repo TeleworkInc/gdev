@@ -9,9 +9,10 @@
     "gdev": "dist/cli.min.cjs"
   },
   "scripts": {
+    "run:rollup": "yarn rollup -c",
     "run:webpack": "yarn webpack --config webpack.config.cjs",
     "run:compile": "yarn gulp",
-    "build": "yarn run:webpack && yarn run:compile",
+    "build": "yarn run:rollup && yarn run:webpack && yarn run:compile",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -49,6 +50,7 @@
     "@tscc/rollup-plugin-tscc": "^0.5.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
+    "chai": "^4.2.0",
     "closure-webpack-plugin": "^2.3.0",
     "create-esm": "^1.0.18",
     "eslint": "^7.4.0",

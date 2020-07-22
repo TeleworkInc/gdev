@@ -11,6 +11,7 @@ const bannerPlugin = new BannerPlugin({
 });
 
 const CONFIG_DEFAULTS = {
+  mode: 'production',
   resolve: {
     extensions: ['.js'],
   },
@@ -47,6 +48,15 @@ const universalConfig = {
   target: 'web',
 };
 
+
+const executableConfig = {
+  ...CONFIG_DEFAULTS,
+  entry: {
+    executable: './exports/universal.js',
+  },
+  target: 'web',
+};
+
 const nodeConfig = {
   ...CONFIG_DEFAULTS,
   entry: {
@@ -67,5 +77,6 @@ const nodeConfig = {
 module.exports = [
   cliConfig,
   universalConfig,
+  executableConfig,
   nodeConfig,
 ];

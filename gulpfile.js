@@ -25,7 +25,7 @@ const doCompile = (name, options = {}) => {
   const emitter = new EventEmitter();
 
   instance.run((exitCode, stdOut, stdErr) => {
-    console.log(exitCode, stdOut, stdErr);
+    if (exitCode !== 0) console.log(exitCode, stdOut, stdErr);
     emitter.emit('finish');
   });
 
@@ -48,16 +48,21 @@ const nodeCompile = () => doCompile('node');
  */
 const cliCompile = () => doCompile('cli');
 
+const markExecutable = (file) => {
+  const currentCode = fs.readFileSync(file);
+  if (currentCode[0] !== '#') {
+    fs.writeFileSync(file, `#!/usr/bin/env node\n${currentCode}`);
+    fs.chmodSync(file, '755');
+  }
+};
+
 /**
  * Make CLI files executable and include shebang.
  */
-const cliExecutable = async () => {
-  const currentCode = fs.readFileSync('dist/cli.min.cjs');
-  if (currentCode[0] !== '#') {
-    fs.writeFileSync('dist/cli.min.cjs', `#!/usr/bin/env node\n${currentCode}`);
-    fs.chmodSync('dist/cli.min.cjs', '755');
-    fs.chmodSync('dist/cli.cjs', '755');
-  }
+const markAllExecutable = async () => {
+  markExecutable('dist/cli.mjs');
+  markExecutable('dist/cli.cjs');
+  markExecutable('dist/cli.min.cjs');
 };
 
 /**
@@ -68,7 +73,20 @@ const cliExecutable = async () => {
  */
 const universalCompile = () => {
   return doCompile('universal', {
-    entry_point: 'dist/universal.cjs',
+    js: 'dist/universal.mjs',
+    entry_point: 'dist/universal.mjs',
+    compilation_level: 'SIMPLE',
+    assume_function_wrapper: true,
+    process_common_js_modules: true,
+    module_resolution: 'NODE',
+  });
+};
+
+const executableCompile = () => {
+  return doCompile('executable', {
+    js: 'dist/universal.mjs',
+    entry_point: 'dist/universal.mjs',
+    js_output_file: 'dist/exe.cjs',
     compilation_level: 'ADVANCED',
     isolation_mode: 'iife',
     dependency_mode: 'PRUNE',
@@ -78,11 +96,13 @@ const universalCompile = () => {
   });
 };
 
+
 export default gulp.series(
     gulp.parallel(
         cliCompile,
         universalCompile,
         nodeCompile,
+        executableCompile,
     ),
-    cliExecutable,
+    markAllExecutable,
 );
