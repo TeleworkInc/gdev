@@ -1,3 +1,2 @@
-export const Test = 42;
-
-console.log(Test);
+import { INTRO_TEMPLATE } from '../lib/templates.js';
+console.log(INTRO_TEMPLATE);

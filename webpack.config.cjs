@@ -14,7 +14,7 @@ const cliConfig = {
   entry: {
     cli: './exports/cli.js',
   },
-  target: 'node',
+  target: 'async-node',
   resolve: {
     extensions: ['.js'],
   },
@@ -35,6 +35,33 @@ const cliConfig = {
   ],
 };
 
+const universalConfig = {
+  entry: {
+    universal: './exports/universal.js',
+  },
+  target: 'web',
+  resolve: {
+    extensions: ['.js'],
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].cjs',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  plugins: [
+    // bannerPlugin,
+
+  ],
+};
+
 module.exports = [
   cliConfig,
+  universalConfig,
 ];
