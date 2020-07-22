@@ -1,20 +1,18 @@
 #!/usr/bin/env node
+import * as commands from '../lib/commands.js';
 
 import { basename } from 'path';
-import { PACKAGE_VERSION } from './package.js';
+import { version as PACKAGE_VERSION } from '../package.json';
 
 import program from 'commander';
 import aft from 'ascii-file-tree';
 import chalk from 'chalk';
 
-/**
- * Imports from /commands.
- */
-import * as commands from '../lib/commands.js';
-
+const CWD = process.cwd();
+const PROJECT_NAME = basename(CWD);
 
 /**
- * Define commands and assign actions to them.
+ * Assign actions to CLI commands.
  */
 
 program
@@ -37,10 +35,10 @@ program
     .description('Initialize a workspace inside an existing directory.')
     .action(commands.initialize);
 
-
-const CWD = process.cwd();
-const PROJECT_NAME = basename(CWD);
-
+/**
+ * Display some introductory text containing the version info and directory
+ * structure as a tree.
+ */
 
 const TREE = (
   commands.checkInsideProject()
@@ -54,26 +52,22 @@ const HEAD = (
   : ''
 );
 
+
 if (PACKAGE_VERSION) {
   console.log('\n', chalk.grey(`gdev v${PACKAGE_VERSION}`), '\n');
 }
 
-if (HEAD) {
-  console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
-}
-
-if (TREE) {
-  console.log(chalk.blueBright(TREE), '\n');
-}
+if (HEAD) console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
+if (TREE) console.log(chalk.blueBright(TREE), '\n');
 
 
 /**
  * Display the location of the dev and production files.
  */
-commands.displayBuildInfo();
+commands.displayProjectInfo();
 
 
 /**
- * Parse process arguments.
+ * Parse command line arguments.
  */
 program.parse(process.argv);

@@ -2,8 +2,8 @@
   "name": "gdev",
   "version": "2.0.0",
   "description": "Javascript development workspaces built around Closure Compiler.",
-  "main": "dist/exports.cjs",
-  "module": "dist/exports.cjs",
+  "main": "dist/node.cjs",
+  "module": "dist/node.mjs",
   "type": "module",
   "bin": {
     "gdev": "dist/cli.cjs"
@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/TeleworkInc/gdev#readme",
   "dependencies": {
+    "@tscc/tscc": "^0.5.1",
     "ascii-file-tree": "^1.2.2",
     "call-bash": "^1.4.0",
     "chalk": "^4.1.0",
@@ -36,13 +37,21 @@
     "eslint-plugin-jsdoc": "^29.2.0",
     "figlet": "^1.4.0",
     "filetouch": "^1.4.0",
+    "google-closure-library": "^20200628.0.0",
     "js-sha256": "^0.9.0",
     "npm": "^6.14.5",
     "npm-watch": "^0.6.0",
     "ora": "^4.0.4",
-    "touch": "^3.1.0"
+    "touch": "^3.1.0",
+    "tsickle": "^0.39.1"
   },
   "devDependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
+    "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
+    "@tscc/rollup-plugin-tscc": "^0.5.0",
+    "babel-eslint": "^10.1.0",
     "create-esm": "^1.0.18",
     "eslint": "^7.4.0",
     "eslint-config-google": "^0.14.0",

@@ -1,3 +1,5 @@
+parser: babel-eslint
+
 env:
   browser: true
   commonjs: true
@@ -13,9 +15,19 @@ parserOptions:
   sourceType: module
 
 ignorePatterns:
-  - "**/dist/**"
+  - '**/dist/**'
+  - '**/externs.js'
 
 rules:
+  require-jsdoc:
+    - error
+    - require:
+        ClassDeclaration: true
+        MethodDefinition: true
+        FunctionDeclaration: false
+        FunctionExpression: false
+        ArrowFunctionExpression: false
+
   operator-linebreak:
     - error
     - before
