@@ -1,23 +1,16 @@
-const ClosurePlugin = require('closure-webpack-plugin');
+/**
+ * Have to use CommonJS for Webpack config.
+ */
+
 const { BannerPlugin } = require('webpack');
 const path = require('path');
-
-const compilerPlugin = new ClosurePlugin({ mode: 'STANDARD' }, {
-  // compiler flags here
-  //
-  // for debugging help, try these:
-  //
-  // formatting: 'PRETTY_PRINT'
-  // debug: true,
-  // renaming: false
-});
 
 const bannerPlugin = new BannerPlugin({
   banner: '#!/usr/bin/env node',
   raw: true,
 });
 
-const serverConfig = {
+const cliConfig = {
   entry: {
     cli: './exports/cli.js',
   },
@@ -43,13 +36,5 @@ const serverConfig = {
 };
 
 module.exports = [
-  serverConfig,
+  cliConfig,
 ];
-
-// export const clientConfig = {
-//   target: 'web',
-//   output: {
-//     path: path.resolve(__dirname, 'dist'),
-//     filename: 'lib.js',
-//   },
-// };
