@@ -10,11 +10,7 @@ const bannerPlugin = new BannerPlugin({
   raw: true,
 });
 
-const cliConfig = {
-  entry: {
-    cli: './exports/cli.js',
-  },
-  target: 'async-node',
+const CONFIG_DEFAULTS = {
   resolve: {
     extensions: ['.js'],
   },
@@ -30,38 +26,46 @@ const cliConfig = {
       },
     ],
   },
+};
+
+const cliConfig = {
+  ...CONFIG_DEFAULTS,
+  entry: {
+    cli: './exports/cli.js',
+  },
+  target: 'async-node',
   plugins: [
     bannerPlugin,
   ],
 };
 
 const universalConfig = {
+  ...CONFIG_DEFAULTS,
   entry: {
     universal: './exports/universal.js',
   },
   target: 'web',
-  resolve: {
-    extensions: ['.js'],
+};
+
+const nodeConfig = {
+  ...CONFIG_DEFAULTS,
+  entry: {
+    node: './exports/node.js',
   },
+  target: 'node',
+  /**
+   * Following lines enable module.export.
+   */
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].cjs',
+    library: '',
+    libraryTarget: 'commonjs',
   },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-      },
-    ],
-  },
-  plugins: [
-    // bannerPlugin,
-
-  ],
 };
 
 module.exports = [
   cliConfig,
   universalConfig,
+  nodeConfig,
 ];
