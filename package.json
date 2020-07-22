@@ -9,6 +9,9 @@
     "gdev": "dist/cli.cjs"
   },
   "scripts": {
+    "run:webpack": "yarn webpack --config webpack.config.cjs",
+    "run:compile": "yarn gulp",
+    "build": "yarn run:webpack && yarn run:compile",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

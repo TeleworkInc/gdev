@@ -55,6 +55,8 @@ const cliExecutable = async () => {
   const currentCode = fs.readFileSync('dist/cli.min.cjs');
   if (currentCode[0] !== '#') {
     fs.writeFileSync('dist/cli.min.cjs', `#!/usr/bin/env node\n${currentCode}`);
+    fs.chmodSync('dist/cli.min.cjs', '755');
+    fs.chmodSync('dist/cli.cjs', '755');
   }
 };
 
