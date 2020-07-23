@@ -16,7 +16,7 @@ const Compiler = Closure.compiler;
  * @return {EventEmitter}
  * The event which will emit when the Closure Compiler is finished.
  */
-const startCompileTask = (options = {}) => {
+export const startCompileTask = (options = {}) => {
   const instance = new Compiler(options);
   const emitter = new EventEmitter();
 
@@ -29,7 +29,8 @@ const startCompileTask = (options = {}) => {
 };
 
 /**
- * Compile a CommonJS script in the dist/ directory.
+ * Compile a CommonJS script in the `dev/` directory into the `dist/` directory.
+ * Used for `executable` builds since they do not have any exports.
  *
  * @param {string} name
  * The name of the preprocessed CJS script to compile, located at
@@ -41,9 +42,15 @@ const startCompileTask = (options = {}) => {
  * @return {EventEmitter}
  * The event which will emit when the Closure Compiler is finished.
  */
-const compileCJS = (name, options = {}) => startCompileTask({
+export const compileCJS = (name, options = {}) => startCompileTask({
+  /**
+   * I/O setup.
+   */
   js: `dev/${name}.cjs`,
   js_output_file: `dist/${name}.min.cjs`,
+  /**
+   * SIMPLE compilation for CJS to avoid renaming.
+   */
   compilation_level: 'SIMPLE',
   ...options,
 });
@@ -60,7 +67,7 @@ const compileCJS = (name, options = {}) => startCompileTask({
  * @return {EventEmitter}
  * The event which will emit when the Closure Compiler is finished.
  */
-const compileESM = (name, options = {}) => {
+export const compileESM = (name, options = {}) => {
   console.log('Compiling ESM for', name);
   return startCompileTask({
     /**
@@ -69,20 +76,26 @@ const compileESM = (name, options = {}) => {
     js: `dev/${name}.mjs`,
     js_output_file: `dist/${name}.min.mjs`,
     /**
-     * Enable import/export.
+     * Enable import/export/require keywords.
      */
-    compilation_level: 'WHITESPACE_ONLY',
     module_resolution: 'NODE',
     process_common_js_modules: true,
     /**
-     * Prevent transpilation.
+     * Prevent transpilation and renaming.
      */
+    compilation_level: 'WHITESPACE_ONLY',
     language_in: 'ES_NEXT',
     language_out: 'ES_NEXT',
     ...options,
   });
 };
 
+/**
+ * Append a shebang to a file and set chmod 755.
+ *
+ * @param {string} file
+ * The file to make executable.
+ */
 const markExecutable = async (file) => {
   const currentCode = fs.readFileSync(file);
   if (currentCode[0] !== '#') {
@@ -92,12 +105,21 @@ const markExecutable = async (file) => {
 };
 
 /**
- * Make CLI files executable and include shebang.
+ * Mark all CLI builds in dist/ and dev/ as executable.
+ *
+ * @return {?}
+ * The stream for this task.
  */
-const markCLIsExecutable = async () => {
-  markExecutable('dist/cli.mjs');
-  markExecutable('dist/cli.cjs');
-  markExecutable('dist/cli.min.cjs');
+export const markCLIsExecutable = () => {
+  return gulp
+      .src([
+        'dev/cli.*',
+        'dev/cli.*',
+        // '!(*.min.mjs)',
+      ], { base: './' })
+      .pipe(tap(
+          async (file, t) => await markExecutable(file.path),
+      ));
 };
 
 /**
@@ -106,7 +128,7 @@ const markCLIsExecutable = async () => {
  * @return {EventEmitter}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
-const nodeCompile = () => compileCJS('node');
+export const nodeCompile = () => compileCJS('node');
 
 /**
  * Compile the exports/universal.js script.
@@ -114,7 +136,7 @@ const nodeCompile = () => compileCJS('node');
  * @return {EventEmitter}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
-const universalCompile = () => {
+export const universalCompile = () => {
   return compileCJS('universal', {
     js: 'dev/universal.mjs',
     entry_point: 'dev/universal.mjs',
@@ -131,7 +153,7 @@ const universalCompile = () => {
  * @return {EventEmitter}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
-const cliCompile = () => compileCJS('cli');
+export const cliCompile = () => compileCJS('cli');
 
 /**
  * Compile the rolled-up exe ESM to CJS.
@@ -139,7 +161,7 @@ const cliCompile = () => compileCJS('cli');
  * @return {EventEmitter}
  * The EventEmitter that will fire when Closure Compiler is done.
  */
-const executableCompile = () => {
+export const executableCompile = () => {
   return compileCJS('executable', {
     js: 'dev/universal.mjs',
     entry_point: 'dev/universal.mjs',
