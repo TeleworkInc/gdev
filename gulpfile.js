@@ -1,3 +1,8 @@
+/**
+ * @file
+ * Runs preprocessed dev files through Google's Closure Compiler.
+ */
+
 import gulp from 'gulp';
 import tap from 'gulp-tap';
 import Closure from 'google-closure-compiler';
@@ -59,6 +64,23 @@ export const compileCJS = (name, options = {}) => startCompileTask({
 });
 
 /**
+ * Prevent transpilation and renaming.
+ */
+const NO_RENAMING = {
+  compilation_level: 'WHITESPACE_ONLY',
+  language_in: 'ES_NEXT',
+  language_out: 'ES_NEXT',
+};
+
+/**
+ * Process ES6/CJS modules.
+ */
+const PROCESS_MODULES = {
+  module_resolution: 'NODE',
+  process_common_js_modules: true,
+};
+
+/**
  * Compile an ES6 module in the dist/ directory.
  *
  * @param {string} name
@@ -71,24 +93,14 @@ export const compileCJS = (name, options = {}) => startCompileTask({
  * The event which will emit when the Closure Compiler is finished.
  */
 export const compileESM = (name, options = {}) => {
-  console.log('Compiling ESM for', name);
   return startCompileTask({
     /**
      * I/O setup.
      */
     js: `dev/${name}.mjs`,
     js_output_file: `dist/${name}.min.mjs`,
-    /**
-     * Prevent transpilation and renaming.
-     */
-    compilation_level: 'WHITESPACE_ONLY',
-    language_in: 'ES_NEXT',
-    language_out: 'ES_NEXT',
-    /**
-     * Process ES6/CJS modules.
-     */
-    module_resolution: 'NODE',
-    process_common_js_modules: true,
+    ...NO_RENAMING,
+    ...PROCESS_MODULES,
     /**
      * Overrides.
      */
@@ -151,15 +163,10 @@ export const universalCompile = () => {
     entry_point: 'dev/universal.mjs',
     js_output_file: 'dev/universal.cjs',
     /**
-     * Prevent name-mangling.
+     * No need for NO_RENAMING flag.
      */
     compilation_level: 'SIMPLE',
-    assume_function_wrapper: true,
-    /**
-     * Process ES6/CJS modules.
-     */
-    process_common_js_modules: true,
-    module_resolution: 'NODE',
+    ...PROCESS_MODULES,
   });
 };
 
@@ -191,11 +198,7 @@ export const executableCompile = () => {
      */
     compilation_level: 'ADVANCED',
     dependency_mode: 'PRUNE',
-    /**
-     * Process ES6/CJS modules.
-     */
-    module_resolution: 'NODE',
-    process_common_js_modules: true,
+    ...PROCESS_MODULES,
 
     /**
      * Force IIFE.
@@ -218,15 +221,18 @@ export const minifyModules = () => {
         '!**/*.min.mjs',
       ], { base: './' })
       .pipe(tap(
-          (file, t) => compileESM(path.basename(file.path, '.mjs')),
+          (file, t) => compileESM(
+              path.basename(file.path, '.mjs'),
+              { jscomp_off: '*' },
+          ),
       ));
 };
 
 export default gulp.series(
     gulp.parallel(
+        nodeCompile,
         cliCompile,
         universalCompile,
-        nodeCompile,
         executableCompile,
     ),
     minifyModules,
