@@ -2,11 +2,14 @@
   "name": "gdev",
   "version": "2.0.0",
   "description": "Javascript development workspaces built around Closure Compiler.",
-  "main": "dist/node.min.cjs",
-  "module": "dist/node.min.mjs",
   "type": "module",
   "bin": {
     "gdev": "dist/cli.min.cjs"
+  },
+  "main": "./dist/node.min.cjs",
+  "exports": {
+    "import": "./dist/node.min.mjs",
+    "require": "./dist/node.min.cjs"
   },
   "scripts": {
     "test": "yarn mocha",
