@@ -32,7 +32,8 @@ export default [
   exportESM('universal'),
   /**
    * Prefer to bundle universal bundle with Rollup, since it will not depend on
-   * NodeJS packages by definition.
+   * NodeJS packages by definition, and Rollup is more reliable. Webpack will be
+   * used to generate the CJS versions of the other ES6 modules.
    */
   exportCJS('universal'),
 ];

@@ -1,14 +1,10 @@
 /**
- * Have to use CommonJS for Webpack config.
+ * Use Webpack to build CJS modules from ES2015 modules.
+ *
+ * Have to use CJS for Webpack config.
  */
 
-const { BannerPlugin } = require('webpack');
 const path = require('path');
-
-const bannerPlugin = new BannerPlugin({
-  banner: '#!/usr/bin/env node',
-  raw: true,
-});
 
 const CONFIG_DEFAULTS = {
   mode: 'production',
@@ -32,29 +28,18 @@ const CONFIG_DEFAULTS = {
 const cliConfig = {
   ...CONFIG_DEFAULTS,
   entry: {
-    cli: './exports/cli.js',
+    cli: './dist/cli.mjs',
   },
   target: 'async-node',
-  plugins: [
-    bannerPlugin,
-  ],
-};
-
-const universalConfig = {
-  ...CONFIG_DEFAULTS,
-  entry: {
-    universal: './exports/universal.js',
+  module: {
+    rules: [
+      {
+        type: 'javascript/auto',
+        test: /\.mjs$/,
+        use: [],
+      },
+    ],
   },
-  target: 'web',
-};
-
-
-const executableConfig = {
-  ...CONFIG_DEFAULTS,
-  entry: {
-    executable: './exports/universal.js',
-  },
-  target: 'web',
 };
 
 const nodeConfig = {
@@ -76,7 +61,5 @@ const nodeConfig = {
 
 module.exports = [
   cliConfig,
-  universalConfig,
-  executableConfig,
   nodeConfig,
 ];

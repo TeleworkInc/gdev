@@ -12,7 +12,7 @@
     "run:rollup": "yarn rollup -c",
     "run:webpack": "yarn webpack --config webpack.config.cjs",
     "run:compile": "yarn gulp",
-    "build": "yarn run:rollup && yarn run:webpack && yarn run:compile",
+    "build": "yarn run:rollup && yarn run:webpack && yarn run:compile && yarn mocha",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -39,6 +39,7 @@
     "commander": "^5.1.0",
     "figlet": "^1.4.0",
     "filetouch": "^1.4.0",
+    "gulp-rename": "^2.0.0",
     "ora": "^4.0.4",
     "touch": "^3.1.0"
   },
@@ -47,6 +48,8 @@
     "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
     "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
     "@tscc/rollup-plugin-tscc": "^0.5.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
