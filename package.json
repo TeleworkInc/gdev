@@ -13,7 +13,7 @@
   },
   "scripts": {
     "test": "yarn mocha",
-    "clean": "rm -rf ./dist && rm -rf ./dev",
+    "clean": "rm -rf ./dist/* && rm -rf ./dev/*",
     "run:rollup": "yarn rollup -c",
     "run:webpack": "yarn webpack --config webpack.config.cjs",
     "run:compile": "yarn gulp",

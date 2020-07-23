@@ -5,7 +5,6 @@ const cjsCli = require('../dev/cli.cjs');
 const cjsCliMin = require('../dist/cli.min.cjs');
 const thisPackage = require('..');
 
-
 describe('CJS require()', () => {
   it('should import this npm package', () => {
     expect(thisPackage.callCompiler).to.be.a('function');

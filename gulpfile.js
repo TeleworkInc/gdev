@@ -52,6 +52,9 @@ export const compileCJS = (name, options = {}) => startCompileTask({
    * SIMPLE compilation for CJS to avoid renaming.
    */
   compilation_level: 'SIMPLE',
+  /**
+   * Overrides.
+   */
   ...options,
 });
 
@@ -76,16 +79,19 @@ export const compileESM = (name, options = {}) => {
     js: `dev/${name}.mjs`,
     js_output_file: `dist/${name}.min.mjs`,
     /**
-     * Enable import/export/require keywords.
-     */
-    module_resolution: 'NODE',
-    process_common_js_modules: true,
-    /**
      * Prevent transpilation and renaming.
      */
     compilation_level: 'WHITESPACE_ONLY',
     language_in: 'ES_NEXT',
     language_out: 'ES_NEXT',
+    /**
+     * Process ES6/CJS modules.
+     */
+    module_resolution: 'NODE',
+    process_common_js_modules: true,
+    /**
+     * Overrides.
+     */
     ...options,
   });
 };
@@ -138,10 +144,20 @@ export const nodeCompile = () => compileCJS('node');
  */
 export const universalCompile = () => {
   return compileCJS('universal', {
+    /**
+     * Compiling dev/universal.mjs -> /dev/universal.cjs
+     */
     js: 'dev/universal.mjs',
     entry_point: 'dev/universal.mjs',
+    js_output_file: 'dev/universal.cjs',
+    /**
+     * Prevent name-mangling.
+     */
     compilation_level: 'SIMPLE',
     assume_function_wrapper: true,
+    /**
+     * Process ES6/CJS modules.
+     */
     process_common_js_modules: true,
     module_resolution: 'NODE',
   });
@@ -156,31 +172,50 @@ export const universalCompile = () => {
 export const cliCompile = () => compileCJS('cli');
 
 /**
- * Compile the rolled-up exe ESM to CJS.
+ * Compile the executable. This will reduce all of the codebase to just its side
+ * effects as best as possible.
  *
  * @return {EventEmitter}
  * The EventEmitter that will fire when Closure Compiler is done.
  */
 export const executableCompile = () => {
   return compileCJS('executable', {
+    /**
+     * Compiling dev/universal -> dist/exe
+     */
     js: 'dev/universal.mjs',
     entry_point: 'dev/universal.mjs',
     js_output_file: 'dist/exe.js',
+    /**
+     * Maximum tree-shaking and dead code elimination.
+     */
     compilation_level: 'ADVANCED',
-    isolation_mode: 'iife',
     dependency_mode: 'PRUNE',
-    assume_function_wrapper: true,
-    process_common_js_modules: true,
+    /**
+     * Process ES6/CJS modules.
+     */
     module_resolution: 'NODE',
+    process_common_js_modules: true,
+
+    /**
+     * Force IIFE.
+     */
+    isolation_mode: 'iife',
+    assume_function_wrapper: true,
   });
 };
 
+/**
+ * Run generated ESM bundles through the compiler.
+ *
+ * @return {?}
+ * The stream for the task.
+ */
 export const minifyModules = () => {
   return gulp
       .src([
         'dev/**/*.mjs',
         '!**/*.min.mjs',
-        // '!(*.min.mjs)',
       ], { base: './' })
       .pipe(tap(
           (file, t) => compileESM(path.basename(file.path, '.mjs')),
