@@ -6,14 +6,26 @@
 
 const path = require('path');
 
+/**
+ * Defaults to enable module.export on an uncompiled CJS bundle.
+ */
+const EXPORT_CONFIG = {
+  output: {
+    path: path.resolve(__dirname, 'dev'),
+    filename: '[name].cjs',
+    library: '',
+    libraryTarget: 'commonjs',
+  },
+};
+
+/**
+ * Webpack defaults, to be overridden if needed.
+ */
 const CONFIG_DEFAULTS = {
+  ...EXPORT_CONFIG,
   mode: 'production',
   resolve: {
     extensions: ['.js'],
-  },
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].cjs',
   },
   module: {
     rules: [
@@ -25,13 +37,19 @@ const CONFIG_DEFAULTS = {
   },
 };
 
+/**
+ * Transpile the CLI module to CJS with async-node target.
+ */
 const cliConfig = {
   ...CONFIG_DEFAULTS,
   entry: {
-    cli: './dist/cli.mjs',
+    cli: './dev/cli.mjs',
   },
   target: 'async-node',
   module: {
+    /**
+     * Following lines enable module.export.
+     */
     rules: [
       {
         type: 'javascript/auto',
@@ -47,16 +65,7 @@ const nodeConfig = {
   entry: {
     node: './exports/node.js',
   },
-  target: 'node',
-  /**
-   * Following lines enable module.export.
-   */
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].cjs',
-    library: '',
-    libraryTarget: 'commonjs',
-  },
+  target: 'async-node',
 };
 
 module.exports = [

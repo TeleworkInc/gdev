@@ -42,7 +42,7 @@ const startCompileTask = (options = {}) => {
  * The event which will emit when the Closure Compiler is finished.
  */
 const compileCJS = (name, options = {}) => startCompileTask({
-  js: `dist/${name}.cjs`,
+  js: `dev/${name}.cjs`,
   js_output_file: `dist/${name}.min.cjs`,
   compilation_level: 'SIMPLE',
   ...options,
@@ -66,7 +66,7 @@ const compileESM = (name, options = {}) => {
     /**
      * I/O setup.
      */
-    js: `dist/${name}.mjs`,
+    js: `dev/${name}.mjs`,
     js_output_file: `dist/${name}.min.mjs`,
     /**
      * Enable import/export.
@@ -116,8 +116,8 @@ const nodeCompile = () => compileCJS('node');
  */
 const universalCompile = () => {
   return compileCJS('universal', {
-    js: 'dist/universal.mjs',
-    entry_point: 'dist/universal.mjs',
+    js: 'dev/universal.mjs',
+    entry_point: 'dev/universal.mjs',
     compilation_level: 'SIMPLE',
     assume_function_wrapper: true,
     process_common_js_modules: true,
@@ -141,9 +141,9 @@ const cliCompile = () => compileCJS('cli');
  */
 const executableCompile = () => {
   return compileCJS('executable', {
-    js: 'dist/universal.mjs',
-    entry_point: 'dist/universal.mjs',
-    js_output_file: 'dist/exe.cjs',
+    js: 'dev/universal.mjs',
+    entry_point: 'dev/universal.mjs',
+    js_output_file: 'dist/exe.js',
     compilation_level: 'ADVANCED',
     isolation_mode: 'iife',
     dependency_mode: 'PRUNE',
@@ -156,7 +156,7 @@ const executableCompile = () => {
 export const minifyModules = () => {
   return gulp
       .src([
-        'dist/**/*.mjs',
+        'dev/**/*.mjs',
         '!**/*.min.mjs',
         // '!(*.min.mjs)',
       ], { base: './' })

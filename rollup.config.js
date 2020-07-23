@@ -6,7 +6,7 @@ const exportESM = (name) => {
   return {
     input: `exports/${name}.js`,
     output: {
-      file: `dist/${name}.mjs`,
+      file: `dev/${name}.mjs`,
       format: 'esm',
     },
   };
@@ -16,7 +16,7 @@ const exportCJS = (name) => {
   return {
     input: `exports/${name}.js`,
     output: {
-      file: `dist/${name}.cjs`,
+      file: `dev/${name}.cjs`,
       format: 'cjs',
     },
   };

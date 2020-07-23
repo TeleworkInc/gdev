@@ -15,8 +15,9 @@ parserOptions:
   sourceType: module
 
 ignorePatterns:
-  - '**/dist/**'
-  - '**/externs.js'
+  - 'dist/**'
+  - 'dev/**'
+  - 'externs.js'
 
 rules:
   require-jsdoc:

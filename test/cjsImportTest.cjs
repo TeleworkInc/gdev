@@ -1,9 +1,9 @@
 const { expect } = require('chai');
-const CJSImport = require('../dist/node.cjs');
+const CJSImport = require('../dev/node.cjs');
 const CJSMinImport = require('../dist/node.min.cjs');
 
 describe('CJS require()', function() {
-  it('should successfuly import the uncompiled module [dist/node.cjs]',
+  it('should successfuly import the uncompiled module [dev/node.cjs]',
       function() {
         expect(CJSImport.callCompiler).to.be.a('function');
       });
