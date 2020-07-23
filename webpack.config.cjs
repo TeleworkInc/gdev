@@ -30,7 +30,7 @@ const CONFIG_DEFAULTS = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\..?js$/,
         exclude: /node_modules/,
       },
     ],
@@ -53,7 +53,7 @@ const cliConfig = {
     rules: [
       {
         type: 'javascript/auto',
-        test: /\.mjs$/,
+        test: /\.?js$/,
         use: [],
       },
     ],
@@ -68,7 +68,16 @@ const nodeConfig = {
   target: 'async-node',
 };
 
+const esmModulesConfig = {
+  ...CONFIG_DEFAULTS,
+  entry: {
+    node: './exports/node.js',
+  },
+  target: 'async-node',
+};
+
 module.exports = [
   cliConfig,
   nodeConfig,
+  esmModulesConfig,
 ];

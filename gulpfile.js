@@ -128,12 +128,11 @@ const markExecutable = async (file) => {
  * @return {?}
  * The stream for this task.
  */
-export const markCLIsExecutable = () => {
+export const markCLIsExecutable = async () => {
   return gulp
       .src([
-        'dev/cli.*',
-        'dev/cli.*',
-        // '!(*.min.mjs)',
+        'dev/cli.**',
+        'dist/cli.**',
       ], { base: './' })
       .pipe(tap(
           async (file, t) => await markExecutable(file.path),
