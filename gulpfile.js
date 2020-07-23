@@ -108,8 +108,10 @@ export const compileESM = (name, options = {}) => {
  */
 const markExecutable = async (file) => {
   console.log('marking executable:', file);
+
   const fileHandle = await fs.promises.open(file, 'r+');
   const currentCode = await fs.promises.readFile(fileHandle, 'utf-8');
+
   if (currentCode[0] !== '#') {
     await fs.promises.writeFile(
         file,
@@ -117,6 +119,7 @@ const markExecutable = async (file) => {
         'utf-8',
     );
   }
+
   await fs.promises.chmod(file, '755');
 };
 
@@ -145,6 +148,7 @@ export const nodeCompile = () => compileCJS('node');
  */
 export const universalCompile = () => {
   return compileCJS('universal', {
+
     js: 'dev/universal.mjs',
     entry_point: 'dev/universal.mjs',
 
@@ -174,23 +178,18 @@ export const cliCompile = () => compileCJS('cli');
  */
 export const executableCompile = () => {
   return compileCJS('executable', {
-    /**
-     * Compiling dev/universal -> dist/exe
-     */
+
+    // Compiling dev/universal -> dist/exe
     js: 'dev/universal.mjs',
     entry_point: 'dev/universal.mjs',
     js_output_file: 'dist/exe.js',
 
-    /**
-     * Maximum tree-shaking and dead code elimination.
-     */
+    // Maximum tree-shaking and dead code elimination.
     compilation_level: 'ADVANCED',
     dependency_mode: 'PRUNE',
     ...PROCESS_MODULES,
 
-    /**
-     * Force IIFE.
-     */
+    // Force IIFE.
     isolation_mode: 'iife',
     assume_function_wrapper: true,
   });

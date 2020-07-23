@@ -8,6 +8,7 @@ import chalk from 'chalk';
 const CWD = process.cwd();
 const PROJECT_NAME = basename(CWD);
 
+
 /**
  * Assign actions to CLI commands.
  */
@@ -32,11 +33,10 @@ program
     .description('Initialize a workspace inside an existing directory.')
     .action(commands.initialize);
 
-/**
- * Display some introductory text containing the version info and directory
- * structure as a tree.
- */
 
+/**
+ * Print some info about the project directory.
+ */
 const TREE = (
   commands.checkInsideProject()
   ? aft.generate({ globs: ['lib/**/*.js'] })
@@ -49,8 +49,7 @@ const HEAD = (
   : ''
 );
 
-console.log('\n', chalk.grey('--- 𝓰𝓭𝓮𝓿 env ---'), '\n');
-
+console.log('\n', chalk.grey('--- 𝓰𝓭𝓮𝓿 ---'), '\n');
 if (HEAD) console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
 if (TREE) console.log(chalk.blueBright(TREE), '\n');
 
@@ -62,7 +61,8 @@ commands.displayProjectInfo();
 
 
 /**
- * Parse command line arguments.
+ * Parse command line arguments. Use try {...} catch {...} and
+ * program.exitOverride() to prevent nonzero exit.
  */
 try {
   program.exitOverride();
