@@ -1,11 +1,11 @@
 import gulp from 'gulp';
-import rename from 'gulp-rename';
+import tap from 'gulp-tap';
 import Closure from 'google-closure-compiler';
 import fs from 'fs';
+import path from 'path';
 import EventEmitter from 'events';
 
 const Compiler = Closure.compiler;
-const closureGulp = Closure.gulp();
 
 /**
  * Compile a preprocessed script located at dist/{name}.
@@ -60,12 +60,28 @@ const compileCJS = (name, options = {}) => startCompileTask({
  * @return {EventEmitter}
  * The event which will emit when the Closure Compiler is finished.
  */
-const compileESM = (name, options = {}) => startCompileTask({
-  js: `dist/${name}.mjs`,
-  js_output_file: `dist/${name}.min.mjs`,
-  compilation_level: 'WHITESPACE_ONLY',
-  ...options,
-});
+const compileESM = (name, options = {}) => {
+  console.log('Compiling ESM for', name);
+  return startCompileTask({
+    /**
+     * I/O setup.
+     */
+    js: `dist/${name}.mjs`,
+    js_output_file: `dist/${name}.min.mjs`,
+    /**
+     * Enable import/export.
+     */
+    compilation_level: 'WHITESPACE_ONLY',
+    module_resolution: 'NODE',
+    process_common_js_modules: true,
+    /**
+     * Prevent transpilation.
+     */
+    language_in: 'ES_NEXT',
+    language_out: 'ES_NEXT',
+    ...options,
+  });
+};
 
 const markExecutable = async (file) => {
   const currentCode = fs.readFileSync(file);
@@ -139,32 +155,15 @@ const executableCompile = () => {
 
 export const minifyModules = () => {
   return gulp
-      .src('dist/**/*.mjs', { base: './' })
-      .pipe(closureGulp({
-        compilation_level: 'WHITESPACE_ONLY',
-        module_resolution: 'NODE',
-        process_common_js_modules: true,
-        language_in: 'ES_NEXT',
-        language_out: 'ES_NEXT',
-      }))
-      .pipe(rename({ extname: '.min.mjs' }))
-      .pipe(gulp.dest('./dist'));
+      .src([
+        'dist/**/*.mjs',
+        '!**/*.min.mjs',
+        // '!(*.min.mjs)',
+      ], { base: './' })
+      .pipe(tap(
+          (file, t) => compileESM(path.basename(file.path, '.mjs')),
+      ));
 };
-
-// const minifyModules = () => {
-//   return gulp
-//       .src('dist/**/*.js', { base: './' })
-//       .pipe(closureGulp({
-//         compilation_level: 'WHITESPACE_ONLY',
-//         module_resolution: 'NODE',
-//         process_common_js_modules: true,
-//         language_in: 'ES_NEXT',
-//         language_out: 'ES_NEXT',
-//         js_output_file: 'output.min.js',
-//       }))
-//       .pipe(rename({ extname: '.min.mjs' }))
-//       .pipe(gulp.dest('./dist'));
-// };
 
 export default gulp.series(
     gulp.parallel(

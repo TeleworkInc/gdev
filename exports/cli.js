@@ -64,4 +64,11 @@ commands.displayProjectInfo();
 /**
  * Parse command line arguments.
  */
-program.parse(process.argv);
+try {
+  program.exitOverride();
+  program.parse(process.argv);
+} catch (e) {
+  /**
+   * Don't bother throwing any errors if there are no args provided.
+   */
+}

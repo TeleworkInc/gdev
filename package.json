@@ -9,11 +9,12 @@
     "gdev": "dist/cli.min.cjs"
   },
   "scripts": {
+    "test": "yarn mocha",
+    "clean": "rm -rf ./dist",
     "run:rollup": "yarn rollup -c",
     "run:webpack": "yarn webpack --config webpack.config.cjs",
     "run:compile": "yarn gulp",
-    "build": "yarn run:rollup && yarn run:webpack && yarn run:compile && yarn mocha",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "yarn clean && yarn run:rollup && yarn run:webpack && yarn run:compile && yarn test"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,7 @@
     "commander": "^5.1.0",
     "figlet": "^1.4.0",
     "filetouch": "^1.4.0",
+    "gulp-each": "^0.5.0",
     "gulp-rename": "^2.0.0",
     "ora": "^4.0.4",
     "touch": "^3.1.0"
@@ -62,6 +64,7 @@
     "google-closure-compiler": "^20200719.0.0",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
+    "gulp-tap": "^2.0.0",
     "inspect-loader": "^1.0.0",
     "mocha": "^8.0.1",
     "rollup": "^2.21.0",
