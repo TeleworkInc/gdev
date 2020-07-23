@@ -6,10 +6,10 @@
   "bin": {
     "gdev": "dist/cli.min.cjs"
   },
-  "main": "./dist/node.min.cjs",
+  "main": "dist/node.min.cjs",
   "exports": {
-    "import": "./dist/node.min.mjs",
-    "require": "./dist/node.min.cjs"
+    "import": "dist/node.min.mjs",
+    "require": "dist/node.min.cjs"
   },
   "scripts": {
     "test": "yarn mocha",
