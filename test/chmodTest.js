@@ -7,10 +7,10 @@ const { expect } = chai;
 chai.use(chaiAsPromised);
 
 describe('Generated CLI bundles', () => {
-  it('should all be executable', () => {
-    const files = glob.sync('./{dev,dist}/cli.**');
-    for (const file of files) {
+  const files = glob.sync('./{dev,dist}/cli.**');
+  for (const file of files) {
+    it(`should be executable (755): ${file}`, () => {
       expect(() => fs.accessSync(file, fs.constants.X_OK)).to.not.throw();
-    }
-  });
+    });
+  }
 });

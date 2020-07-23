@@ -3,12 +3,12 @@
  * Runs preprocessed dev files through Google's Closure Compiler.
  */
 
+import glob from 'glob';
 import gulp from 'gulp';
 import tap from 'gulp-tap';
 import Closure from 'google-closure-compiler';
 import fs from 'fs';
 import path from 'path';
-import EventEmitter from 'events';
 
 const Compiler = Closure.compiler;
 
@@ -18,19 +18,17 @@ const Compiler = Closure.compiler;
  * @param {?object} options
  * Options to pass to the compiler.
  *
- * @return {EventEmitter}
- * The event which will emit when the Closure Compiler is finished.
+ * @return {Promise}
+ * A Promise which will resolve when the Closure Compiler is finished.
  */
 export const startCompileTask = (options = {}) => {
   const instance = new Compiler(options);
-  const emitter = new EventEmitter();
-
-  instance.run((exitCode, stdOut, stdErr) => {
-    if (exitCode !== 0) console.log(exitCode, stdOut, stdErr);
-    emitter.emit('finish');
-  });
-
-  return emitter;
+  return new Promise((resolve, reject) => instance.run(
+      (exitCode, stdOut, stdErr) => {
+        if (exitCode !== 0) reject(stdErr);
+        else resolve();
+      },
+  ));
 };
 
 /**
@@ -44,22 +42,18 @@ export const startCompileTask = (options = {}) => {
  * @param {object?} options
  * Additional flags to pass the compiler.
  *
- * @return {EventEmitter}
- * The event which will emit when the Closure Compiler is finished.
+ * @return {Promise}
+ * A Promise which will resolve when the Closure Compiler is finished.
  */
 export const compileCJS = (name, options = {}) => startCompileTask({
-  /**
-   * I/O setup.
-   */
+  // I/O setup.
   js: `dev/${name}.cjs`,
   js_output_file: `dist/${name}.min.cjs`,
-  /**
-   * SIMPLE compilation for CJS to avoid renaming.
-   */
+
+  // SIMPLE compilation for CJS to avoid renaming.
   compilation_level: 'SIMPLE',
-  /**
-   * Overrides.
-   */
+
+  // Overrides.
   ...options,
 });
 
@@ -89,21 +83,19 @@ const PROCESS_MODULES = {
  * @param {object?} options
  * Additional flags to pass the compiler.
  *
- * @return {EventEmitter}
- * The event which will emit when the Closure Compiler is finished.
+ * @return {Promise}
+ * A Promise which will resolve when the Closure Compiler is finished.
  */
 export const compileESM = (name, options = {}) => {
   return startCompileTask({
-    /**
-     * I/O setup.
-     */
+    // I/O setup.
     js: `dev/${name}.mjs`,
     js_output_file: `dist/${name}.min.mjs`,
+
     ...NO_RENAMING,
     ...PROCESS_MODULES,
-    /**
-     * Overrides.
-     */
+
+    // Overrides.
     ...options,
   });
 };
@@ -115,34 +107,32 @@ export const compileESM = (name, options = {}) => {
  * The file to make executable.
  */
 const markExecutable = async (file) => {
-  const currentCode = fs.readFileSync(file);
+  console.log('marking executable:', file);
+  const fileHandle = await fs.promises.open(file, 'r+');
+  const currentCode = await fs.promises.readFile(fileHandle, 'utf-8');
   if (currentCode[0] !== '#') {
-    fs.writeFileSync(file, `#!/usr/bin/env node\n${currentCode}`);
-    fs.chmodSync(file, '755');
+    await fs.promises.writeFile(
+        file,
+        `#!/usr/bin/env node\n${currentCode}`,
+        'utf-8',
+    );
   }
+  await fs.promises.chmod(file, '755');
 };
 
 /**
  * Mark all CLI builds in dist/ and dev/ as executable.
- *
- * @return {?}
- * The stream for this task.
  */
 export const markCLIsExecutable = async () => {
-  return gulp
-      .src([
-        'dev/cli.**',
-        'dist/cli.**',
-      ], { base: './' })
-      .pipe(tap(
-          async (file, t) => await markExecutable(file.path),
-      ));
+  glob.sync('./**/{dev,dist}/cli.**').forEach(
+      async (file) => await markExecutable(file),
+  );
 };
 
 /**
  * Compile a script for `node-async` target.
  *
- * @return {EventEmitter}
+ * @return {Promise}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
 export const nodeCompile = () => compileCJS('node');
@@ -150,20 +140,18 @@ export const nodeCompile = () => compileCJS('node');
 /**
  * Compile the exports/universal.js script.
  *
- * @return {EventEmitter}
+ * @return {Promise}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
 export const universalCompile = () => {
   return compileCJS('universal', {
-    /**
-     * Compiling dev/universal.mjs -> /dev/universal.cjs
-     */
     js: 'dev/universal.mjs',
     entry_point: 'dev/universal.mjs',
+
+    // dev/universal.mjs -> dev/universal.cjs
     js_output_file: 'dev/universal.cjs',
-    /**
-     * No need for NO_RENAMING flag.
-     */
+
+    // No need for NO_RENAMING flag.
     compilation_level: 'SIMPLE',
     ...PROCESS_MODULES,
   });
@@ -172,7 +160,7 @@ export const universalCompile = () => {
 /**
  * Compile the exports/cli.js script.
  *
- * @return {EventEmitter}
+ * @return {Promise}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
 export const cliCompile = () => compileCJS('cli');
@@ -181,7 +169,7 @@ export const cliCompile = () => compileCJS('cli');
  * Compile the executable. This will reduce all of the codebase to just its side
  * effects as best as possible.
  *
- * @return {EventEmitter}
+ * @return {Promise}
  * The EventEmitter that will fire when Closure Compiler is done.
  */
 export const executableCompile = () => {
@@ -192,6 +180,7 @@ export const executableCompile = () => {
     js: 'dev/universal.mjs',
     entry_point: 'dev/universal.mjs',
     js_output_file: 'dist/exe.js',
+
     /**
      * Maximum tree-shaking and dead code elimination.
      */
@@ -213,18 +202,16 @@ export const executableCompile = () => {
  * @return {?}
  * The stream for the task.
  */
-export const minifyModules = () => {
-  return gulp
-      .src([
-        'dev/**/*.mjs',
-        '!**/*.min.mjs',
-      ], { base: './' })
-      .pipe(tap(
-          (file, t) => compileESM(
-              path.basename(file.path, '.mjs'),
+export const minifyModules = async () => {
+  const files = glob.sync('dev/**/*.mjs', { base: './' });
+  await Promise.all(
+      files.map(
+          async (file) => await compileESM(
+              path.basename(file, '.mjs'),
               { jscomp_off: '*' },
           ),
-      ));
+      ),
+  );
 };
 
 export default gulp.series(
