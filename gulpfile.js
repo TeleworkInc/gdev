@@ -92,6 +92,7 @@ export const compileESM = (name, options = {}) => {
     js: `dev/${name}.mjs`,
     js_output_file: `dist/${name}.min.mjs`,
 
+    // Don't rename vars, use NODE module_resolution.
     ...NO_RENAMING,
     ...PROCESS_MODULES,
 
@@ -107,8 +108,7 @@ export const compileESM = (name, options = {}) => {
  * The file to make executable.
  */
 const markExecutable = async (file) => {
-  const
-    fileHandle = await fs.promises.open(file, 'r+');
+  const fileHandle = await fs.promises.open(file, 'r+');
   const currentCode = await fs.promises.readFile(fileHandle, 'utf-8');
 
   if (currentCode[0] !== '#') {
