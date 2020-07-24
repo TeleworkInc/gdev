@@ -1,4 +1,5 @@
-const { expect } = require('chai');
+require('chai/register-expect');
+
 const cjsNode = require('../dev/node.cjs');
 const cjsNodeMin = require('../dist/node.min.cjs');
 const cjsCli = require('../dev/cli.cjs');

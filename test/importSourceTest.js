@@ -1,5 +1,4 @@
-import chai from 'chai';
-const { expect } = chai;
+import 'chai/register-expect.js';
 
 import * as cli from '../exports/cli.js';
 import * as node from '../exports/node.js';

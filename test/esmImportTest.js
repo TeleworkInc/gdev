@@ -1,5 +1,4 @@
-import chai from 'chai';
-const { expect } = chai;
+import 'chai/register-expect.js';
 
 import * as thisPackage from 'gdev';
 import * as esmCli from '../dev/cli.mjs';

@@ -1,5 +1,4 @@
-import chai from 'chai';
-const { expect } = chai;
+import 'chai/register-expect.js';
 
 /**
  * Import (run) executable from dist/.
