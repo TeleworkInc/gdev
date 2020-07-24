@@ -20,13 +20,14 @@ const EXPORT_CONFIG = {
 };
 
 /**
- * Webpack defaults, to be overridden if needed.
+ * Webpack defaults, to be overridden if needed. Writes a CJS module to
+ * dev/{name}.cjs.
  */
 const CONFIG_DEFAULTS = {
   ...EXPORT_CONFIG,
   mode: 'production',
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.js', '.cjs', '.mjs'],
   },
   module: {
     rules: [
@@ -55,7 +56,11 @@ const cliConfig = {
       {
         type: 'javascript/auto',
         test: /\..?js$/,
-        use: [],
+        use: [
+          {
+            loader: 'shebang-loader',
+          },
+        ],
       },
     ],
   },

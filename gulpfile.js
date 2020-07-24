@@ -26,7 +26,7 @@ export const startCompileTask = (options = {}) => {
   return new Promise((resolve, reject) => instance.run(
       (exitCode, stdOut, stdErr) => {
         return exitCode == 0
-          ? resolve()
+          ? resolve(stdOut)
           : reject(stdErr);
       },
   ));
@@ -87,8 +87,8 @@ const PROCESS_MODULES = {
  * @return {Promise}
  * A Promise which will resolve when the Closure Compiler is finished.
  */
-export const compileESM = (name, options = {}) => {
-  return startCompileTask({
+export const compileESM = async (name, options = {}) => {
+  await startCompileTask({
     // I/O setup.
     js: `dev/${name}.mjs`,
     js_output_file: `dist/${name}.min.mjs`,
@@ -127,9 +127,10 @@ const markExecutable = async (file) => {
  * Mark all CLI builds in dist/ and dev/ as executable.
  */
 export const markCLIsExecutable = async () => {
-  glob.sync('./**/{dev,dist}/cli.**').forEach(
+  const files = glob.sync('./**/{dev,dist}/cli.**');
+  await Promise.all(files.map(
       async (file) => await markExecutable(file),
-  );
+  ));
 };
 
 /**
@@ -138,7 +139,7 @@ export const markCLIsExecutable = async () => {
  * @return {Promise}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
-export const nodeCompile = () => compileCJS('node');
+export const nodeCompile = async () => await compileCJS('node');
 
 /**
  * Compile the exports/universal.js script.
@@ -146,18 +147,17 @@ export const nodeCompile = () => compileCJS('node');
  * @return {Promise}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
-export const universalCompile = () => {
-  return compileCJS('universal', {
-    // Compining dev/universal.mjs -> dev/universal.cjs
-    ...PROCESS_MODULES,
-    js: 'dev/universal.mjs',
-    entry_point: 'dev/universal.mjs',
+export const universalCompile = async () => {
+  await compileCJS('universal', {
+    // Compiling dev/universal.cjs -> dist/universal.min.cjs
+    js: 'dev/universal.cjs',
+    js_output_file: 'dist/universal.min.cjs',
 
-    // dev/universal.mjs -> dev/universal.cjs
-    js_output_file: 'dev/universal.cjs',
-
-    // No need for NO_RENAMING flag.
+    // SIMPLE compilation and language_in == language_out to prevent name
+    // mangling while getting maximum compression.
     compilation_level: 'SIMPLE',
+    language_in: 'ES_NEXT',
+    language_out: 'ES_NEXT',
   });
 };
 
@@ -167,7 +167,7 @@ export const universalCompile = () => {
  * @return {Promise}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
-export const cliCompile = () => compileCJS('cli');
+export const cliCompile = async () => await compileCJS('cli');
 
 /**
  * Compile the executable. This will reduce all of the codebase to just its side
@@ -176,8 +176,8 @@ export const cliCompile = () => compileCJS('cli');
  * @return {Promise}
  * The EventEmitter that will fire when Closure Compiler is done.
  */
-export const executableCompile = () => {
-  return compileCJS('executable', {
+export const executableCompile = async () => {
+  await compileCJS('executable', {
     // Compiling dev/universal -> dist/exe
     ...PROCESS_MODULES,
     entry_point: 'dev/universal.mjs',

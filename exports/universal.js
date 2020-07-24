@@ -12,7 +12,7 @@ console.log(INTRO_TEMPLATE);
 /**
  * A test class to export.
  *
- * @export
+ * @exportSymbol
  */
 export class MyTestClass {
   /** Create a new TestClass. */

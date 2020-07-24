@@ -6,12 +6,16 @@
  */
 
 import 'chai/register-expect.js';
-
 import * as thisPackage from 'gdev';
-import * as esmCli from '../dev/cli.mjs';
-import * as cjsCliMin from '../dist/cli.min.mjs';
-import * as esmNode from '../dev/node.mjs';
-import * as esmNodeMin from '../dist/node.min.mjs';
+
+import * as cliDev from '../dev/cli.mjs';
+import * as cliDist from '../dist/cli.min.mjs';
+
+import * as nodeDev from '../dev/node.mjs';
+import * as nodeDist from '../dist/node.min.mjs';
+
+import * as universalDev from '../dev/universal.mjs';
+import * as universalDist from '../dist/universal.min.mjs';
 
 describe('ESM import', () => {
   it('should import this package', () => {
@@ -19,18 +23,26 @@ describe('ESM import', () => {
   });
 
   it('should import the uncompiled module [dev/node.mjs]', () => {
-    expect(esmNode.create).to.be.a('function');
+    expect(nodeDev.create).to.be.a('function');
   });
 
   it('should import the compiled module [dist/node.min.mjs]', () => {
-    expect(esmNodeMin.create).to.be.a('function');
+    expect(nodeDist.create).to.be.a('function');
   });
 
   it('should not fail for uncompiled ESM [dev/cli.mjs]', () => {
-    expect(() => esmCli).to.not.throw();
+    expect(() => cliDev).to.not.throw();
   });
 
   it('should not fail for compiled ESM [dist/cli.min.mjs]', () => {
-    expect(() => cjsCliMin).to.not.throw();
+    expect(() => cliDist).to.not.throw();
+  });
+
+  it('should import class MyTestClass from [dev/universal.mjs]', () => {
+    expect(universalDev.MyTestClass).to.not.be.undefined;
+  });
+
+  it('should import class MyTestClass from [dist/universal.mjs]', () => {
+    expect(universalDist.MyTestClass).to.not.be.undefined;
   });
 });
