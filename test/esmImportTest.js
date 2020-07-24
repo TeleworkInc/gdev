@@ -1,3 +1,10 @@
+/**
+ * @license MIT
+ *
+ * @file
+ * Test ESM imports for this project.
+ */
+
 import 'chai/register-expect.js';
 
 import * as thisPackage from 'gdev';

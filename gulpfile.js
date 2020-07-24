@@ -1,4 +1,5 @@
 /**
+ * @license MIT
  * @file
  * Runs preprocessed dev files through Google's Closure Compiler.
  */
@@ -147,7 +148,8 @@ export const nodeCompile = () => compileCJS('node');
  */
 export const universalCompile = () => {
   return compileCJS('universal', {
-
+    // Compining dev/universal.mjs -> dev/universal.cjs
+    ...PROCESS_MODULES,
     js: 'dev/universal.mjs',
     entry_point: 'dev/universal.mjs',
 
@@ -156,7 +158,6 @@ export const universalCompile = () => {
 
     // No need for NO_RENAMING flag.
     compilation_level: 'SIMPLE',
-    ...PROCESS_MODULES,
   });
 };
 
@@ -177,20 +178,21 @@ export const cliCompile = () => compileCJS('cli');
  */
 export const executableCompile = () => {
   return compileCJS('executable', {
-
     // Compiling dev/universal -> dist/exe
-    js: 'dev/universal.mjs',
+    ...PROCESS_MODULES,
     entry_point: 'dev/universal.mjs',
     js_output_file: 'dist/exe.js',
 
     // Maximum tree-shaking and dead code elimination.
     compilation_level: 'ADVANCED',
     dependency_mode: 'PRUNE',
-    ...PROCESS_MODULES,
 
-    // Force IIFE.
-    isolation_mode: 'iife',
-    assume_function_wrapper: true,
+    // generate exports if they exist, must include base.js
+    generate_exports: true,
+    js: [
+      'node_modules/google-closure-library/closure/goog/base.js',
+      'dev/universal.mjs',
+    ],
   });
 };
 

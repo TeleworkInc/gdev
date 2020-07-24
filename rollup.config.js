@@ -1,4 +1,6 @@
 /**
+ * @license MIT
+ * @file
  * Using rollup for ESM bundling, primarily for dev refresh on save.
  */
 

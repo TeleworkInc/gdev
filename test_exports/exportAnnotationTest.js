@@ -1,4 +1,11 @@
 /**
+ * @license MIT
+ *
+ * @file
+ * An annotation test.
+ */
+
+/**
  * A test class.
  *
  * @export

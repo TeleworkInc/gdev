@@ -1,3 +1,10 @@
+/**
+ * @license MIT
+ *
+ * @file
+ * Make sure the raw ESM source code for this project works as expected.
+ */
+
 import 'chai/register-expect.js';
 
 import * as cli from '../exports/cli.js';

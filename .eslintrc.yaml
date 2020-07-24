@@ -20,6 +20,23 @@ ignorePatterns:
   - 'externs.js'
 
 rules:
+  'jsdoc/require-file-overview': 
+    - error
+    - {
+        tags: {
+          file: {
+            initialCommentsOnly: true,
+            mustExist: true,
+            preventDuplicates: true,
+          },
+          license: {
+            initialCommentsOnly: true,
+            mustExist: true,
+            preventDuplicates: true,
+          },
+        }
+      }
+
   require-jsdoc:
     - error
     - require:

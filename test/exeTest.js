@@ -1,3 +1,10 @@
+/**
+ * @license MIT
+ *
+ * @file
+ * Test the compiled executable for this project.
+ */
+
 import 'chai/register-expect.js';
 
 /**

@@ -1,3 +1,10 @@
+/**
+ * @license MIT
+ *
+ * @file
+ * Test the file permissions of the exported CLI.
+ */
+
 import 'chai/register-expect.js';
 
 import fs from 'fs';

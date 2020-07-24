@@ -1,3 +1,10 @@
+/**
+ * @license MIT
+ *
+ * @file
+ * Test CJS imports for this project.
+ */
+
 require('chai/register-expect');
 
 const cjsNode = require('../dev/node.cjs');

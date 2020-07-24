@@ -1,3 +1,9 @@
+/**
+ * @license MIT
+ *
+ * @file
+ * Specify the exports for this project's CLI.
+ */
 import * as commands from '../lib/commands.js';
 
 import { basename } from 'path';

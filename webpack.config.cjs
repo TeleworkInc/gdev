@@ -1,7 +1,8 @@
 /**
- * Use Webpack to build CJS modules from ES2015 modules.
- *
- * Have to use CJS for Webpack config.
+ * @license MIT
+ * @file
+ * Use Webpack to build CJS modules from ES2015 modules in the dev/ directory.
+ * CommonJS is mandatory for this config file.
  */
 
 const path = require('path');
@@ -53,7 +54,7 @@ const cliConfig = {
     rules: [
       {
         type: 'javascript/auto',
-        test: /\.?js$/,
+        test: /\..?js$/,
         use: [],
       },
     ],
