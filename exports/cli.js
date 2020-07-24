@@ -8,7 +8,6 @@ import chalk from 'chalk';
 const CWD = process.cwd();
 const PROJECT_NAME = basename(CWD);
 
-
 /**
  * Assign actions to CLI commands.
  */
@@ -33,7 +32,6 @@ program
     .description('Initialize a workspace inside an existing directory.')
     .action(commands.initialize);
 
-
 /**
  * Print some info about the project directory.
  */
@@ -53,12 +51,10 @@ console.log('\n', chalk.grey('--- 𝓰𝓭𝓮𝓿 ---'), '\n');
 if (HEAD) console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
 if (TREE) console.log(chalk.blueBright(TREE), '\n');
 
-
 /**
  * Display the location of the dev and production files.
  */
 commands.displayProjectInfo();
-
 
 /**
  * Parse command line arguments. Use try {...} catch {...} and

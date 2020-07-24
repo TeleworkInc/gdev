@@ -24,8 +24,8 @@ rules:
     - error
     - require:
         ClassDeclaration: true
+        FunctionDeclaration: true
         MethodDefinition: true
-        FunctionDeclaration: false
         FunctionExpression: false
         ArrowFunctionExpression: false
 

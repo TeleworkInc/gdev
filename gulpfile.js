@@ -5,7 +5,6 @@
 
 import glob from 'glob';
 import gulp from 'gulp';
-import tap from 'gulp-tap';
 import Closure from 'google-closure-compiler';
 import fs from 'fs';
 import path from 'path';
@@ -25,8 +24,9 @@ export const startCompileTask = (options = {}) => {
   const instance = new Compiler(options);
   return new Promise((resolve, reject) => instance.run(
       (exitCode, stdOut, stdErr) => {
-        if (exitCode !== 0) reject(stdErr);
-        else resolve();
+        return exitCode == 0
+          ? resolve()
+          : reject(stdErr);
       },
   ));
 };
@@ -107,9 +107,8 @@ export const compileESM = (name, options = {}) => {
  * The file to make executable.
  */
 const markExecutable = async (file) => {
-  console.log('marking executable:', file);
-
-  const fileHandle = await fs.promises.open(file, 'r+');
+  const
+    fileHandle = await fs.promises.open(file, 'r+');
   const currentCode = await fs.promises.readFile(fileHandle, 'utf-8');
 
   if (currentCode[0] !== '#') {
