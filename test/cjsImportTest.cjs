@@ -28,13 +28,19 @@ describe('CJS require()', () => {
     expect(() => require('../dist/cli.min.cjs')).to.not.throw();
   });
 
-  it('should import MyTestClass from [dev/universal.cjs]', () => {
-    expect(require('../dev/universal.cjs').MyTestClass).to.not.be.undefined;
+  it('should import test classes from [dev/universal.cjs]', () => {
+    const mod = require('../dev/universal.cjs');
+    expect(mod.TestA).to.not.be.undefined;
+    expect(mod.TestB).to.not.be.undefined;
+    expect(mod.TestC).to.not.be.undefined;
+    expect(mod.TEST_STRING).to.not.be.undefined;
   });
 
-  it('should import MyTestClass from [dist/universal.min.cjs]', () => {
-    expect(
-        require('../dist/universal.min.cjs').MyTestClass,
-    ).to.not.be.undefined;
+  it('should import test classes from [dist/universal.min.cjs]', () => {
+    const mod = require('../dist/universal.min.cjs');
+    expect(mod.TestA).to.not.be.undefined;
+    expect(mod.TestB).to.not.be.undefined;
+    expect(mod.TestC).to.not.be.undefined;
+    expect(mod.TEST_STRING).to.not.be.undefined;
   });
 });
