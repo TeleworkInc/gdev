@@ -157,7 +157,9 @@ export const universalCompile = async () => {
     // mangling while getting maximum compression.
     compilation_level: 'SIMPLE',
     language_in: 'ES_NEXT',
-    language_out: 'NO_TRANSPILE',
+    language_out: 'ECMASCRIPT5_STRICT',
+    use_types_for_optimization: true,
+    process_common_js_modules: false,
   });
 };
 
