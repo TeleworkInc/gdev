@@ -25,6 +25,9 @@ rules:
     # Anyone can add needed Closure @annotations for ESLint here.
     - definedTags:
       - exportSymbol
+  jsdoc/newline-after-description:
+    - error
+    - always
   jsdoc/require-file-overview: 
     - error
     - {

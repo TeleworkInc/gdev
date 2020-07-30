@@ -1,3 +1,7 @@
+# gdev dev/ and dist/ dirs
+./dev/
+./dist/
+
 # Logs
 logs
 *.log

@@ -4,12 +4,11 @@
  * @file
  * Specify the exports for this project's CLI.
  */
-import * as commands from '../lib/commands.js';
-
-import { basename } from 'path';
 import program from 'commander';
 import aft from 'ascii-file-tree';
 import chalk from 'chalk';
+import { basename } from 'path';
+import * as commands from '../lib/commands.js';
 
 const CWD = process.cwd();
 const PROJECT_NAME = basename(CWD);
@@ -17,7 +16,6 @@ const PROJECT_NAME = basename(CWD);
 /**
  * Assign actions to CLI commands.
  */
-
 program
     .command('create <project>')
     .description('Create a new gdev workspace.')
