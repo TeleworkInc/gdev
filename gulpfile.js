@@ -1,5 +1,7 @@
 /**
  * @license MIT
+ */
+/**
  * @file
  * Runs preprocessed dev files through Google's Closure Compiler.
  */
@@ -11,6 +13,23 @@ import fs from 'fs';
 import path from 'path';
 
 const Compiler = Closure.compiler;
+
+/**
+ * Prevent transpilation and renaming.
+ */
+const NO_RENAMING = {
+  compilation_level: 'WHITESPACE_ONLY',
+  language_in: 'ES_NEXT',
+  language_out: 'NO_TRANSPILE',
+};
+
+/**
+ * Process ES6/CJS modules.
+ */
+const PROCESS_MODULES = {
+  module_resolution: 'NODE',
+  process_common_js_modules: true,
+};
 
 /**
  * Compile a preprocessed script located at dist/{name}.
@@ -43,36 +62,20 @@ export const startCompileTask = (options = {}) => {
  * @param {object?} options
  * Additional flags to pass the compiler.
  *
- * @return {Promise}
- * A Promise which will resolve when the Closure Compiler is finished.
+ * @return {void}
  */
-export const compileCJS = (name, options = {}) => startCompileTask({
-  // I/O setup.
-  js: `dev/${name}.cjs`,
-  js_output_file: `dist/${name}.min.cjs`,
+export const compileCJS = async (name, options = {}) => {
+  await startCompileTask({
+    // I/O setup.
+    js: `dev/${name}.cjs`,
+    js_output_file: `dist/${name}.min.cjs`,
 
-  // SIMPLE compilation for CJS to avoid renaming.
-  compilation_level: 'SIMPLE',
+    // SIMPLE compilation for CJS to avoid renaming.
+    compilation_level: 'SIMPLE',
 
-  // Overrides.
-  ...options,
-});
-
-/**
- * Prevent transpilation and renaming.
- */
-const NO_RENAMING = {
-  compilation_level: 'WHITESPACE_ONLY',
-  language_in: 'ES_NEXT',
-  language_out: 'NO_TRANSPILE',
-};
-
-/**
- * Process ES6/CJS modules.
- */
-const PROCESS_MODULES = {
-  module_resolution: 'NODE',
-  process_common_js_modules: true,
+    // Overrides.
+    ...options,
+  });
 };
 
 /**
@@ -84,8 +87,7 @@ const PROCESS_MODULES = {
  * @param {object?} options
  * Additional flags to pass the compiler.
  *
- * @return {Promise}
- * A Promise which will resolve when the Closure Compiler is finished.
+ * @return {void}
  */
 export const compileESM = async (name, options = {}) => {
   await startCompileTask({
@@ -107,6 +109,8 @@ export const compileESM = async (name, options = {}) => {
  *
  * @param {string} file
  * The file to make executable.
+ *
+ * @return {void}
  */
 const markExecutable = async (file) => {
   const fileHandle = await fs.promises.open(file, 'r+');
@@ -125,6 +129,8 @@ const markExecutable = async (file) => {
 
 /**
  * Mark all CLI builds in dist/ and dev/ as executable.
+ *
+ * @return {void}
  */
 export const markCLIsExecutable = async () => {
   const files = glob.sync('./**/{dev,dist}/cli.**');
@@ -136,15 +142,14 @@ export const markCLIsExecutable = async () => {
 /**
  * Compile a script for `node-async` target.
  *
- * @return {Promise}
- * An EventEmitter that will fire when Closure Compiler is done.
+ * @return {void}
  */
 export const nodeCompile = async () => await compileCJS('node');
 
 /**
  * Compile the exports/universal.js script.
  *
- * @return {Promise}
+ * @return {void}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
 export const universalCompile = async () => {
@@ -166,7 +171,7 @@ export const universalCompile = async () => {
 /**
  * Compile the exports/cli.js script.
  *
- * @return {Promise}
+ * @return {void}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
 export const cliCompile = async () => await compileCJS('cli');
@@ -175,7 +180,7 @@ export const cliCompile = async () => await compileCJS('cli');
  * Compile the executable. This will reduce all of the codebase to just its side
  * effects as best as possible.
  *
- * @return {Promise}
+ * @return {void}
  * The EventEmitter that will fire when Closure Compiler is done.
  */
 export const executableCompile = async () => {
@@ -201,8 +206,7 @@ export const executableCompile = async () => {
 /**
  * Run generated ESM bundles through the compiler.
  *
- * @return {?}
- * The stream for the task.
+ * @return {void}
  */
 export const minifyModules = async () => {
   const files = glob.sync('dev/**/*.mjs', { base: './' });
