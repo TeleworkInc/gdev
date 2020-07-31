@@ -1,9 +1,9 @@
 /**
  * @license MIT
- *
+ */
+/**
  * @file
- * The universal exports for this project, completely non-dependent on NodeJS
- * libraries.
+ * Specify the exports for this project's CLI.
  */
 export * from '../lib/TestAB.js';
 export * from '../lib/TestC.js';

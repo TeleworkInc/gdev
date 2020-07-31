@@ -1,10 +1,8 @@
 /**
  * @license MIT
- * @file
- * Uses Rollup for ESM bundling, primarily for dev refresh on save.
+ * @file Uses Rollup for ESM bundling, primarily for dev refresh on save.
  */
 
-import path from 'path';
 import glob from 'glob';
 
 export const exportESM = (file) => {
@@ -12,8 +10,8 @@ export const exportESM = (file) => {
     input: file,
     output: {
       file: file
-          .replace('exports', 'dist')
-          .replace('index.js', 'index.mjs'),
+          .replace('exports', 'dev')
+          .replace('.js', '.mjs'),
       format: 'esm',
     },
   };
@@ -24,29 +22,21 @@ export const exportCJS = (file) => {
     input: file,
     output: {
       file: file
-          .replace('exports', 'dist')
-          .replace('index.js', 'index.cjs'),
-      format: 'esm',
+          .replace('exports', 'dev')
+          .replace('.js', '.cjs'),
+      format: 'cjs',
     },
   };
 };
 
 export default [
-  ...inputs.map(exportESM),
+  /**
+   * Compile ESM builds for everything in the exports/ directory.
+   */
+  ...glob.sync('exports/*.js').map(exportESM),
+  /**
+   * Use Rollup to roll the universal CJS bundle since it will contain no Node
+   * dependencies by definition.
+   */
+  exportCJS('exports/universal.js'),
 ];
-
-// export default [
-//   /**
-//    * Export ES6 modules for cli, node, and universal targets, which may be
-//    * distributed.
-//    */
-//   exportESM('cli'),
-//   exportESM('node'),
-//   exportESM('universal'),
-//   /**
-//    * Prefer to bundle universal bundle with Rollup, since it will not depend on
-//    * NodeJS packages by definition, and Rollup is more reliable. Webpack will be
-//    * used to generate the CJS versions of the other ES6 modules.
-//    */
-//   exportCJS('universal'),
-// ];

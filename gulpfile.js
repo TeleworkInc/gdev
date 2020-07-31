@@ -64,7 +64,7 @@ export const compileCJS = (name, options = {}) => startCompileTask({
 const NO_RENAMING = {
   compilation_level: 'WHITESPACE_ONLY',
   language_in: 'ES_NEXT',
-  language_out: 'ES_NEXT',
+  language_out: 'NO_TRANSPILE',
 };
 
 /**

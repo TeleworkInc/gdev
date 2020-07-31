@@ -1,14 +1,18 @@
 /**
  * @license MIT
+ */
+/**
  * @file
  * Use Webpack to build CJS modules from ES2015 modules in the dev/ directory.
  * CommonJS is mandatory for this config file.
+ *
+ * Files will be built from dev/* to dev/*.cjs.
  */
-
+const glob = require('glob');
 const path = require('path');
 
 /**
- * Defaults to enable module.export on an uncompiled CJS bundle.
+ * Output to dev/[name].cjs.
  */
 const EXPORT_CONFIG = {
   output: {
@@ -20,8 +24,7 @@ const EXPORT_CONFIG = {
 };
 
 /**
- * Webpack defaults, to be overridden if needed. Writes a CJS module to
- * dev/{name}.cjs.
+ * Default config for Webpack exports.
  */
 const CONFIG_DEFAULTS = {
   ...EXPORT_CONFIG,
@@ -41,6 +44,7 @@ const CONFIG_DEFAULTS = {
 
 /**
  * Transpile the CLI module to CJS with async-node target.
+ * Entry: dev/cli.mjs
  */
 const cliConfig = {
   ...CONFIG_DEFAULTS,
@@ -66,6 +70,10 @@ const cliConfig = {
   },
 };
 
+/**
+ * Build a Node distribution.
+ * Entry: dev/node.mjs
+ */
 const nodeConfig = {
   ...CONFIG_DEFAULTS,
   entry: {
@@ -74,16 +82,23 @@ const nodeConfig = {
   target: 'async-node',
 };
 
-const esmModulesConfig = {
-  ...CONFIG_DEFAULTS,
-  entry: {
-    node: './exports/node.js',
-  },
-  target: 'async-node',
-};
+/**
+ * Build an ESM module.
+ */
+const remainingEsmModules = glob.sync('./exports/*.js', {
+  ignore: ['exports/node.js', 'exports/cli.js', 'exports/universal.js'],
+}).map((file) => {
+  return {
+    ...CONFIG_DEFAULTS,
+    entry: {
+      [path.parse(file).name]: file,
+    },
+    target: 'async-node',
+  };
+});
 
 module.exports = [
   cliConfig,
   nodeConfig,
-  esmModulesConfig,
+  ...remainingEsmModules,
 ];

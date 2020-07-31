@@ -6,14 +6,15 @@
  */
 
 import 'chai/register-expect.js';
+import path from 'path';
+import fs from 'fs';
+import { runInThisContext } from 'vm';
 
 /**
- * Import (run) executable from dist/.
+ * Will pass if no errors encountered with executable.
  */
-import * as exe from '../dist/exe.js';
-
 describe('Compiled executable', () => {
   it('should not throw errors', () => {
-    expect(() => exe).not.to.throw();
+    runInThisContext(fs.readFileSync(path.resolve('dist/exe.js')));
   });
 });
