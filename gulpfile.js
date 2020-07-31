@@ -55,20 +55,20 @@ export const startCompileTask = (options = {}) => {
  * Compile a CommonJS script in the `dev/` directory into the `dist/` directory.
  * Used for `executable` builds since they do not have any exports.
  *
- * @param {string} name
- * The name of the preprocessed CJS script to compile, located at
- * dist/{name}.cjs.
+ * @param {string} file
+ * The location of the preprocessed CJS bundle to compile.
  *
  * @param {object?} options
  * Additional flags to pass the compiler.
  *
  * @return {void}
  */
-export const compileCJS = async (name, options = {}) => {
+export const compileCJS = async (file, options = {}) => {
+  const name = path.parse(file).name;
   await startCompileTask({
     // I/O setup.
-    js: `dev/${name}.cjs`,
-    js_output_file: `dist/${name}.min.cjs`,
+    js: file,
+    js_output_file: file.replace('dev', 'dist').replace(name, `${name}.min`),
 
     // SIMPLE compilation for CJS to avoid renaming.
     compilation_level: 'SIMPLE',
@@ -81,19 +81,20 @@ export const compileCJS = async (name, options = {}) => {
 /**
  * Compile an ES6 module in the dist/ directory.
  *
- * @param {string} name
- * The name of the preprocessed ESM to compile, located at dist/{name}.mjs.
+ * @param {string} file
+ * The location of the preprocessed MJS bundle to compile.
  *
  * @param {object?} options
  * Additional flags to pass the compiler.
  *
  * @return {void}
  */
-export const compileESM = async (name, options = {}) => {
+export const compileESM = async (file, options = {}) => {
+  const name = path.parse(file).name;
   await startCompileTask({
     // I/O setup.
-    js: `dev/${name}.mjs`,
-    js_output_file: `dist/${name}.min.mjs`,
+    js: file,
+    js_output_file: file.replace('dev', 'dist').replace(name, `${name}.min`),
 
     // Don't rename vars, use NODE module_resolution.
     ...NO_RENAMING,
@@ -144,7 +145,7 @@ export const markCLIsExecutable = async () => {
  *
  * @return {void}
  */
-export const nodeCompile = async () => await compileCJS('node');
+export const nodeCompile = async () => await compileCJS('dev/node.cjs');
 
 /**
  * Compile the exports/universal.js script.
@@ -153,7 +154,7 @@ export const nodeCompile = async () => await compileCJS('node');
  * An EventEmitter that will fire when Closure Compiler is done.
  */
 export const universalCompile = async () => {
-  await compileCJS('universal', {
+  await compileCJS('dev/universal.cjs', {
     // Compiling dev/universal.cjs -> dist/universal.min.cjs
     js: 'dev/universal.cjs',
     js_output_file: 'dist/universal.min.cjs',
@@ -174,7 +175,7 @@ export const universalCompile = async () => {
  * @return {void}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
-export const cliCompile = async () => await compileCJS('cli');
+export const cliCompile = async () => await compileCJS('dev/cli.cjs');
 
 /**
  * Compile the executable. This will reduce all of the codebase to just its side
@@ -184,7 +185,7 @@ export const cliCompile = async () => await compileCJS('cli');
  * The EventEmitter that will fire when Closure Compiler is done.
  */
 export const executableCompile = async () => {
-  await compileCJS('executable', {
+  await compileCJS('dev/executable.cjs', {
     // Compiling dev/universal -> dist/exe
     ...PROCESS_MODULES,
     entry_point: 'dev/universal.mjs',
@@ -213,7 +214,7 @@ export const minifyModules = async () => {
   await Promise.all(
       files.map(
           async (file) => await compileESM(
-              path.basename(file, '.mjs'),
+              file,
               { jscomp_off: '*' },
           ),
       ),
