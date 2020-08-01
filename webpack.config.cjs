@@ -43,6 +43,32 @@ const CJS_DEFAULTS = {
   },
 };
 
+const ESM_DEFAULTS = {
+  ...CONFIG_DEFAULTS,
+  module: {
+    /**
+     * Following lines enable module.export.
+     */
+    rules: [
+      {
+        type: 'javascript/auto',
+        test: /\..?js$/,
+        use: [
+          {
+            loader: 'shebang-loader',
+          },
+        ],
+      },
+    ],
+  },
+  output: {
+    path: path.resolve(__dirname, 'dev'),
+    filename: '[name].cjs',
+    library: '',
+    libraryTarget: 'commonjs',
+  },
+};
+
 /**
  * Transpile the CLI module to CJS with async-node target.
  * dev/cli.mjs -> dev/cli.cjs
@@ -76,9 +102,9 @@ const cliConfig = {
  * dev/node.mjs -> dev/node.cjs
  */
 const nodeConfig = {
-  ...CJS_DEFAULTS,
+  ...ESM_DEFAULTS,
   entry: {
-    node: './exports/node.js',
+    node: './dev/node.mjs',
   },
   target: 'async-node',
 };
