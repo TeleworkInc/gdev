@@ -28,23 +28,27 @@ const CONFIG_DEFAULTS = {
       },
     ],
   },
+  // plugins: [
+  //   new webpack.IgnorePlugin(/fsevents/),
+  // ],
+};
+
+const CJS_DEFAULTS = {
+  ...CONFIG_DEFAULTS,
   output: {
     path: path.resolve(__dirname, 'dev'),
     filename: '[name].cjs',
     library: '',
     libraryTarget: 'commonjs',
   },
-  // plugins: [
-  //   new webpack.IgnorePlugin(/fsevents/),
-  // ],
 };
 
 /**
  * Transpile the CLI module to CJS with async-node target.
- * Entry: dev/cli.mjs
+ * dev/cli.mjs -> dev/cli.cjs
  */
 const cliConfig = {
-  ...CONFIG_DEFAULTS,
+  ...CJS_DEFAULTS,
   entry: {
     cli: './dev/cli.mjs',
   },
@@ -69,10 +73,10 @@ const cliConfig = {
 
 /**
  * Build a Node distribution.
- * Entry: dev/node.mjs
+ * dev/node.mjs -> dev/node.cjs
  */
 const nodeConfig = {
-  ...CONFIG_DEFAULTS,
+  ...CJS_DEFAULTS,
   entry: {
     node: './exports/node.js',
   },
@@ -80,22 +84,23 @@ const nodeConfig = {
 };
 
 /**
- * Build an ESM module.
+ * Build non-standard exports.
+ * exports/* -> dev/*
  */
-const remainingEsmModules = glob.sync('./exports/*.js', {
-  ignore: ['exports/node.js', 'exports/cli.js', 'exports/universal.js'],
-}).map((file) => {
-  return {
-    ...CONFIG_DEFAULTS,
-    entry: {
-      [path.parse(file).name]: file,
-    },
-    target: 'async-node',
-  };
-});
+// const remainingEsmModules = glob.sync('./exports/*.js', {
+//   ignore: ['exports/node.js', 'exports/cli.js', 'exports/universal.js'],
+// }).map((file) => {
+//   return {
+//     ...CJS_DEFAULTS,
+//     entry: {
+//       [path.parse(file).name]: file,
+//     },
+//     target: 'async-node',
+//   };
+// });
 
 module.exports = [
   cliConfig,
   nodeConfig,
-  ...remainingEsmModules,
+  // ...remainingEsmModules,
 ];
