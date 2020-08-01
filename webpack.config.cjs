@@ -15,7 +15,7 @@ const path = require('path');
 /**
  * Default config for Webpack exports.
  */
-const CONFIG_DEFAULTS = {
+const EXPORT_DEFAULTS = {
   mode: 'production',
   resolve: {
     extensions: ['.js', '.cjs', '.mjs'],
@@ -23,33 +23,9 @@ const CONFIG_DEFAULTS = {
   module: {
     rules: [
       {
-        test: /\..?js$/,
-        exclude: /node_modules/,
-      },
-    ],
-  },
-};
-
-const CJS_DEFAULTS = {
-  ...CONFIG_DEFAULTS,
-  output: {
-    path: path.resolve(__dirname, 'dev'),
-    filename: '[name].cjs',
-    library: '',
-    libraryTarget: 'commonjs',
-  },
-};
-
-const ESM_DEFAULTS = {
-  ...CONFIG_DEFAULTS,
-  module: {
-    /**
-     * Following lines enable module.export.
-     */
-    rules: [
-      {
         type: 'javascript/auto',
         test: /\..?js$/,
+        exclude: /node_modules/,
         use: [
           {
             loader: 'shebang-loader',
@@ -58,6 +34,10 @@ const ESM_DEFAULTS = {
       },
     ],
   },
+};
+
+const EXPORT_CJS = {
+  ...EXPORT_DEFAULTS,
   /**
    * -> dev/[name].cjs
    */
@@ -69,28 +49,14 @@ const ESM_DEFAULTS = {
   },
 };
 
-/**
- * Transpile the CLI module to CJS with async-node target.
- * dev/cli.mjs -> dev/cli.cjs
- */
-const cliConfig = {
-  entry: {
-    cli: './dev/cli.mjs',
+const EXPORT_ESM = {
+  ...EXPORT_DEFAULTS,
+  output: {
+    path: path.resolve(__dirname, 'dev'),
+    filename: '[name].cjs',
+    library: '',
+    libraryTarget: 'commonjs',
   },
-  target: 'async-node',
-  ...ESM_DEFAULTS,
-};
-
-/**
- * Build a Node distribution.
- * dev/node.mjs -> dev/node.cjs
- */
-const nodeConfig = {
-  entry: {
-    node: './dev/node.mjs',
-  },
-  target: 'async-node',
-  ...ESM_DEFAULTS,
 };
 
 const exportCJS = (file) => {
@@ -100,13 +66,13 @@ const exportCJS = (file) => {
       [name]: file,
     },
     target: 'async-node',
-    ...ESM_DEFAULTS,
+    ...EXPORT_CJS,
   };
 };
 
 /**
- * Build non-standard exports.
- * exports/* -> dev/*
+ * Compile all ES modules in dev/ except the universal bundle, which was rolled
+ * with Rollup due to lack of NodeJS dependencies.
  */
 const buildEsModules = glob.sync('./dev/*.mjs', {
   ignore: ['./dev/universal.*'],
