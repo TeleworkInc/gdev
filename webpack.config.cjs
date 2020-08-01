@@ -61,6 +61,9 @@ const ESM_DEFAULTS = {
       },
     ],
   },
+  /**
+   * -> dev/[name].cjs
+   */
   output: {
     path: path.resolve(__dirname, 'dev'),
     filename: '[name].cjs',
@@ -74,27 +77,11 @@ const ESM_DEFAULTS = {
  * dev/cli.mjs -> dev/cli.cjs
  */
 const cliConfig = {
-  ...CJS_DEFAULTS,
+  ...ESM_DEFAULTS,
   entry: {
     cli: './dev/cli.mjs',
   },
   target: 'async-node',
-  module: {
-    /**
-     * Following lines enable module.export.
-     */
-    rules: [
-      {
-        type: 'javascript/auto',
-        test: /\..?js$/,
-        use: [
-          {
-            loader: 'shebang-loader',
-          },
-        ],
-      },
-    ],
-  },
 };
 
 /**
