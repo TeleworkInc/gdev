@@ -10,24 +10,12 @@
  */
 const glob = require('glob');
 const path = require('path');
-
-/**
- * Output to dev/[name].cjs.
- */
-const EXPORT_CONFIG = {
-  output: {
-    path: path.resolve(__dirname, 'dev'),
-    filename: '[name].cjs',
-    library: '',
-    libraryTarget: 'commonjs',
-  },
-};
+// const webpack = require('webpack');
 
 /**
  * Default config for Webpack exports.
  */
 const CONFIG_DEFAULTS = {
-  ...EXPORT_CONFIG,
   mode: 'production',
   resolve: {
     extensions: ['.js', '.cjs', '.mjs'],
@@ -40,6 +28,15 @@ const CONFIG_DEFAULTS = {
       },
     ],
   },
+  output: {
+    path: path.resolve(__dirname, 'dev'),
+    filename: '[name].cjs',
+    library: '',
+    libraryTarget: 'commonjs',
+  },
+  // plugins: [
+  //   new webpack.IgnorePlugin(/fsevents/),
+  // ],
 };
 
 /**

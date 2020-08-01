@@ -23,9 +23,9 @@ program
     .action(commands.create);
 
 program
-    .command('watch')
+    .command('develop')
     .description('Start developing and build when changes are made.')
-    .action(commands.watch);
+    .action(commands.develop);
 
 program
     .command('compile')
