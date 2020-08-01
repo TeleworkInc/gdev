@@ -12,12 +12,13 @@
     "require": "./dist/node.min.cjs"
   },
   "scripts": {
-    "test": "yarn mocha",
+    "build": "yarn clean && yarn compile && yarn test",
     "clean": "rm -rf ./dist/* && rm -rf ./dev/*",
+    "compile": "yarn run:rollup && yarn run:webpack && yarn run:gulp",
+    "run:gulp": "yarn gulp",
     "run:rollup": "yarn rollup -c",
     "run:webpack": "yarn webpack --config webpack.config.cjs",
-    "run:compile": "yarn gulp",
-    "build": "yarn clean && yarn run:rollup && yarn run:webpack && yarn run:compile && yarn test"
+    "test": "yarn mocha"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,8 @@
     "closure",
     "compiler",
     "google",
-    "javascript"
+    "es6",
+    "es2015"
   ],
   "author": "Christian Lewis <hello@trytelework.com>",
   "license": "MIT",

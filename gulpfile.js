@@ -148,17 +148,13 @@ export const markCLIsExecutable = async () => {
 export const nodeCompile = async () => await compileCJS('dev/node.cjs');
 
 /**
- * Compile the exports/universal.js script.
+ * Compile dev/universal.js -> dist/universal.cjs
  *
  * @return {void}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
 export const universalCompile = async () => {
   await compileCJS('dev/universal.cjs', {
-    // Compiling dev/universal.cjs -> dist/universal.min.cjs
-    js: 'dev/universal.cjs',
-    js_output_file: 'dist/universal.min.cjs',
-
     // SIMPLE compilation and language_in == language_out to prevent name
     // mangling while getting maximum compression.
     compilation_level: 'SIMPLE',
