@@ -6,7 +6,7 @@
  * Specify the exports for this project's CLI.
  */
 import program from 'commander';
-import aft from 'ascii-file-tree';
+import tree from 'tree-node-cli';
 import chalk from 'chalk';
 import { basename } from 'path';
 import * as commands from '../lib/commands.js';
@@ -42,7 +42,7 @@ program
  */
 const TREE = (
   commands.checkInsideProject()
-  ? aft.generate({ globs: ['lib/**/*.js'] })
+  ? '\n' + tree('./lib/')
   : ''
 );
 

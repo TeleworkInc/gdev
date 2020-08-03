@@ -9,9 +9,11 @@ import 'chai/register-expect.js';
 import * as thisPackage from 'gdev';
 
 import * as cliDev from '../dev/cli.mjs';
+import * as cliMinDev from '../dev/cli.min.mjs';
 import * as cliDist from '../dist/cli.min.mjs';
 
 import * as nodeDev from '../dev/node.mjs';
+import * as nodeMinDev from '../dev/node.min.mjs';
 import * as nodeDist from '../dist/node.min.mjs';
 
 import * as universalDev from '../dev/universal.mjs';
@@ -26,12 +28,20 @@ describe('ESM import', () => {
     expect(nodeDev.create).to.be.a('function');
   });
 
+  it('should import the bundled module [dev/node.min.mjs]', () => {
+    expect(nodeMinDev.create).to.be.a('function');
+  });
+
   it('should import the compiled module [dist/node.min.mjs]', () => {
     expect(nodeDist.create).to.be.a('function');
   });
 
   it('should not fail for uncompiled ESM [dev/cli.mjs]', () => {
     expect(() => cliDev).to.not.throw();
+  });
+
+  it('should not fail for bundled ES module [dev/cli.min.mjs]', () => {
+    expect(() => cliMinDev).to.not.throw();
   });
 
   it('should not fail for compiled ESM [dist/cli.min.mjs]', () => {

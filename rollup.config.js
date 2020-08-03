@@ -3,10 +3,23 @@
  * @file Uses Rollup for ESM bundling, primarily for dev refresh on save.
  */
 
-// import json from '@rollup/plugin-json';
-// import resolve from '@rollup/plugin-node-resolve';
-// import cjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
+import resolve from '@rollup/plugin-node-resolve';
+import cjs from '@rollup/plugin-commonjs';
 import glob from 'glob';
+
+const DEFAULTS = {
+  plugins: [
+    cjs({
+      transformMixedEsModules: true,
+    }),
+    json(),
+    resolve({
+      preferBuiltins: true,
+      preferConst: true,
+    }),
+  ],
+};
 
 export const exportESM = (file) => {
   return {
@@ -19,14 +32,7 @@ export const exportESM = (file) => {
       // will help with compiler inlining
       preferConst: true,
     },
-    // plugins: [
-    //   cjs(),
-    //   json(),
-    //   resolve({
-    //     preferBuiltins: true,
-    //     preferConst: true,
-    //   }),
-    // ],
+    ...DEFAULTS,
   };
 };
 
@@ -40,6 +46,7 @@ export const exportCJS = (file) => {
       format: 'cjs',
       preferConst: true,
     },
+    ...DEFAULTS,
   };
 };
 

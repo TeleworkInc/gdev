@@ -10,7 +10,22 @@
  */
 const glob = require('glob');
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
+
 // const webpack = require('webpack');
+
+const EXPERIMENTS = {
+  experiments: {
+    mjs: true,
+    outputModule: true,
+    syncWebAssembly: true,
+    topLevelAwait: true,
+    asset: true,
+    asyncWebAssembly: true,
+    importAsync: true,
+    importAwait: true,
+  },
+};
 
 /**
  * Default config for Webpack exports.
@@ -29,22 +44,30 @@ const EXPORT_DEFAULTS = {
         use: [
           {
             loader: 'shebang-loader',
+            loader: 'babel-loader',
           },
         ],
       },
     ],
   },
+  optimization: {
+    minimize: false,
+    minimizer: [new TerserPlugin({
+      terserOptions: {
+        parse: {
+          bare_returns: true,
+        },
+      },
+    })],
+  },
+  ...EXPERIMENTS,
 };
 
 const EXPORT_CJS = {
   ...EXPORT_DEFAULTS,
-  /**
-   * -> dev/[name].cjs
-   */
   output: {
     path: path.resolve(__dirname, 'dev'),
     filename: '[name].cjs',
-    library: '',
     libraryTarget: 'commonjs',
   },
 };
@@ -52,10 +75,12 @@ const EXPORT_CJS = {
 const EXPORT_ESM = {
   ...EXPORT_DEFAULTS,
   output: {
+    iife: false,
+    module: true,
+    scriptType: 'module',
+    libraryTarget: 'module',
     path: path.resolve(__dirname, 'dev'),
-    filename: '[name].cjs',
-    library: '',
-    libraryTarget: 'commonjs',
+    filename: '[name].min.mjs',
   },
 };
 
@@ -70,15 +95,29 @@ const exportCJS = (file) => {
   };
 };
 
+const exportESM = (file) => {
+  const name = path.parse(file).name;
+  return {
+    entry: {
+      [name]: file,
+    },
+    target: 'async-node',
+    ...EXPORT_ESM,
+  };
+};
+
 /**
  * Compile all ES modules in dev/ except the universal bundle, which was rolled
  * with Rollup due to lack of NodeJS dependencies.
  */
-const buildEsModules = glob.sync('./dev/*.mjs', {
-  ignore: ['./dev/universal.*'],
-}).map(exportCJS);
+const esmExports = glob.sync('./dev/*.mjs', {
+  ignore: [
+    './dev/*.min.mjs',
+    // './dev/universal.*',
+  ],
+}).map(exportESM);
 
 module.exports = [
-  ...buildEsModules,
+  ...esmExports,
   // ...remainingEsmModules,
 ];

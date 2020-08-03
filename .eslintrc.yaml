@@ -20,6 +20,8 @@ ignorePatterns:
   - 'externs.js'
 
 rules:
+
+  newline-after-import: true
   
   jsdoc/check-tag-names:
     - error
