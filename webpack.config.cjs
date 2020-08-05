@@ -44,7 +44,6 @@ const EXPORT_CJS = {
   output: {
     path: path.resolve(__dirname, 'dev'),
     filename: '[name].cjs',
-    library: '',
     libraryTarget: 'commonjs',
   },
 };
@@ -54,7 +53,6 @@ const EXPORT_ESM = {
   output: {
     path: path.resolve(__dirname, 'dev'),
     filename: '[name].cjs',
-    library: '',
     libraryTarget: 'commonjs',
   },
 };

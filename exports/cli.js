@@ -6,7 +6,7 @@
  * Specify the exports for this project's CLI.
  */
 import program from 'commander';
-import aft from 'ascii-file-tree';
+import tree from 'tree-node-cli';
 import chalk from 'chalk';
 import { basename } from 'path';
 import * as commands from '../lib/commands.js';
@@ -42,7 +42,7 @@ program
  */
 const TREE = (
   commands.checkInsideProject()
-  ? aft.generate({ globs: ['lib/**/*.js'] })
+  ? '\n' + tree('./lib/')
   : ''
 );
 
@@ -55,11 +55,6 @@ const HEAD = (
 console.log('\n', chalk.grey('--- 𝓰𝓭𝓮𝓿 ---'), '\n');
 if (HEAD) console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
 if (TREE) console.log(chalk.blueBright(TREE), '\n');
-
-/**
- * Display the location of the dev and production files.
- */
-commands.displayProjectInfo();
 
 /**
  * Parse command line arguments. Use try {...} catch {...} and

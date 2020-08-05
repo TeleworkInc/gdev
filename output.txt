@@ -1,0 +1,129 @@
+yarn run v1.22.4
+warning ../../package.json: No license field
+$ yarn clean && yarn compile && yarn test
+warning ../../package.json: No license field
+$ rm -rf ./dist/* && rm -rf ./dev/*
+warning ../../package.json: No license field
+$ yarn run:rollup && yarn run:webpack && yarn run:gulp
+warning ../../package.json: No license field
+$ yarn rollup -c
+warning ../../package.json: No license field
+$ /home/christian/Projects/gdev/node_modules/.bin/rollup -c
+
+exports/cli.js → dev/cli.mjs...
+(!) Unresolved dependencies
+https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
+commander (imported by exports/cli.js)
+ascii-file-tree (imported by exports/cli.js)
+chalk (imported by exports/cli.js, lib/commands.js)
+path (imported by exports/cli.js, lib/commands.js)
+fs (imported by lib/commands.js)
+call-bash (imported by lib/commands.js)
+chokidar (imported by lib/commands.js)
+filetouch (imported by lib/commands.js)
+ora (imported by lib/commands.js)
+created dev/cli.mjs in 31ms
+
+exports/node.js → dev/node.mjs...
+(!) Unresolved dependencies
+https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
+fs (imported by lib/commands.js)
+path (imported by lib/commands.js)
+call-bash (imported by lib/commands.js)
+chalk (imported by lib/commands.js)
+chokidar (imported by lib/commands.js)
+filetouch (imported by lib/commands.js)
+ora (imported by lib/commands.js)
+created dev/node.mjs in 16ms
+
+exports/testExport.js → dev/testExport.mjs...
+created dev/testExport.mjs in 2ms
+
+exports/universal.js → dev/universal.mjs...
+created dev/universal.mjs in 10ms
+
+exports/universal.js → dev/universal.cjs...
+created dev/universal.cjs in 6ms
+warning ../../package.json: No license field
+$ yarn webpack --config webpack.config.cjs
+warning ../../package.json: No license field
+$ /home/christian/Projects/gdev/node_modules/.bin/webpack --config webpack.config.cjs
+Hash: 3a8076c501f05832fd04c90a7bf4b1c7285ce1a964fca9e25d6a3a8039cc
+Version: webpack 5.0.0-beta.22
+Child
+    Hash: 3a8076c501f05832fd04
+    Time: 802 ms
+    Built at: 2020-08-05 010:33:04
+    1 asset
+    Entrypoint cli = cli.cjs
+    ./dev/cli.mjs 5.36 KiB [built]
+    ./node_modules/commander/index.js 49.8 KiB [built]
+    external "path" 42 bytes [built]
+    external "fs" 42 bytes [built]
+    ./node_modules/chalk/source/index.js 5.93 KiB [built]
+    ./node_modules/call-bash/index.js 426 bytes [built]
+    ./node_modules/chokidar/index.js 26.8 KiB [built]
+    ./node_modules/filetouch/index.js 289 bytes [built]
+    ./node_modules/ora/index.js 7.5 KiB [built]
+    external "events" 42 bytes [built]
+    external "child_process" 42 bytes [built]
+    ./node_modules/chalk/node_modules/ansi-styles/index.js 4.04 KiB [built]
+    ./node_modules/supports-color/index.js 2.7 KiB [built]
+    ./node_modules/chalk/source/util.js 1.01 KiB [built]
+    ./node_modules/chalk/source/templates.js 3.29 KiB [built]
+        + 79 hidden modules
+
+    WARNING in ./node_modules/chokidar/lib/fsevents-handler.js 9:13-32
+    Module not found: Error: Can't resolve 'fsevents' in '/home/christian/Projects/gdev/node_modules/chokidar/lib'
+     @ ./node_modules/chokidar/index.js 15:24-57
+     @ ./dev/cli.mjs 7:0-32 141:2-16
+
+    ERROR in ./dev/cli.mjs 2:0-34
+    Module not found: Error: Can't resolve 'ascii-file-tree' in '/home/christian/Projects/gdev/dev'
+
+Child
+    Hash: c90a7bf4b1c7285ce1a9
+    Time: 810 ms
+    Built at: 2020-08-05 010:33:04
+       Asset     Size
+    node.cjs  354 KiB  [emitted]  [name: node]
+    Entrypoint node = node.cjs
+    ./dev/node.mjs 5.21 KiB [built]
+    external "fs" 42 bytes [built]
+    external "path" 42 bytes [built]
+    ./node_modules/call-bash/index.js 426 bytes [built]
+    ./node_modules/chalk/source/index.js 5.93 KiB [built]
+    ./node_modules/chokidar/index.js 26.8 KiB [built]
+    ./node_modules/filetouch/index.js 289 bytes [built]
+    ./node_modules/ora/index.js 7.5 KiB [built]
+    external "child_process" 42 bytes [built]
+    ./node_modules/chalk/node_modules/ansi-styles/index.js 4.04 KiB [built]
+    ./node_modules/supports-color/index.js 2.7 KiB [built]
+    ./node_modules/chalk/source/util.js 1.01 KiB [built]
+    ./node_modules/chalk/source/templates.js 3.29 KiB [built]
+    external "events" 42 bytes [built]
+    external "util" 42 bytes [built]
+        + 78 hidden modules
+
+    WARNING in ./node_modules/chokidar/lib/fsevents-handler.js 9:13-32
+    Module not found: Error: Can't resolve 'fsevents' in '/home/christian/Projects/gdev/node_modules/chokidar/lib'
+     @ ./node_modules/chokidar/index.js 15:24-57
+     @ ./dev/node.mjs 5:0-32 197:2-16
+
+Child
+    Hash: 64fca9e25d6a3a8039cc
+    Time: 86 ms
+    Built at: 2020-08-05 010:33:03
+             Asset   Size
+    testExport.cjs  3 KiB  [emitted]  [name: testExport]
+    Entrypoint testExport = testExport.cjs
+    ./dev/testExport.mjs 108 bytes [built]
+        + 3 hidden modules
+error Command failed with exit code 2.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+error Command failed with exit code 2.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+error Command failed with exit code 2.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+error Command failed with exit code 2.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
