@@ -1,2 +1,2 @@
-# 𝓰𝓭𝓮𝓿
+# 𝓰𝓷𝓿
 Javascript development workspaces built around Closure Compiler.

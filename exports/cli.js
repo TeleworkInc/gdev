@@ -52,7 +52,7 @@ const HEAD = (
   : ''
 );
 
-console.log('\n', chalk.grey('--- 𝓰𝓭𝓮𝓿 ---'), '\n');
+console.log('\n', chalk.grey('--- 𝓰𝓷𝓿 ---'), '\n');
 if (HEAD) console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
 if (TREE) console.log(chalk.blueBright(TREE), '\n');
 
