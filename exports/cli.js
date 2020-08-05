@@ -5,6 +5,7 @@
  * @file
  * Specify the exports for this project's CLI.
  */
+import path from 'path';
 import program from 'commander';
 import tree from 'tree-node-cli';
 import chalk from 'chalk';
@@ -42,7 +43,7 @@ program
  */
 const TREE = (
   commands.checkInsideProject()
-  ? '\n' + tree('./lib/')
+  ? '\n' + tree('./lib')
   : ''
 );
 

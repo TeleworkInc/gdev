@@ -2,6 +2,9 @@
 ./dev/
 ./dist/
 
+# potential debug file
+debug.txt
+
 # Logs
 logs
 *.log
