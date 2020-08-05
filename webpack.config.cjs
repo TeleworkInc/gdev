@@ -6,11 +6,10 @@
  * Use Webpack to build CJS modules from ES2015 modules in the dev/ directory.
  * CommonJS is mandatory for this config file.
  *
- * Files will be built from dev/* to dev/*.cjs.
+ * Files will be built from dev/*.mjs to dev/*.cjs.
  */
 const glob = require('glob');
 const path = require('path');
-// const webpack = require('webpack');
 
 /**
  * Default config for Webpack exports.
@@ -48,14 +47,14 @@ const EXPORT_CJS = {
   },
 };
 
-const EXPORT_ESM = {
-  ...EXPORT_DEFAULTS,
-  output: {
-    path: path.resolve(__dirname, 'dev'),
-    filename: '[name].cjs',
-    libraryTarget: 'commonjs',
-  },
-};
+// const EXPORT_ESM = {
+//   ...EXPORT_DEFAULTS,
+//   output: {
+//     path: path.resolve(__dirname, 'dev'),
+//     filename: '[name].cjs',
+//     libraryTarget: 'commonjs',
+//   },
+// };
 
 const exportCJS = (file) => {
   const name = path.parse(file).name;
@@ -78,5 +77,4 @@ const buildEsModules = glob.sync('./dev/*.mjs', {
 
 module.exports = [
   ...buildEsModules,
-  // ...remainingEsmModules,
 ];
