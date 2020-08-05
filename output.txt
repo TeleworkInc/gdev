@@ -8,7 +8,7 @@ $ yarn run:rollup && yarn run:webpack && yarn run:gulp
 warning ../../package.json: No license field
 $ yarn rollup -c
 warning ../../package.json: No license field
-$ /home/christian/Projects/gdev/node_modules/.bin/rollup -c
+$ /home/christian/Projects/gnv/node_modules/.bin/rollup -c
 
 exports/cli.js → dev/cli.mjs...
 (!) Unresolved dependencies
@@ -47,7 +47,7 @@ created dev/universal.cjs in 6ms
 warning ../../package.json: No license field
 $ yarn webpack --config webpack.config.cjs
 warning ../../package.json: No license field
-$ /home/christian/Projects/gdev/node_modules/.bin/webpack --config webpack.config.cjs
+$ /home/christian/Projects/gnv/node_modules/.bin/webpack --config webpack.config.cjs
 Hash: 3a8076c501f05832fd04c90a7bf4b1c7285ce1a964fca9e25d6a3a8039cc
 Version: webpack 5.0.0-beta.22
 Child
@@ -74,12 +74,12 @@ Child
         + 79 hidden modules
 
     WARNING in ./node_modules/chokidar/lib/fsevents-handler.js 9:13-32
-    Module not found: Error: Can't resolve 'fsevents' in '/home/christian/Projects/gdev/node_modules/chokidar/lib'
+    Module not found: Error: Can't resolve 'fsevents' in '/home/christian/Projects/gnv/node_modules/chokidar/lib'
      @ ./node_modules/chokidar/index.js 15:24-57
      @ ./dev/cli.mjs 7:0-32 141:2-16
 
     ERROR in ./dev/cli.mjs 2:0-34
-    Module not found: Error: Can't resolve 'ascii-file-tree' in '/home/christian/Projects/gdev/dev'
+    Module not found: Error: Can't resolve 'ascii-file-tree' in '/home/christian/Projects/gnv/dev'
 
 Child
     Hash: c90a7bf4b1c7285ce1a9
@@ -106,7 +106,7 @@ Child
         + 78 hidden modules
 
     WARNING in ./node_modules/chokidar/lib/fsevents-handler.js 9:13-32
-    Module not found: Error: Can't resolve 'fsevents' in '/home/christian/Projects/gdev/node_modules/chokidar/lib'
+    Module not found: Error: Can't resolve 'fsevents' in '/home/christian/Projects/gnv/node_modules/chokidar/lib'
      @ ./node_modules/chokidar/index.js 15:24-57
      @ ./dev/node.mjs 5:0-32 197:2-16
 

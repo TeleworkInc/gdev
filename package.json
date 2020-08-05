@@ -1,10 +1,10 @@
 {
-  "name": "gdev",
+  "name": "gnv",
   "version": "2.1.0",
   "description": "Javascript development workspaces built around Closure Compiler.",
   "type": "module",
   "bin": {
-    "gdev": "./dist/cli.min.cjs"
+    "gnv": "./dist/cli.min.cjs"
   },
   "main": "./dist/node.min.cjs",
   "exports": {
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TeleworkInc/gdev.git"
+    "url": "git+https://github.com/TeleworkInc/gnv.git"
   },
   "keywords": [
     "closure",
@@ -35,9 +35,9 @@
   "author": "Christian Lewis <hello@trytelework.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/TeleworkInc/gdev/issues"
+    "url": "https://github.com/TeleworkInc/gnv/issues"
   },
-  "homepage": "https://github.com/TeleworkInc/gdev#readme",
+  "homepage": "https://github.com/TeleworkInc/gnv#readme",
   "dependencies": {
     "await-shell": "^1.26.0",
     "chai-as-promised": "^7.1.1",

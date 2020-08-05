@@ -19,7 +19,7 @@ const PROJECT_NAME = basename(CWD);
  */
 program
     .command('create <project>')
-    .description('Create a new gdev workspace.')
+    .description('Create a new gnv workspace.')
     .action(commands.create);
 
 program
