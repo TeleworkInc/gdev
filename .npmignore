@@ -1,8 +1,5 @@
-# FOR WHEN ROLLUP ESM ISSUES ARE RESOLVED
-# see https://github.com/christiantjl/rollup-node-testing.git
-
 # ignore everything
-#**/**
+**/**
 
 # except dist
-#!dist/*
+!dist/*
