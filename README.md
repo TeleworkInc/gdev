@@ -73,7 +73,7 @@ dist
 
 Where **\*\*bold\*\*** indicates an executable file.
 
-## How does the `cli.js` export work?
+## How does the CLI export work?
 The `bin` field of `package.json` points to `dist/cli.cjs` and uses the
 `commander` package by default to provide an interactive command line interface.
 
@@ -81,7 +81,7 @@ gnv will generate `cli.js` with an example program when a new workspace is
 created with `gnv create my-project-name`. Call your CLI at the command line
 with `my-project-name` and you will see `Welcome to gnv!` printed to stdout.
 
-## How does the `node.js` export work?
+## How does the Node export work?
 Node will `import` or `require` the appropriate compiled export file
 (`dist/node.mjs` or `dist/node.cjs` respectively) in `dist/`. The following
 settings allow for this:
@@ -94,7 +94,7 @@ settings allow for this:
 * `"type": "module` in `package.json` so ES6 `import`/`export` are available by
   default, i.e. for inside `lib/`.
 
-## What's `exe.js` and how does the universal export work?
+## How does the universal export work, and what's `exe.js`?
 The **executable** output is generated from the **universal** target. While
 **universal** specifies exports that can be `import`'d and `require`'d, `exe.js`
 is the most compressed version of this module which exports nothing and aims to
