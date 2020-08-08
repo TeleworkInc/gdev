@@ -1,5 +1,6 @@
 /**
  * @license MIT
+ *
  * @fileoverview
  * Named import test for ES modules in dist/.
  */
