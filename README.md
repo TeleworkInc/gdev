@@ -73,6 +73,27 @@ dist
 
 Where **\*\*bold\*\*** indicates an executable file.
 
+## How does the `cli.js` export work?
+The `bin` field of `package.json` points to `dist/cli.cjs` and uses the
+`commander` package by default to provide an interactive command line interface.
+
+gnv will generate `cli.js` with an example program when a new workspace is
+created with `gnv create my-project-name`. Call your CLI at the command line
+with `my-project-name` and you will see `Welcome to gnv!` printed to stdout.
+
+## How does the `node.js` export work?
+Node will `import` or `require` the appropriate compiled export file
+(`dist/node.mjs` or `dist/node.cjs` respectively) in `dist/`. The following
+settings allow for this:
+
+* `.mjs` and `.cjs` extensions on built files for explicit specification of
+  ES/CJS modules
+* `"main": "dist/node.cjs"` in `package.json` for pre-13.2.0 compatibility
+* `"exports": { ... }` in `package.json` to specify CJS and ESM export locations
+  for post-13.2.0 `import`/`require` support
+* `"type": "module` in `package.json` so ES6 `import`/`export` are available by
+  default, i.e. for inside `lib/`.
+
 ## What's `exe.js` and how does the universal export work?
 The **executable** output is generated from the **universal** target. While
 **universal** specifies exports that can be `import`'d and `require`'d, `exe.js`
@@ -122,7 +143,7 @@ console.log("a is 10");
 
 ## How will my package work with `require` and `import`?
 The goal of gnv workspaces is full CJS/ESM interop, and `require` and `import`
-should both expose your `exports/node.js` exports as expected thanks to Rollup. 
+should both expose your exports as expected thanks to Rollup. 
 
 `ES6 | namedImportTest.mjs [PASSING]`
 ```javascript
@@ -133,29 +154,6 @@ import { TestA, TestB, TestC, TestDefault } from '../dist/universal.mjs';
 ```javascript
 const { TestA, TestB, TestC, TestDefault } = require('../dist/universal.cjs');
 ```
-
-## How does the `node.js` export work?
-Node will `import` or `require` the appropriate compiled export file
-(`dist/node.mjs` or `dist/node.cjs` respectively) in `dist/`. The following
-settings allow for this:
-
-* `.mjs` and `.cjs` extensions on built files for explicit specification of
-  ES/CJS modules
-* `"main": "dist/node.cjs"` in `package.json` for pre-13.2.0 compatibility
-* `"exports": { ... }` in `package.json` to specify CJS and ESM export locations
-  for post-13.2.0 `import`/`require` support
-* `"type": "module` in `package.json` so ES6 `import`/`export` are available by
-  default, i.e. for inside `lib/`.
-
-## How does the `cli.js` export work?
-The `bin` field of `package.json` points to `dist/cli.cjs` and
-uses the `commander` package by default to provide an interactive command line
-interface. 
-
-gnv will generate `cli.js` with an example program when a new
-workspace is created with `gnv create my-project-name`. Call your CLI at the
-command line with `my-project-name` and you will see `Welcome to gnv!` printed
-to stdout.
 
 ## How do I use third party modules if I want to keep my `package.json` free of dependencies? 
 We're used to doing `yarn add [pkg]` / `npm install [pkg]` when we need to use a
