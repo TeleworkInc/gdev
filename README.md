@@ -94,7 +94,7 @@ export would be empty (or violate the following assumption), **named exports are
 also exported as the `default` export**. This is a little ugly in the source,
 and, using the gnv project itself as an example, looks like:
 
-### Generated development bundle at `dev/node.mjs`
+#### Generated development bundle at `dev/node.mjs`
 ```javascript
 // expose as named exports
 export { callCompiler, checkInsideProject, compile, create, devCompile, develop, displayProjectInfo, initialize };
@@ -107,7 +107,7 @@ A large motivation of this is so that the form `import pkg from ...` can be used
 instead of `import * as pkg from ...`, but it does allow for predictable
 behavior:
 
-### ESM `import`
+#### ESM `import`
 ```javascript
 // default (all)
 import gnv from './dev/node.mjs';
@@ -120,7 +120,7 @@ console.log({
 });
 ```
 
-### CJS `require`
+#### CJS `require`
 ```javascript
 // default (all)
 const gnv = require('./dev/node.cjs');
