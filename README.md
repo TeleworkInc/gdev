@@ -1,4 +1,4 @@
-# 𝓰𝓷𝓿
+# 𝓰𝓷𝓿 [WIP]
 Javascript development workspaces built around
 [Rollup](https://github.com/rollup/rollup) and [Closure
 Compiler](https://github.com/google/closure-compiler) with full CJS/ESM interop.
@@ -143,7 +143,8 @@ console.log("a is 10");
 
 ## How will my package work with `require` and `import`?
 The goal of gnv workspaces is full CJS/ESM interop, and `require` and `import`
-should both expose your exports as expected thanks to Rollup. 
+should both expose your exports as expected thanks to Rollup. This allows for
+distraction-free interop as seen below:
 
 `ES6 | namedImportTest.mjs [PASSING]`
 ```javascript
@@ -154,6 +155,83 @@ import { TestA, TestB, TestC, TestDefault } from '../dist/universal.mjs';
 ```javascript
 const { TestA, TestB, TestC, TestDefault } = require('../dist/universal.cjs');
 ```
+
+An additional small twist that gnv adds is, because it explicitly only ever
+compiles exports, there will never really be a situation where the `default`
+export would be empty (or violate the following assumption), **named exports are
+also exported as the `default` export**. This is a little ugly in the source,
+and, using the gnv project itself as an example, looks like:
+
+`dev/node.mjs`
+```javascript
+// expose as named exports
+export { callCompiler, checkInsideProject, compile, create, devCompile, develop, displayProjectInfo, initialize };
+
+// expose all as default export
+export default { callCompiler, checkInsideProject, compile, create, devCompile, develop, displayProjectInfo, initialize };
+```
+
+A large motivation of this is so that the form `import pkg from ...` can be used
+instead of `import * as pkg from ...`, but it does allow for predictable
+behavior:
+
+`test.mjs`
+```javascript
+import gnv from './dev/node.mjs';
+import { callCompiler } from './dev/node.mjs';
+
+console.log({
+  gnv,
+  callCompiler,
+});
+```
+
+`test.cjs`
+```javascript
+const { callCompiler } = require('./dev/node.cjs');
+const gnv = require('./dev/node.cjs');
+
+console.log({
+  gnv,
+  callCompiler,
+});
+```
+
+Running in Node to compare outputs:
+
+`$ node test.cjs`
+```javascript
+{
+  gnv: {
+    callCompiler: [AsyncFunction: callCompiler],
+    checkInsideProject: [Function: checkInsideProject],
+    compile: [AsyncFunction: compile],
+    create: [AsyncFunction: create],
+    devCompile: [AsyncFunction: devCompile],
+    develop: [AsyncFunction: develop],
+    displayProjectInfo: [Function: displayProjectInfo],
+    initialize: [AsyncFunction: initialize]
+  },
+  callCompiler: [AsyncFunction: callCompiler]
+}
+```
+`$ node test.mjs`
+```javascript
+{
+  gnv: {
+    callCompiler: [AsyncFunction: callCompiler],
+    checkInsideProject: [Function: checkInsideProject],
+    compile: [AsyncFunction: compile],
+    create: [AsyncFunction: create],
+    devCompile: [AsyncFunction: devCompile],
+    develop: [AsyncFunction: develop],
+    displayProjectInfo: [Function: displayProjectInfo],
+    initialize: [AsyncFunction: initialize]
+  },
+  callCompiler: [AsyncFunction: callCompiler]
+}
+```
+
 
 ## How do I use third party modules if I want to keep my `package.json` free of dependencies? 
 We're used to doing `yarn add [pkg]` / `npm install [pkg]` when we need to use a
