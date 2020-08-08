@@ -1,6 +1,7 @@
 # 𝓰𝓷𝓿
-Javascript development workspaces built around Closure Compiler with full
-CJS/ESM interop.
+Javascript development workspaces built around
+[Rollup](https://github.com/rollup/rollup) and [Closure
+Compiler](https://github.com/google/closure-compiler) with full CJS/ESM interop.
 
 ## Easily build CLI, browser, and Node packages all in one workspace using the latest syntax.
 Build the **smallest** and **fastest** bundles for **multiple targets** with
