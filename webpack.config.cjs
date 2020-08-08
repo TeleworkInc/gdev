@@ -1,13 +1,13 @@
 /**
  * @license MIT
- */
-/**
- * @file
+ *
+ * @fileoverview
  * Use Webpack to build CJS modules from ES2015 modules in the dev/ directory.
  * CommonJS is mandatory for this config file.
  *
  * Files will be built from dev/*.mjs to dev/*.cjs.
  */
+
 const glob = require('glob');
 const path = require('path');
 

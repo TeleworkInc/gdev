@@ -90,9 +90,9 @@ const { TestA, TestB, TestC, TestDefault } = require('../dist/universal.cjs');
 
 An additional small twist that gnv adds is, because it explicitly only ever
 compiles exports, there will never really be a situation where the `default`
-export would be empty (or violate the following assumption), **named exports are
-also exported as the `default` export**. This is a little ugly in the source,
-and, using the gnv project itself as an example, looks like:
+export would be empty by default, so if a `default` export is not defined, all
+**named exports are exported as the `default` export**. This is a little ugly in
+the source, and, using the gnv project itself as an example, looks like:
 
 #### Generated development bundle at `dev/node.mjs`
 ```javascript
@@ -103,9 +103,9 @@ export { callCompiler, checkInsideProject, compile, create, devCompile, develop,
 export default { callCompiler, checkInsideProject, compile, create, devCompile, develop, displayProjectInfo, initialize };
 ```
 
-A large motivation of this is so that the form `import pkg from ...` can be used
-instead of `import * as pkg from ...`, but it does allow for predictable
-behavior:
+This can be overridden by setting a `default` export manually. A large
+motivation of this is so that the form `import pkg from ...` can be used instead
+of `import * as pkg from ...`, and it allows for predictable behavior:
 
 #### ESM `import`
 ```javascript
@@ -176,8 +176,32 @@ The `bin` field of `package.json` points to `dist/cli.cjs` and uses the
 `commander` package by default to provide an interactive command line interface.
 
 gnv will generate `cli.js` with an example program when a new workspace is
-created with `gnv create my-project-name`. Call your CLI at the command line
-with `my-project-name` and you will see `Welcome to gnv!` printed to stdout.
+created with `gnv create my-project-name`.
+
+### Example
+Create a new project:
+```bash
+$ gnv create my-project
+```
+
+Enter the directory:
+```bash
+$ cd my-project
+```
+
+Link the package to your local bin to emulate a global install:
+```bash
+$ yarn link
+```
+
+Call your program:
+```bash
+$ my-project
+
+Hello world!
+```
+
+Check `exports/cli.js` to see what's happening behind the scenes. 
 
 ## How does the Node export work?
 Node will `import` or `require` the appropriate compiled export file

@@ -1,10 +1,10 @@
 /**
  * @license MIT
- */
-/**
- * @file
+ *
+ * @fileoverview
  * Specify the exports for this project's CLI.
  */
+
 import program from 'commander';
 import tree from 'tree-node-cli';
 import chalk from 'chalk';

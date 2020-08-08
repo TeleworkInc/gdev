@@ -1,7 +1,6 @@
 /**
  * @license MIT
- */
-/**
+ *
  * @fileoverview
  * Specify the exports for this project's CLI.
  */
@@ -9,7 +8,6 @@
 /**
  * Expose data from `lib/`.
  */
-
 export * from '../lib/TestAB.js';
 export * from '../lib/TestC.js';
 

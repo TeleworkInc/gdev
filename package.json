@@ -50,6 +50,7 @@
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
     "ora": "^4.0.4",
+    "rollup-plugin-export-default": "^1.2.0",
     "touch": "^3.1.0",
     "tree-node-cli": "^1.4.0"
   },

@@ -1,7 +1,7 @@
 /**
  * @license MIT
+ *
+ * @fileoverview A test file.
  */
-/**
- * @file A test file.
- */
+
 export const MyTestVariable = 5;

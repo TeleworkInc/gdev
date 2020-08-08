@@ -1,6 +1,8 @@
 /**
  * @license MIT
- * @file Uses Rollup for ESM bundling, primarily for dev refresh on save.
+ *
+ * @fileoverview
+ * Uses Rollup for ESM bundling, primarily for dev refresh on save.
  */
 import glob from 'glob';
 
