@@ -1,5 +1,8 @@
-/* eslint-disable jsdoc/require-file-overview */
-/* eslint-disable require-jsdoc */
+/**
+ * @license MIT
+ * @fileoverview
+ * Named import test for ES modules in dist/.
+ */
 import 'chai/register-expect.js';
 import { TestA, TestB, TestC, TestDefault } from '../dist/universal.mjs';
 

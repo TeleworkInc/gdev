@@ -1,7 +1,7 @@
 /**
  * @license MIT
  *
- * @file
+ * @fileoverview
  * Test CJS imports for this project.
  */
 

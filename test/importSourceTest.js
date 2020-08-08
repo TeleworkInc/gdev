@@ -1,7 +1,7 @@
 /**
  * @license MIT
  *
- * @file
+ * @fileoverview
  * Make sure the raw ESM source code for this project works as expected.
  */
 

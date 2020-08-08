@@ -120,9 +120,9 @@ Compiler optimization.
 console.log("a is 10");
 ```
 
-## How will my package work with `require` and `import` work in Node?
+## How will my package work with `require` and `import`?
 The goal of gnv workspaces is full CJS/ESM interop, and `require` and `import`
-should both expose your `exports/node.js` exports as expected.
+should both expose your `exports/node.js` exports as expected thanks to Rollup. 
 
 `ES6 | namedImportTest.mjs [PASSING]`
 ```javascript
@@ -134,14 +134,28 @@ import { TestA, TestB, TestC, TestDefault } from '../dist/universal.mjs';
 const { TestA, TestB, TestC, TestDefault } = require('../dist/universal.cjs');
 ```
 
-This is accomplished with the following:
+## How does the `node.js` export work?
+Node will `import` or `require` the appropriate compiled export file
+(`dist/node.mjs` or `dist/node.cjs` respectively) in `dist/`. The following
+settings allow for this:
 
-* `"main": "dist/node.cjs"` added to `package.json` for pre-13.2.0
-  compatibility.
-* `"exports": { ... }` added to `package.json`, specifying CJS and ESM export
-  locations for post-13.2.0 `import`/`require`.
-* `"type": "module` added to `package.json`, so ES6 `import`/`export` are
-  available by default, i.e. for inside `lib/`.
+* `.mjs` and `.cjs` extensions on built files for explicit specification of
+  ES/CJS modules
+* `"main": "dist/node.cjs"` in `package.json` for pre-13.2.0 compatibility
+* `"exports": { ... }` in `package.json` to specify CJS and ESM export locations
+  for post-13.2.0 `import`/`require` support
+* `"type": "module` in `package.json` so ES6 `import`/`export` are available by
+  default, i.e. for inside `lib/`.
+
+## How does the `cli.js` export work?
+The `bin` field of `package.json` points to `dist/cli.cjs` and
+uses the `commander` package by default to provide an interactive command line
+interface. 
+
+gnv will generate `cli.js` with an example program when a new
+workspace is created with `gnv create my-project-name`. Call your CLI at the
+command line with `my-project-name` and you will see `Welcome to gnv!` printed
+to stdout.
 
 ## How do I use third party modules if I want to keep my `package.json` free of dependencies? 
 We're used to doing `yarn add [pkg]` / `npm install [pkg]` when we need to use a
@@ -160,7 +174,6 @@ You can always add dependencies locally rather than globally and ship the
 package as-is, if your priorities are different.
 
 ## Aren't global NPM installs bad?
-
 No. The most popular article explaining why it might be a bad idea to install
 packages globally offered the following reasoning:
 

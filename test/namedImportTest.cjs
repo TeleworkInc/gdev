@@ -1,3 +1,10 @@
+/**
+ * @license MIT
+ *
+ * @fileoverview
+ * A named import test for CJS modules in dist/.
+ */
+
 require('chai/register-expect');
 
 const { TestA, TestB, TestC, TestDefault } = require('../dist/universal.cjs');

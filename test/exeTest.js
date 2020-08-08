@@ -1,7 +1,7 @@
 /**
  * @license MIT
  *
- * @file
+ * @fileoverview
  * Test the compiled executable for this project.
  */
 

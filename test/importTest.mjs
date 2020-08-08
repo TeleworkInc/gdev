@@ -1,7 +1,7 @@
 /**
  * @license MIT
  *
- * @file
+ * @fileoverview
  * Test ESM imports for this project.
  */
 

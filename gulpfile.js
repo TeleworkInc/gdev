@@ -2,7 +2,7 @@
  * @license MIT
  */
 /**
- * @file
+ * @fileoverview
  * Runs preprocessed dev files through Google's Closure Compiler.
  */
 
@@ -10,7 +10,6 @@ import glob from 'glob';
 import gulp from 'gulp';
 import Closure from 'google-closure-compiler';
 import fs from 'fs';
-import path from 'path';
 
 const Compiler = Closure.compiler;
 

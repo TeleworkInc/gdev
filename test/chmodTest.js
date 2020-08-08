@@ -1,7 +1,7 @@
 /**
  * @license MIT
  *
- * @file
+ * @fileoverview
  * Test the file permissions of the exported CLI.
  */
 
