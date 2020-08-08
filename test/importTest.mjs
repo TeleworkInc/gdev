@@ -9,13 +9,13 @@ import 'chai/register-expect.js';
 import * as thisPackage from 'gnv';
 
 import * as cliDev from '../dev/cli.mjs';
-import * as cliDist from '../dist/cli.min.mjs';
+import * as cliDist from '../dist/cli.mjs';
 
 import * as nodeDev from '../dev/node.mjs';
-import * as nodeDist from '../dist/node.min.mjs';
+import * as nodeDist from '../dist/node.mjs';
 
 import * as universalDev from '../dev/universal.mjs';
-import * as universalDist from '../dist/universal.min.mjs';
+import * as universalDist from '../dist/universal.mjs';
 
 describe('ESM import', () => {
   it('should import this package', () => {
@@ -26,7 +26,7 @@ describe('ESM import', () => {
     expect(nodeDev.create).to.be.a('function');
   });
 
-  it('should import the compiled module [dist/node.min.mjs]', () => {
+  it('should import the compiled module [dist/node.mjs]', () => {
     expect(nodeDist.create).to.be.a('function');
   });
 
@@ -34,7 +34,7 @@ describe('ESM import', () => {
     expect(() => cliDev).to.not.throw();
   });
 
-  it('should not fail for compiled ESM [dist/cli.min.mjs]', () => {
+  it('should not fail for compiled ESM [dist/cli.mjs]', () => {
     expect(() => cliDist).to.not.throw();
   });
 

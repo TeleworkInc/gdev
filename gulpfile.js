@@ -64,11 +64,10 @@ export const startCompileTask = (options = {}) => {
  * @return {void}
  */
 export const compileCJS = async (file, options = {}) => {
-  const name = path.parse(file).name;
   await startCompileTask({
     // I/O setup.
     js: file,
-    js_output_file: file.replace('dev', 'dist').replace(name, `${name}.min`),
+    js_output_file: file.replace('dev', 'dist'),
 
     // SIMPLE compilation for CJS to avoid renaming.
     compilation_level: 'SIMPLE',
@@ -90,11 +89,10 @@ export const compileCJS = async (file, options = {}) => {
  * @return {void}
  */
 export const compileESM = async (file, options = {}) => {
-  const name = path.parse(file).name;
   await startCompileTask({
     // I/O setup.
     js: file,
-    js_output_file: file.replace('dev', 'dist').replace(name, `${name}.min`),
+    js_output_file: file.replace('dev', 'dist'),
 
     // Don't rename vars, use NODE module_resolution.
     ...NO_RENAMING,
