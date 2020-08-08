@@ -71,7 +71,7 @@ dist
 └── universal.mjs
 ```
 
-Where **\*\*bold\*\*** indicates an executable file.
+Where `**file**` indicates an executable file.
 
 ## How does the CLI export work?
 The `bin` field of `package.json` points to `dist/cli.cjs` and uses the
