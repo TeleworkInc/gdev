@@ -3,7 +3,7 @@ Javascript development workspaces built around
 [Rollup](https://github.com/rollup/rollup) and [Closure
 Compiler](https://github.com/google/closure-compiler) with full CJS/ESM interop.
 
-## Easily build CLI, browser, and Node packages all in one workspace using the latest syntax.
+### Easily build CLI, browser, and Node packages all in one workspace using the latest syntax.
 Build the **smallest** and **fastest** bundles for **multiple targets** with
 **no dependencies**¹.  With dependency-free outputs, all of your package's
 dependencies will be baked into the compiled output for each target, so
