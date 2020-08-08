@@ -73,6 +73,104 @@ dist
 
 Where `**file**` indicates an executable file.
 
+## How will my exports work with `require` and `import`?
+The goal of gnv workspaces is full CJS/ESM interop, and `require` and `import`
+should both expose your exports as expected thanks to Rollup. This allows for
+distraction-free interop as seen below:
+
+`ES6 | namedImportTest.mjs [PASSING]`
+```javascript
+import { TestA, TestB, TestC, TestDefault } from '../dist/universal.mjs';
+```
+
+`CJS | namedImportTest.cjs [PASSING]`
+```javascript
+const { TestA, TestB, TestC, TestDefault } = require('../dist/universal.cjs');
+```
+
+An additional small twist that gnv adds is, because it explicitly only ever
+compiles exports, there will never really be a situation where the `default`
+export would be empty (or violate the following assumption), **named exports are
+also exported as the `default` export**. This is a little ugly in the source,
+and, using the gnv project itself as an example, looks like:
+
+### Generated development bundle at `dev/node.mjs`
+```javascript
+// expose as named exports
+export { callCompiler, checkInsideProject, compile, create, devCompile, develop, displayProjectInfo, initialize };
+
+// expose all as default export
+export default { callCompiler, checkInsideProject, compile, create, devCompile, develop, displayProjectInfo, initialize };
+```
+
+A large motivation of this is so that the form `import pkg from ...` can be used
+instead of `import * as pkg from ...`, but it does allow for predictable
+behavior:
+
+### ESM `import`
+```javascript
+// default (all)
+import gnv from './dev/node.mjs';
+// named
+import { callCompiler } from './dev/node.mjs';
+
+console.log({
+  gnv,
+  callCompiler,
+});
+```
+
+### CJS `require`
+```javascript
+// default (all)
+const gnv = require('./dev/node.cjs');
+// named
+const { callCompiler } = require('./dev/node.cjs');
+
+console.log({
+  gnv,
+  callCompiler,
+});
+```
+
+Running in Node to compare outputs:
+
+`$ node test.cjs`
+```javascript
+{
+  gnv: {
+    callCompiler: [AsyncFunction: callCompiler],
+    checkInsideProject: [Function: checkInsideProject],
+    compile: [AsyncFunction: compile],
+    create: [AsyncFunction: create],
+    devCompile: [AsyncFunction: devCompile],
+    develop: [AsyncFunction: develop],
+    displayProjectInfo: [Function: displayProjectInfo],
+    initialize: [AsyncFunction: initialize]
+  },
+  callCompiler: [AsyncFunction: callCompiler]
+}
+```
+`$ node test.mjs`
+```javascript
+{
+  gnv: {
+    callCompiler: [AsyncFunction: callCompiler],
+    checkInsideProject: [Function: checkInsideProject],
+    compile: [AsyncFunction: compile],
+    create: [AsyncFunction: create],
+    devCompile: [AsyncFunction: devCompile],
+    develop: [AsyncFunction: develop],
+    displayProjectInfo: [Function: displayProjectInfo],
+    initialize: [AsyncFunction: initialize]
+  },
+  callCompiler: [AsyncFunction: callCompiler]
+}
+```
+
+Everything works as expected! We have named *and* default exports for CJS *and*
+ES modules!
+
 ## How does the CLI export work?
 The `bin` field of `package.json` points to `dist/cli.cjs` and uses the
 `commander` package by default to provide an interactive command line interface.
@@ -140,98 +238,6 @@ Compiler optimization.
 ```javascript
 console.log("a is 10");
 ```
-
-## How will my package work with `require` and `import`?
-The goal of gnv workspaces is full CJS/ESM interop, and `require` and `import`
-should both expose your exports as expected thanks to Rollup. This allows for
-distraction-free interop as seen below:
-
-`ES6 | namedImportTest.mjs [PASSING]`
-```javascript
-import { TestA, TestB, TestC, TestDefault } from '../dist/universal.mjs';
-```
-
-`CJS | namedImportTest.cjs [PASSING]`
-```javascript
-const { TestA, TestB, TestC, TestDefault } = require('../dist/universal.cjs');
-```
-
-An additional small twist that gnv adds is, because it explicitly only ever
-compiles exports, there will never really be a situation where the `default`
-export would be empty (or violate the following assumption), **named exports are
-also exported as the `default` export**. This is a little ugly in the source,
-and, using the gnv project itself as an example, looks like:
-
-`dev/node.mjs`
-```javascript
-// expose as named exports
-export { callCompiler, checkInsideProject, compile, create, devCompile, develop, displayProjectInfo, initialize };
-
-// expose all as default export
-export default { callCompiler, checkInsideProject, compile, create, devCompile, develop, displayProjectInfo, initialize };
-```
-
-A large motivation of this is so that the form `import pkg from ...` can be used
-instead of `import * as pkg from ...`, but it does allow for predictable
-behavior:
-
-`test.mjs`
-```javascript
-import gnv from './dev/node.mjs';
-import { callCompiler } from './dev/node.mjs';
-
-console.log({
-  gnv,
-  callCompiler,
-});
-```
-
-`test.cjs`
-```javascript
-const gnv = require('./dev/node.cjs');
-const { callCompiler } = require('./dev/node.cjs');
-
-console.log({
-  gnv,
-  callCompiler,
-});
-```
-
-Running in Node to compare outputs:
-
-`$ node test.cjs`
-```javascript
-{
-  gnv: {
-    callCompiler: [AsyncFunction: callCompiler],
-    checkInsideProject: [Function: checkInsideProject],
-    compile: [AsyncFunction: compile],
-    create: [AsyncFunction: create],
-    devCompile: [AsyncFunction: devCompile],
-    develop: [AsyncFunction: develop],
-    displayProjectInfo: [Function: displayProjectInfo],
-    initialize: [AsyncFunction: initialize]
-  },
-  callCompiler: [AsyncFunction: callCompiler]
-}
-```
-`$ node test.mjs`
-```javascript
-{
-  gnv: {
-    callCompiler: [AsyncFunction: callCompiler],
-    checkInsideProject: [Function: checkInsideProject],
-    compile: [AsyncFunction: compile],
-    create: [AsyncFunction: create],
-    devCompile: [AsyncFunction: devCompile],
-    develop: [AsyncFunction: develop],
-    displayProjectInfo: [Function: displayProjectInfo],
-    initialize: [AsyncFunction: initialize]
-  },
-  callCompiler: [AsyncFunction: callCompiler]
-}
-```
-
 
 ## How do I use third party modules if I want to keep my `package.json` free of dependencies? 
 We're used to doing `yarn add [pkg]` / `npm install [pkg]` when we need to use a
