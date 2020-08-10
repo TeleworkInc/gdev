@@ -181,24 +181,30 @@ created with `gnv create my-project-name`.
 ### Example
 Create a new project:
 ```bash
-$ gnv create my-project
+gnv create my-package
 ```
 
-Enter the directory:
+Enter the directory and build the project:
 ```bash
-$ cd my-project
+cd my-package && gnv build
 ```
 
 Link the package to your local bin to emulate a global install:
 ```bash
-$ yarn link
+yarn link
 ```
 
-Call your program:
+Call your built program (`./dist/cli.cjs`):
 ```bash
-$ my-project
+my-package
+> Hello world!
+```
 
-Hello world!
+If you make changes to the `exports/cli.js` file, a development version of the
+CLI is linked to `my-package-dev`:
+```bash
+my-package-dev
+> Logging without rebuilding!
 ```
 
 Check `exports/cli.js` to see what's happening behind the scenes. 
