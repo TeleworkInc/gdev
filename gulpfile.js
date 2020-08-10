@@ -8,10 +8,10 @@
 
 import glob from 'glob';
 import gulp from 'gulp';
-import Closure from 'google-closure-compiler';
+import closure from 'google-closure-compiler';
 import fs from 'fs';
 
-const Compiler = Closure.compiler;
+const Compiler = closure.compiler;
 
 /**
  * Prevent transpilation and renaming.
@@ -30,6 +30,7 @@ const PROCESS_MODULES = {
   process_common_js_modules: true,
 };
 
+
 /**
  * Compile a preprocessed script located at dist/{name}.
  *
@@ -39,7 +40,7 @@ const PROCESS_MODULES = {
  * @return {Promise}
  * A Promise which will resolve when the Closure Compiler is finished.
  */
-export const startCompileTask = (options = {}) => {
+export const callCompiler = (options = {}) => {
   const instance = new Compiler(options);
   return new Promise((resolve, reject) => instance.run(
       (exitCode, stdOut, stdErr) => {
@@ -49,6 +50,7 @@ export const startCompileTask = (options = {}) => {
       },
   ));
 };
+
 
 /**
  * Compile a CommonJS script in the `dev/` directory into the `dist/` directory.
@@ -63,7 +65,7 @@ export const startCompileTask = (options = {}) => {
  * @return {void}
  */
 export const compileCJS = async (file, options = {}) => {
-  await startCompileTask({
+  await callCompiler({
     // I/O setup.
     js: file,
     js_output_file: file.replace('dev', 'dist'),
@@ -75,6 +77,7 @@ export const compileCJS = async (file, options = {}) => {
     ...options,
   });
 };
+
 
 /**
  * Compile an ES6 module in the dist/ directory.
@@ -88,7 +91,7 @@ export const compileCJS = async (file, options = {}) => {
  * @return {void}
  */
 export const compileESM = async (file, options = {}) => {
-  await startCompileTask({
+  await callCompiler({
     // I/O setup.
     js: file,
     js_output_file: file.replace('dev', 'dist'),
@@ -101,6 +104,7 @@ export const compileESM = async (file, options = {}) => {
     ...options,
   });
 };
+
 
 /**
  * Append a shebang to a file and set chmod 755.
@@ -125,6 +129,7 @@ const markExecutable = async (file) => {
   await fs.promises.chmod(file, '755');
 };
 
+
 /**
  * Mark all CLI builds in dist/ and dev/ as executable.
  *
@@ -137,12 +142,59 @@ export const markCLIsExecutable = async () => {
   ));
 };
 
+
+/**
+ * Compile the exports/cli.js script.
+ *
+ * @return {void}
+ * An EventEmitter that will fire when Closure Compiler is done.
+ */
+export const compileCliTarget = async () => await compileCJS('dev/cli.cjs');
+
+
+/**
+ * Compile the executable. This will reduce all of the codebase to just its side
+ * effects as best as possible.
+ *
+ * @return {void}
+ * The EventEmitter that will fire when Closure Compiler is done.
+ */
+export const compileExecutableTarget = async () => {
+  await callCompiler({
+    // Compiling dev/universal -> dist/exe
+    ...PROCESS_MODULES,
+    entry_point: 'dist/universal.cjs',
+    js_output_file: 'dist/exe.js',
+
+    // Maximum tree-shaking and dead code elimination.
+    compilation_level: 'ADVANCED',
+    dependency_mode: 'PRUNE',
+
+    // generate exports if they exist, must include base.js
+    generate_exports: true,
+    js: [
+      'node_modules/google-closure-library/closure/goog/base.js',
+      'dist/universal.cjs',
+    ],
+  });
+};
+
+
 /**
  * Compile a script for `node-async` target.
  *
  * @return {void}
  */
 export const compileNodeTarget = async () => await compileCJS('dev/node.cjs');
+
+
+/**
+ * Compile non-default targets.
+ */
+const compileRemainingTargets = async () => {
+  // glob.sync();
+};
+
 
 /**
  * Compile dev/universal.js -> dist/universal.cjs
@@ -160,40 +212,6 @@ export const compileUniversalTarget = async () => {
   });
 };
 
-/**
- * Compile the exports/cli.js script.
- *
- * @return {void}
- * An EventEmitter that will fire when Closure Compiler is done.
- */
-export const compileCliTarget = async () => await compileCJS('dev/cli.cjs');
-
-/**
- * Compile the executable. This will reduce all of the codebase to just its side
- * effects as best as possible.
- *
- * @return {void}
- * The EventEmitter that will fire when Closure Compiler is done.
- */
-export const compileExecutableTarget = async () => {
-  await compileCJS('dev/executable.cjs', {
-    // Compiling dev/universal -> dist/exe
-    ...PROCESS_MODULES,
-    entry_point: 'dev/universal.mjs',
-    js_output_file: 'dist/exe.js',
-
-    // Maximum tree-shaking and dead code elimination.
-    compilation_level: 'ADVANCED',
-    dependency_mode: 'PRUNE',
-
-    // generate exports if they exist, must include base.js
-    generate_exports: true,
-    js: [
-      'node_modules/google-closure-library/closure/goog/base.js',
-      'dev/universal.mjs',
-    ],
-  });
-};
 
 /**
  * Run generated ESM bundles through the compiler.
@@ -204,21 +222,27 @@ export const compressEsmOutputs = async () => {
   const files = glob.sync('dev/**/*.mjs', { base: './' });
   await Promise.all(
       files.map(
-          async (file) => await compileESM(
-              file,
-              { jscomp_off: '*' },
-          ),
+          async (file) =>
+            await compileESM(
+                file,
+                { jscomp_off: '*' },
+            ),
       ),
   );
 };
+
 
 export default gulp.series(
     gulp.parallel(
         compileNodeTarget,
         compileCliTarget,
         compileUniversalTarget,
-        compileExecutableTarget,
+        compileRemainingTargets,
     ),
-    compressEsmOutputs,
+    gulp.parallel(
+        compressEsmOutputs,
+        compileExecutableTarget,
+        compileRemainingTargets,
+    ),
     markCLIsExecutable,
 );

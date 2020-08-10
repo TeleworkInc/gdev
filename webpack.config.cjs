@@ -47,15 +47,6 @@ const EXPORT_CJS = {
   },
 };
 
-// const EXPORT_ESM = {
-//   ...EXPORT_DEFAULTS,
-//   output: {
-//     path: path.resolve(__dirname, 'dev'),
-//     filename: '[name].cjs',
-//     libraryTarget: 'commonjs',
-//   },
-// };
-
 const exportCJS = (file) => {
   const name = path.parse(file).name;
   return {
@@ -71,10 +62,10 @@ const exportCJS = (file) => {
  * Compile all ES modules in dev/ except the universal bundle, which was rolled
  * with Rollup due to lack of NodeJS dependencies.
  */
-const buildEsModules = glob.sync('./dev/*.mjs', {
+const buildDevCjsModules = glob.sync('./dev/*.mjs', {
   ignore: ['./dev/universal.*'],
 }).map(exportCJS);
 
 module.exports = [
-  ...buildEsModules,
+  ...buildDevCjsModules,
 ];
