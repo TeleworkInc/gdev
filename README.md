@@ -200,8 +200,9 @@ my-package
 > Hello world!
 ```
 
-If you make changes to the `exports/cli.js` file, a development version of the
-CLI is linked to `my-package-dev`:
+### Development
+If you want to test live changes to the `exports/cli.js` file, a development
+version of the CLI is linked to `my-package-dev`:
 ```bash
 my-package-dev
 > Logging without rebuilding!
