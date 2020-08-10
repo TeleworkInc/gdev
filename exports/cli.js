@@ -5,11 +5,12 @@
  * Specify the exports for this project's CLI.
  */
 
-import program from 'commander';
-import tree from 'tree-node-cli';
+import commander from 'commander';
+import treeNodeCli from 'tree-node-cli';
 import chalk from 'chalk';
-import { basename } from 'path';
+
 import * as commands from '../lib/commands.js';
+import { basename } from 'path';
 
 const CWD = process.cwd();
 const PROJECT_NAME = basename(CWD);
@@ -17,22 +18,22 @@ const PROJECT_NAME = basename(CWD);
 /**
  * Assign actions to CLI commands.
  */
-program
+commander
     .command('create <project>')
     .description('Create a new gnv workspace.')
     .action(commands.create);
 
-program
+commander
     .command('develop')
     .description('Start developing and build when changes are made.')
     .action(commands.develop);
 
-program
+commander
     .command('compile')
     .description('Compile this workspace and output in [dist].')
     .action(commands.compile);
 
-program
+commander
     .command('init [directory]')
     .description('Initialize a workspace inside an existing directory.')
     .action(commands.initialize);
@@ -41,15 +42,15 @@ program
  * Print some info about the project directory.
  */
 const TREE = (
-  commands.checkInsideProject()
-  ? '\n' + tree('./lib')
-  : ''
+  commands.checkInsideProject() ?
+  '\n' + treeNodeCli('./lib') :
+  ''
 );
 
 const HEAD = (
-  commands.checkInsideProject()
-  ? ` ${PROJECT_NAME} `
-  : ''
+  commands.checkInsideProject() ?
+  ` ${PROJECT_NAME} ` :
+  ''
 );
 
 console.log('\n', chalk.grey('--- 𝓰𝓷𝓿 ---'), '\n');
@@ -61,10 +62,12 @@ if (TREE) console.log(chalk.blueBright(TREE), '\n');
  * program.exitOverride() to prevent nonzero exit.
  */
 try {
-  program.exitOverride();
-  program.parse(process.argv);
+  commander.exitOverride();
+  commander.parse(process.argv);
 } catch (e) {
   /**
-   * Don't bother throwing any errors if there are no args provided.
+   * If no args are provided, this block executes.
    */
 }
+
+console.log('\n');

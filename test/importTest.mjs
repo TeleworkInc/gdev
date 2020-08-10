@@ -39,16 +39,10 @@ describe('ESM import', () => {
   });
 
   it('should import test classes from [dev/universal.mjs]', () => {
-    expect(universalDev.TestA).to.not.be.undefined;
-    expect(universalDev.TestB).to.not.be.undefined;
-    expect(universalDev.TestC).to.not.be.undefined;
     expect(universalDev.TEST_STRING).to.not.be.undefined;
   });
 
   it('should import test classes from [dist/universal.mjs]', () => {
-    expect(universalDist.TestA).to.not.be.undefined;
-    expect(universalDist.TestB).to.not.be.undefined;
-    expect(universalDist.TestC).to.not.be.undefined;
     expect(universalDist.TEST_STRING).to.not.be.undefined;
   });
 });

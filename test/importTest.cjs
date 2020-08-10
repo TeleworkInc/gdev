@@ -30,17 +30,11 @@ describe('CJS require()', () => {
 
   it('should import test classes from [dev/universal.cjs]', () => {
     const mod = require('../dev/universal.cjs');
-    expect(mod.TestA).to.not.be.undefined;
-    expect(mod.TestB).to.not.be.undefined;
-    expect(mod.TestC).to.not.be.undefined;
     expect(mod.TEST_STRING).to.not.be.undefined;
   });
 
   it('should import test classes from [dist/universal.cjs]', () => {
     const mod = require('../dist/universal.cjs');
-    expect(mod.TestA).to.not.be.undefined;
-    expect(mod.TestB).to.not.be.undefined;
-    expect(mod.TestC).to.not.be.undefined;
     expect(mod.TEST_STRING).to.not.be.undefined;
   });
 });

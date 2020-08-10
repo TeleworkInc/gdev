@@ -8,6 +8,7 @@ env:
 
 extends:
   - google
+  - plugin:consistent-imports/recommended
   - plugin:jsdoc/recommended
 
 parserOptions:
@@ -59,7 +60,7 @@ rules:
 
   operator-linebreak:
     - error
-    - before
+    - after
 
   object-curly-spacing:
     - error
@@ -76,3 +77,6 @@ settings:
       # Disable @fileoverview -> @file replacement
       fileoverview: fileoverview
       file: fileoverview
+
+plugins:
+  - consistent-imports
