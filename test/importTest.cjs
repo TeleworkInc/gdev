@@ -9,15 +9,15 @@ require('chai/register-expect');
 
 describe('CJS require()', () => {
   it('should import this npm package', () => {
-    expect(require('..').callCompiler).to.be.a('function');
+    expect(require('..').create).to.be.a('function');
   });
 
   it('should import the uncompiled module [dev/node.cjs]', () => {
-    expect(require('../dev/node.cjs').callCompiler).to.be.a('function');
+    expect(require('../dev/node.cjs').create).to.be.a('function');
   });
 
   it('should import the compiled module [dist/node.cjs]', () => {
-    expect(require('../dist/node.cjs').callCompiler).to.be.a('function');
+    expect(require('../dist/node.cjs').create).to.be.a('function');
   });
 
   it('should not fail for uncompiled CLI bundle [dev/cli.cjs]', () => {

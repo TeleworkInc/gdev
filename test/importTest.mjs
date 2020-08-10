@@ -18,7 +18,7 @@ import * as universalDev from '../dev/universal.mjs';
 import * as universalDist from '../dist/universal.mjs';
 
 describe('ESM import', () => {
-  it('should import this package', () => {
+  it('should import this npm package', () => {
     expect(thisPackage.create).to.be.a('function');
   });
 
