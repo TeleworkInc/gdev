@@ -43,9 +43,9 @@ export const startCompileTask = (options = {}) => {
   const instance = new Compiler(options);
   return new Promise((resolve, reject) => instance.run(
       (exitCode, stdOut, stdErr) => {
-        return exitCode == 0
-          ? resolve(stdOut)
-          : reject(stdErr);
+        return exitCode == 0 ?
+          resolve(stdOut) :
+          reject(stdErr);
       },
   ));
 };
@@ -142,7 +142,7 @@ export const markCLIsExecutable = async () => {
  *
  * @return {void}
  */
-export const nodeCompile = async () => await compileCJS('dev/node.cjs');
+export const compileNodeTarget = async () => await compileCJS('dev/node.cjs');
 
 /**
  * Compile dev/universal.js -> dist/universal.cjs
@@ -150,7 +150,7 @@ export const nodeCompile = async () => await compileCJS('dev/node.cjs');
  * @return {void}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
-export const universalCompile = async () => {
+export const compileUniversalTarget = async () => {
   await compileCJS('dev/universal.cjs', {
     compilation_level: 'SIMPLE',
     language_in: 'ES_NEXT',
@@ -166,7 +166,7 @@ export const universalCompile = async () => {
  * @return {void}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
-export const cliCompile = async () => await compileCJS('dev/cli.cjs');
+export const compileCliTarget = async () => await compileCJS('dev/cli.cjs');
 
 /**
  * Compile the executable. This will reduce all of the codebase to just its side
@@ -175,7 +175,7 @@ export const cliCompile = async () => await compileCJS('dev/cli.cjs');
  * @return {void}
  * The EventEmitter that will fire when Closure Compiler is done.
  */
-export const executableCompile = async () => {
+export const compileExecutableTarget = async () => {
   await compileCJS('dev/executable.cjs', {
     // Compiling dev/universal -> dist/exe
     ...PROCESS_MODULES,
@@ -200,7 +200,7 @@ export const executableCompile = async () => {
  *
  * @return {void}
  */
-export const minifyModules = async () => {
+export const compressEsmOutputs = async () => {
   const files = glob.sync('dev/**/*.mjs', { base: './' });
   await Promise.all(
       files.map(
@@ -214,11 +214,11 @@ export const minifyModules = async () => {
 
 export default gulp.series(
     gulp.parallel(
-        nodeCompile,
-        cliCompile,
-        universalCompile,
-        executableCompile,
+        compileNodeTarget,
+        compileCliTarget,
+        compileUniversalTarget,
+        compileExecutableTarget,
     ),
-    minifyModules,
+    compressEsmOutputs,
     markCLIsExecutable,
 );
