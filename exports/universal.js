@@ -13,5 +13,4 @@ export { TEST_STRING } from '../lib/templates.js';
 /**
  * This is a side effect that won't get removed due to dead code elimination.
  */
-const a = 10;
-console.log(`a is ${a}`);
+console.log('Welcome to gnv!');
