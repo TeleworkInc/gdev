@@ -17,9 +17,9 @@
     "clean": "rm -rf ./dist/* && rm -rf ./dev/*",
     "compile": "yarn run:rollup && yarn run:webpack && yarn run:gulp",
     "dev": "yarn rollup -c",
-    "run:gulp": "yarn gulp",
-    "run:rollup": "yarn rollup -c",
-    "run:webpack": "yarn webpack --config webpack.config.cjs",
+    "run:gulp": "yarn gulp -f .gulpfile.js",
+    "run:rollup": "yarn rollup -c .rollup.config.js",
+    "run:webpack": "yarn webpack --config .webpack.config.cjs",
     "test": "yarn mocha"
   },
   "repository": {
@@ -65,6 +65,7 @@
     "google-closure-compiler": "^20200719.0.0",
     "mocha": "^8.0.1",
     "rollup": "^2.21.0",
+    "rollup-plugin-preserve-shebang": "^1.0.1",
     "shebang-loader": "^0.0.1",
     "webpack": "~4.43.0",
     "webpack-cli": "~3.3.12"

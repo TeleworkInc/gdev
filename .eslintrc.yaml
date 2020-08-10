@@ -16,6 +16,7 @@ parserOptions:
   # sourceType: module
 
 ignorePatterns:
+  - '!/.config/**'
   - '**/dist/**'
   - '**/dev/**'
   - externs.js
