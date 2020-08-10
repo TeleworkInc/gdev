@@ -29,9 +29,9 @@ commander
     .action(commands.develop);
 
 commander
-    .command('compile')
-    .description('Compile this workspace and output in [dist].')
-    .action(commands.compile);
+    .command('build')
+    .description('Build this workspace and output in [dist].')
+    .action(commands.build);
 
 commander
     .command('init [directory]')
