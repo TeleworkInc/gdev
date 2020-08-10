@@ -20,6 +20,12 @@ const PROJECT_NAME = basename(CWD);
 /**
  * Assign actions to CLI commands.
  */
+
+commander
+    .command('clean')
+    .description('Clean the gnv workspace.')
+    .action(commands.clean);
+
 commander
     .command('create <project>')
     .description('Create a new gnv workspace.')
