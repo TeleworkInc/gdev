@@ -61,8 +61,6 @@ export const callCompiler = (options = {}) => {
  *
  * @param {object?} options
  * Additional flags to pass the compiler.
- *
- * @return {void}
  */
 export const compileCJS = async (file, options = {}) => {
   await callCompiler({
@@ -87,8 +85,6 @@ export const compileCJS = async (file, options = {}) => {
  *
  * @param {object?} options
  * Additional flags to pass the compiler.
- *
- * @return {void}
  */
 export const compileESM = async (file, options = {}) => {
   await callCompiler({
@@ -111,8 +107,6 @@ export const compileESM = async (file, options = {}) => {
  *
  * @param {string} file
  * The file to make executable.
- *
- * @return {void}
  */
 const markExecutable = async (file) => {
   const fileHandle = await fs.promises.open(file, 'r+');
@@ -132,8 +126,6 @@ const markExecutable = async (file) => {
 
 /**
  * Mark all CLI builds in dist/ and dev/ as executable.
- *
- * @return {void}
  */
 export const markCLIsExecutable = async () => {
   const files = glob.sync('./**/{dev,dist}/cli.**');
@@ -145,19 +137,15 @@ export const markCLIsExecutable = async () => {
 
 /**
  * Compile the exports/cli.js script.
- *
- * @return {void}
- * An EventEmitter that will fire when Closure Compiler is done.
  */
-export const buildCliTarget = async () => await compileCJS('dev/cli.cjs');
+export const buildCliTarget = async () => {
+  await compileCJS('dev/cli.cjs');
+};
 
 
 /**
  * Compile the executable. This will reduce all of the codebase to just its side
  * effects as best as possible.
- *
- * @return {void}
- * The EventEmitter that will fire when Closure Compiler is done.
  */
 export const buildExecutableTarget = async () => {
   await callCompiler({
@@ -182,10 +170,10 @@ export const buildExecutableTarget = async () => {
 
 /**
  * Compile a script for `node-async` target.
- *
- * @return {void}
  */
-export const buildNodeTarget = async () => await compileCJS('dev/node.cjs');
+export const buildNodeTarget = async () => {
+  await compileCJS('dev/node.cjs');
+};
 
 
 /**
@@ -201,9 +189,6 @@ const buildCustomTargets = async () => {
 
 /**
  * Compile dev/universal.js -> dist/universal.cjs
- *
- * @return {void}
- * An EventEmitter that will fire when Closure Compiler is done.
  */
 export const buildUniversalTarget = async () => {
   await compileCJS('dev/universal.cjs', {
@@ -219,8 +204,6 @@ export const buildUniversalTarget = async () => {
 /**
  * Run ESM bundles in `dev/` through Closure Compiler to minify them, and put
  * the output in `dist/`.
- *
- * @return {void}
  */
 export const buildEsOutputs = async () => {
   const files = glob.sync('dev/*.mjs');
@@ -237,13 +220,21 @@ export const buildEsOutputs = async () => {
 
 
 /**
- * Export default targets `node`, `CLI`, and `universal`.
+ * Export default targets `node`, `CLI`, and `universal` from `dev/` -> `dist/`.
  */
 export const buildDefaultTargets = gulp.series(
+    /**
+     * Can build `node` and `cli` targets simultaneously, since they do not
+     * depend on each other.
+     */
     gulp.parallel(
         buildNodeTarget,
         buildCliTarget,
     ),
+    /**
+     * Build `universal` and `exe` targets sequentially, since `exe` is built
+     * *from* the `dist/universal` bundle.
+     */
     gulp.series(
         /** Build `dist/universal.cjs`. */
         buildUniversalTarget,
@@ -253,7 +244,15 @@ export const buildDefaultTargets = gulp.series(
 );
 
 
+/**
+ * Build files from `dev/` -> `dist/`, and handle post-processing like CLI
+ * `chmod +x`.
+ */
 export default gulp.series(
+    /**
+     * All `dev/` -> `dist/` builds can run simultaneously, since all the dev
+     * files necessary will be ready by this time.
+     */
     gulp.parallel(
         /** Build `dev/*.mjs` -> `dist/*.mjs`. */
         buildEsOutputs,
@@ -262,8 +261,6 @@ export default gulp.series(
         /** Build all non-default export targets. */
         buildCustomTargets,
     ),
-    /**
-     * Make sure CLIs are chmod 755.
-     */
+    /** Make sure CLIs are chmod 755. */
     markCLIsExecutable,
 );
