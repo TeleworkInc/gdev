@@ -137,9 +137,9 @@ const markExecutable = async (file) => {
  */
 export const markCLIsExecutable = async () => {
   const files = glob.sync('./**/{dev,dist}/cli.**');
-  await Promise.all(files.map(
-      async (file) => await markExecutable(file),
-  ));
+  await Promise.all(
+      files.map(async (file) => await markExecutable(file)),
+  );
 };
 
 
@@ -149,7 +149,7 @@ export const markCLIsExecutable = async () => {
  * @return {void}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
-export const compileCliTarget = async () => await compileCJS('dev/cli.cjs');
+export const buildCliTarget = async () => await compileCJS('dev/cli.cjs');
 
 
 /**
@@ -159,7 +159,7 @@ export const compileCliTarget = async () => await compileCJS('dev/cli.cjs');
  * @return {void}
  * The EventEmitter that will fire when Closure Compiler is done.
  */
-export const compileExecutableTarget = async () => {
+export const buildExecutableTarget = async () => {
   await callCompiler({
     // Compiling dev/universal -> dist/exe
     ...PROCESS_MODULES,
@@ -185,14 +185,17 @@ export const compileExecutableTarget = async () => {
  *
  * @return {void}
  */
-export const compileNodeTarget = async () => await compileCJS('dev/node.cjs');
+export const buildNodeTarget = async () => await compileCJS('dev/node.cjs');
 
 
 /**
- * Compile non-default targets.
+ * Compile non-default targets, which exist at the top level of the dev/
+ * directory.
  */
-const compileRemainingTargets = async () => {
-  // glob.sync();
+const buildCustomTargets = async () => {
+  await Promise.all(
+      glob.sync('dev/*.cjs').map(async (file) => await compileCJS(file)),
+  );
 };
 
 
@@ -202,7 +205,7 @@ const compileRemainingTargets = async () => {
  * @return {void}
  * An EventEmitter that will fire when Closure Compiler is done.
  */
-export const compileUniversalTarget = async () => {
+export const buildUniversalTarget = async () => {
   await compileCJS('dev/universal.cjs', {
     compilation_level: 'SIMPLE',
     language_in: 'ES_NEXT',
@@ -214,12 +217,13 @@ export const compileUniversalTarget = async () => {
 
 
 /**
- * Run generated ESM bundles through the compiler.
+ * Run ESM bundles in `dev/` through Closure Compiler to minify them, and put
+ * the output in `dist/`.
  *
  * @return {void}
  */
-export const compressEsmOutputs = async () => {
-  const files = glob.sync('dev/**/*.mjs', { base: './' });
+export const buildEsOutputs = async () => {
+  const files = glob.sync('dev/*.mjs');
   await Promise.all(
       files.map(
           async (file) =>
@@ -232,17 +236,34 @@ export const compressEsmOutputs = async () => {
 };
 
 
+/**
+ * Export default targets `node`, `CLI`, and `universal`.
+ */
+export const buildDefaultTargets = gulp.series(
+    gulp.parallel(
+        buildNodeTarget,
+        buildCliTarget,
+    ),
+    gulp.series(
+        /** Build `dist/universal.cjs`. */
+        buildUniversalTarget,
+        /** Build `dist/exe.js` from `dist/universal.cjs`. */
+        buildExecutableTarget,
+    ),
+);
+
+
 export default gulp.series(
     gulp.parallel(
-        compileNodeTarget,
-        compileCliTarget,
-        compileUniversalTarget,
-        compileRemainingTargets,
+        /** Build `dev/*.mjs` -> `dist/*.mjs`. */
+        buildEsOutputs,
+        /** Build CLI, universal, and Node targets. */
+        buildDefaultTargets,
+        /** Build all non-default export targets. */
+        buildCustomTargets,
     ),
-    gulp.parallel(
-        compressEsmOutputs,
-        compileExecutableTarget,
-        compileRemainingTargets,
-    ),
+    /**
+     * Make sure CLIs are chmod 755.
+     */
     markCLIsExecutable,
 );
