@@ -151,18 +151,18 @@ export const buildExecutableTarget = async () => {
   await callCompiler({
     // Compiling dev/universal -> dist/exe
     ...PROCESS_MODULES,
-    entry_point: 'dist/universal.cjs',
+    entry_point: 'dev/universal.mjs',
     js_output_file: 'dist/exe.js',
 
     // Maximum tree-shaking and dead code elimination.
     compilation_level: 'ADVANCED',
     dependency_mode: 'PRUNE',
 
-    // generate exports if they exist, must include base.js
-    generate_exports: true,
+    // Do not generate exports for an executable
+    generate_exports: false,
     js: [
       'node_modules/google-closure-library/closure/goog/base.js',
-      'dist/universal.cjs',
+      'dev/universal.mjs',
     ],
   });
 };
