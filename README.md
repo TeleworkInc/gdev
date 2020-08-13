@@ -22,24 +22,26 @@ typically `import` different things from `lib/` and then expose some information
 to a given target. To expose exports for a given **target**, `export` values
 from `exports/[target].js`.
 
-```
+### Basic structure
+The general structure of a gnv project is:
+```none
 lib
 ├── commands.js
-├── templates.js
-├── TestAB.js
-├── TestC.js
-└── TestDefault.js
+└── templates.js
 exports
 ├── **cli.js**
 ├── node.js
-├── testExport.js
 └── universal.js
 ```
 
-There are three reserved **targets**, which will build with special assumptions.
+Where `**file**` indicates an executable file.
+
+### Reserved Targets
+
+There are three **reserved targets**, which will build with special assumptions.
 For instance, `cli.js` and its compiled output will both be set to be
-executable. Other targets at `exports/[target].js` will build with the same
-default settings.
+executable. Non-reserved targets at `exports/[target].js` will all build with
+the same default settings.
 
 | Target Filename | Description |
 |--|--|
@@ -47,7 +49,7 @@ default settings.
 | `exports/node.js` | A module which will be exposed to Node, i.e. what what users will `import` or `require` from inside a NodeJS script. |
 | `exports/universal.js` | A module which does not rely on *any* Node dependencies and can be run in any environment (browser, Node, etc.). Primarily for browser bundles and pure vanilla JS programs which will benefit from the maximum level of compression offered by the Closure Compiler. The **executable** (see below) will be generated from the **universal** target output.
 
-Building the project with `gnv compile` will create development and distribution
+Building the project with `gnv build` will create development and distribution
 folders that look like:
 ```
 dev
@@ -70,8 +72,6 @@ dist
 ├── universal.cjs
 └── universal.mjs
 ```
-
-Where `**file**` indicates an executable file.
 
 ## How will my exports work with `require` and `import`?
 The goal of gnv workspaces is full CJS/ESM interop, and `require` and `import`
