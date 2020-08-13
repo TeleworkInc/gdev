@@ -57,8 +57,6 @@ dev
 ├── **cli.mjs**
 ├── node.cjs
 ├── node.mjs
-├── testExport.cjs
-├── testExport.mjs
 ├── universal.cjs
 └── universal.mjs
 dist
@@ -67,8 +65,6 @@ dist
 ├── exe.js
 ├── node.cjs
 ├── node.mjs
-├── testExport.cjs
-├── testExport.mjs
 ├── universal.cjs
 └── universal.mjs
 ```
