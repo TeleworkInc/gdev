@@ -15,6 +15,7 @@ const path = require('path');
  * Default config for Webpack exports.
  */
 const EXPORT_DEFAULTS = {
+  context: path.resolve(__dirname, '..'),
   mode: 'production',
   resolve: {
     extensions: ['.js', '.cjs', '.mjs'],
@@ -41,7 +42,7 @@ const EXPORT_CJS = {
    * -> dev/[name].cjs
    */
   output: {
-    path: path.resolve(__dirname, 'dev'),
+    path: path.resolve(__dirname, '../dev'),
     filename: '[name].cjs',
     libraryTarget: 'commonjs',
   },

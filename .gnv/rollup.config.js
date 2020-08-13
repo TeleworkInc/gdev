@@ -8,10 +8,6 @@
 import glob from 'glob';
 import shebang from 'rollup-plugin-preserve-shebang';
 import exportDefault from 'rollup-plugin-export-default';
-// import nodeResolve from 'rollup-plugin-node-resolve';
-// import builtinModules from 'builtin-modules';
-// import nodeBuiltins from 'rollup-plugin-node-builtins';
-// import nodeGlobals from 'rollup-plugin-node-globals';
 
 export const exportESM = (file) => {
   return {
@@ -26,9 +22,6 @@ export const exportESM = (file) => {
     },
     plugins: [
       shebang(),
-      // nodeGlobals(),
-      // nodeBuiltins(),
-      // nodeResolve(),
       exportDefault(),
     ],
   };

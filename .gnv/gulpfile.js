@@ -11,6 +11,14 @@ import gulp from 'gulp';
 import closure from 'google-closure-compiler';
 import fs from 'fs';
 
+/**
+ * Move process to project root.
+ */
+process.chdir('..');
+
+/**
+ * Use Closure Compiler for various levels of compression and executable output.
+ */
 const Compiler = closure.compiler;
 
 /**
