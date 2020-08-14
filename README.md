@@ -38,6 +38,7 @@ programs at `exports/node.js`. It can then be required and imported via `import
 ### Basic structure
 The general structure of a gnv project involves a `lib/` directory for storing
 library code and an `exports/` folder for exposing data to export targets:
+
 ```none
 lib
 ├── commands.js
@@ -48,7 +49,8 @@ exports
 └── universal.js
 ```
 
-Where `**file**` indicates an executable file.
+Where `**file**` indicates an executable file. If you need a concrete example,
+this project itself is a gnv workspace!
 
 ### Reserved Targets
 
