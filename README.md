@@ -17,19 +17,27 @@ dependencies will be baked into the compiled output for each target, so
 | `hub`   | A CLI for managing GitHub repositories developed by GitHub. **[Install](https://github.com/github/hub#installation)** *(Optional: Use `--no-github` flag to disable.)* |
 
 ## Usage
-Creating a new gnv workspace with `gnv create [name]` will initialize a folder
-with a `lib/` and an `exports/` directory. gnv projects are like modules in that
-they have **exports** for different **targets**, which will create corresponding
-outputs in `dev/` and `dist/` build directories.
+Creating a new gnv workspace with `gnv create [organization]/name` will
+initialize a GitHub repository with a `lib/` and an `exports/` directory and
+install it to the current directory (as a submodule, if inside a git repo). gnv
+projects are like modules in that they have **exports** for different
+**targets**, which will create corresponding outputs in `dev/` and `dist/` build
+directories.
 
 Think of `lib/` as a sandbox - it is where all internal code will go, and the
-`exports/` folder is where exports are defined for each target. Exports will
+`exports/` folder is where endpoints are *exposed* for each target. Exports will
 typically `import` different things from `lib/` and then expose some information
 to a given target. To expose exports for a given **target**, `export` values
 from `exports/[target].js`.
 
+For instance, gnv's `create()` function in `lib/commands.js` is used to
+initialize new projects for the CLI, but is also exported for usage in Node
+programs at `exports/node.js`. It can then be required and imported via `import
+{ create } from 'gnv'` in third party packages.
+
 ### Basic structure
-The general structure of a gnv project is:
+The general structure of a gnv project involves a `lib/` directory for storing
+library code and an `exports/` folder for exposing data to export targets:
 ```none
 lib
 ├── commands.js
