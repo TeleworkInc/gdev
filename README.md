@@ -13,8 +13,8 @@ dependencies will be baked into the compiled output for each target, so
 ## Prerequisites 
 | Package      | Description |
 | ----------- | ----------- |
-| `yarn`<br>**[Install](https://classic.yarnpkg.com/en/docs/install)**| A performant Node package manager developed by Facebook. |
-| `hub`<br>**[Install](https://classic.yarnpkg.com/en/docs/install)**| A CLI for managing GitHub repositories developed by GitHub.<br>*(Optional: Use `--no-github` flag to disable.)* |
+| `yarn`      | A performant Node package manager developed by Facebook. **[Install](https://classic.yarnpkg.com/en/docs/install)** |
+| `hub`   | A CLI for managing GitHub repositories developed by GitHub. **[Install](https://github.com/github/hub#installation)**<br>*(Optional: Use `--no-github` flag to disable.)* |
 
 ## Usage
 Creating a new gnv workspace with `gnv create [organization]/name` will
