@@ -75,7 +75,7 @@ const TREE = (
       + treeNodeCli('./lib', {
         dirsFirst: true,
       })
-      + '\n'
+      + '\n\n'
       + treeNodeCli('./exports', {
         dirsFirst: true,
       })
