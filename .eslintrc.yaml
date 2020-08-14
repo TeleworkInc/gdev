@@ -22,6 +22,10 @@ ignorePatterns:
   - externs.js
 
 rules:
+
+  brace-style:
+    - error
+    - stroustrup
   
   jsdoc/check-tag-names:
     - error
@@ -61,7 +65,7 @@ rules:
 
   operator-linebreak:
     - error
-    - after
+    - before
 
   object-curly-spacing:
     - error

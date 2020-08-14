@@ -27,8 +27,17 @@ commander
     .action(commands.clean);
 
 commander
-    .command('create <project>')
+    .command('create <name>')
     .description('Create a new gnv workspace.')
+    .option(
+        '-g, --github',
+        'Create a new GitHub repository for the workspace. Use '
+        + 'form <organization/name> to create for an organization.',
+    )
+    .option(
+        '-s, --submodule',
+        'Initialize using [git add submodule] rather than [git clone].',
+    )
     .action(commands.create);
 
 commander
@@ -46,24 +55,40 @@ commander
     .description('Initialize a workspace inside an existing directory.')
     .action(commands.initialize);
 
+
 /**
- * Print some info about the project directory.
+ * Log a `--- gnv ---` intro and some information about the project directory.
  */
-const TREE = (
-  commands.checkInsideProject() ?
-  '\n' + treeNodeCli('./lib') :
-  ''
-);
 
 const HEAD = (
-  commands.checkInsideProject() ?
-  ` ${PROJECT_NAME} ` :
-  ''
+  commands.checkInsideProject()
+  ? ` ${PROJECT_NAME} `
+  : ''
 );
 
+const TREE = (
+  commands.checkInsideProject()
+  ? (
+      '\n'
+      + treeNodeCli('./lib', {
+        dirsFirst: true,
+      })
+      + '\n'
+      + treeNodeCli('./exports', {
+        dirsFirst: true,
+      })
+    )
+  : ''
+);
+
+/**
+ * @param {string...} test
+ */
 console.log('\n', chalk.grey('--- 𝓰𝓷𝓿 ---'), '\n');
+
 if (HEAD) console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
 if (TREE) console.log(chalk.blueBright(TREE), '\n');
+
 
 /**
  * Parse command line arguments. Use try {...} catch {...} and
@@ -76,6 +101,5 @@ try {
   /**
    * If no args are provided, this block executes.
    */
+  console.log('\n');
 }
-
-console.log('\n');
