@@ -14,7 +14,7 @@ dependencies will be baked into the compiled output for each target, so
 | Package      | Description |
 | ----------- | ----------- |
 | `yarn`      | A performant Node package manager developed by Facebook. **[Install](https://classic.yarnpkg.com/en/docs/install)** |
-| `hub`   | A CLI for managing GitHub repositories developed by GitHub. **[Install](https://github.com/github/hub#installation)** *(Optional: Use `--no-github` flag to disable.)* |
+| `hub`   | A CLI for managing GitHub repositories developed by GitHub. **[Install](https://github.com/github/hub#installation)**<br>*(Optional: Use `--no-github` flag to disable.)* |
 
 ## Usage
 Creating a new gnv workspace with `gnv create [organization]/name` will
