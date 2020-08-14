@@ -8,7 +8,13 @@ Build the **smallest** and **fastest** bundles for **multiple targets** with
 **no dependencies**¹.  With dependency-free outputs, all of your package's
 dependencies will be baked into the compiled output for each target, so
 `package.json` will contain no `dependencies` or `devDependencies` fields and
-`npm install` will only need to download what is in the `dist/` directory.  
+`npm install` will only need to download what is in the `dist/` directory. 
+
+## Prerequisites 
+| Package      | Description |
+| ----------- | ----------- |
+| `yarn`      | A performant Node package manager developed by Facebook. **[Install](https://classic.yarnpkg.com/en/docs/install)** |
+| `hub`   | A CLI for managing GitHub repositories developed by GitHub. **[Install](https://github.com/github/hub#installation)** *(Optional: Use `--no-github` flag to disable.)* |
 
 ## Usage
 Creating a new gnv workspace with `gnv create [name]` will initialize a folder
