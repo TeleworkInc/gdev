@@ -72,7 +72,7 @@ dist
 ## How will my exports work with `require` and `import`?
 The goal of gnv workspaces is full CJS/ESM interop, and `require` and `import`
 should both expose your exports as expected thanks to Rollup. This allows for
-distraction-free interop as seen below:
+distraction-free usage as seen below:
 
 `ES6 | namedImportTest.mjs [PASSING]`
 ```javascript
@@ -101,7 +101,7 @@ export default { callCompiler, checkInsideProject, compile, create, devCompile, 
 
 This can be overridden by setting a `default` export manually. A large
 motivation of this is so that the form `import pkg from ...` can be used instead
-of `import * as pkg from ...`, and it allows for predictable behavior:
+of `import * as pkg from ...`, and it allows for predictable coding patterns:
 
 #### ESM `import`
 ```javascript
@@ -164,15 +164,22 @@ Running in Node to compare outputs:
 }
 ```
 
-Everything works as expected! We have named *and* default exports for CJS *and*
-ES modules!
+Everything works as expected! The default and named exports for CJS and ESM
+outputs are functionally identical.
 
 ## How does the CLI export work?
 The `bin` field of `package.json` points to `dist/cli.cjs` and uses the
 `commander` package by default to provide an interactive command line interface.
 
 gnv will generate `cli.js` with an example program when a new workspace is
-created with `gnv create my-project-name`.
+created with `gnv create my-project-name`, and it will also initialize a GitHub
+repository (or submodule, if you're in a git directory already) unless passed
+the `-ng, --no-github` or `-ns, --no-submodule` flags respectively.
+
+You will spend most of your time working running `my-project-name-dev` rather
+than `my-project-name`, as the development version of the CLI will run the
+source code in `exports/`, whereas the production version will point to the
+compiled output at `dist/cli.cjs`.
 
 ### Example
 Create a new project:

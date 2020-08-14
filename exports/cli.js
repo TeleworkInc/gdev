@@ -28,15 +28,17 @@ commander
 
 commander
     .command('create <name>')
-    .description('Create a new gnv workspace.')
-    .option(
-        '-g, --github',
-        'Create a new GitHub repository for the workspace. Use '
-        + 'form <organization/name> to create for an organization.',
+    .description(
+        'Create a new gnv workspace and push to GitHub. Use <organization/name>'
+      + 'to create for an organization. Requires `hub` package or -ng flag.',
     )
     .option(
-        '-s, --submodule',
-        'Initialize using [git add submodule] rather than [git clone].',
+        '-ng, --no-github',
+        'Do not use GitHub integration.',
+    )
+    .option(
+        '-ns, --no-submodule',
+        'Do not create as a submodule, even if inside a git repository.',
     )
     .action(commands.create);
 
@@ -97,7 +99,8 @@ if (TREE) console.log(chalk.blueBright(TREE), '\n');
 try {
   commander.exitOverride();
   commander.parse(process.argv);
-} catch (e) {
+}
+catch (e) {
   /**
    * If no args are provided, this block executes.
    */
