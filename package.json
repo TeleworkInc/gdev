@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build:dev": "yarn run:rollup && yarn run:webpack",
-    "build:dist": "yarn run:gulp",
+    "build:dist": "yarn run:gulp && yarn rollup -c esDist.rollup.js && yarn run:gulp addNamedExportsForEsDist && yarn run:gulp markClisExecutable",
     "build": "yarn clean && yarn build:dev && yarn build:dist && yarn test",
     "clean": "rm -rf ./dist/* && rm -rf ./dev/*",
     "run:gulp": "yarn gulp -f .gnv/config.gulp.mjs",

@@ -1,3 +1,5 @@
 import node from './dist/node.mjs';
-import { build } from './dist/node.mjs';
-console.log(build);
+console.log(node);
+
+import { TEST_STRING } from './dist/universal.mjs';
+console.log({ TEST_STRING });

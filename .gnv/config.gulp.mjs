@@ -135,7 +135,7 @@ const markExecutable = async (file) => {
 /**
  * Mark all CLI builds in dist/ and dev/ as executable.
  */
-export const markCLIsExecutable = async () => {
+export const markClisExecutable = async () => {
   const files = glob.sync('./**/{dev,dist}/cli.**');
   await Promise.all(
       files.map(async (file) => await markExecutable(file)),
@@ -188,7 +188,7 @@ export const buildNodeTarget = async () => {
  * Compile non-default targets, which exist at the top level of the dev/
  * directory.
  */
-const buildCustomTargets = async () => {
+export const buildCustomTargets = async () => {
   await Promise.all(
       glob.sync('dev/*.cjs').map(async (file) => await compileCJS(file)),
   );
@@ -251,24 +251,23 @@ export const buildDefaultTargets = gulp.series(
     ),
 );
 
+/**
+ * Different entries, different outputs, so can run concurrently.
+ */
+export const build = gulp.parallel(
+    /** Build CLI, universal, and Node targets. */
+    buildDefaultTargets,
+    /** Build all non-default export targets. */
+    buildCustomTargets,
+);
+
+import { addNamedExports } from '../lib/namedExports.js';
+export const addNamedExportsForEsDist = gulp.series(
+    addNamedExports,
+);
 
 /**
  * Build files from `dev/` -> `dist/`, and handle post-processing like CLI
  * `chmod +x`.
  */
-export default gulp.series(
-    /**
-     * All `dev/` -> `dist/` builds can run simultaneously, since all the dev
-     * files necessary will be ready by this time.
-     */
-    gulp.parallel(
-        /** Build `dev/*.mjs` -> `dist/*.mjs`. */
-        buildEsOutputs,
-        /** Build CLI, universal, and Node targets. */
-        buildDefaultTargets,
-        /** Build all non-default export targets. */
-        buildCustomTargets,
-    ),
-    /** Make sure CLIs are chmod 755. */
-    markCLIsExecutable,
-);
+export default build;
