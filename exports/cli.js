@@ -2,7 +2,8 @@
 
 /**
  * @license MIT
- *
+ */
+/**
  * @fileoverview
  * Specify the exports for this project's CLI.
  */

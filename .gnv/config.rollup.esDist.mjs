@@ -1,5 +1,12 @@
+/**
+ * @license MIT
+ */
+/**
+ * @fileoverview
+ * Turn dist/*.cjs into dist/*.mjs.
+ */
+
 import shebang from 'rollup-plugin-preserve-shebang';
-import exportDefault from 'rollup-plugin-export-default';
 import commonjs from '@rollup/plugin-commonjs';
 import glob from 'glob';
 
@@ -17,7 +24,6 @@ export default glob.sync('dist/*.cjs').map(
         commonjs({
           transformMixedEsModules: true,
         }),
-      // exportDefault(),
       ],
     }),
 );
