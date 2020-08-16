@@ -1,0 +1,130 @@
+yarn run v1.22.4
+warning ../../package.json: No license field
+$ yarn webpack --config .gnv/config.webpack.cjs
+warning ../../package.json: No license field
+$ /home/christian/Projects/gnv/node_modules/.bin/webpack --config .gnv/config.webpack.cjs
+Hash: 5214d54938ba41f1007115e56e1015db739be767
+Version: webpack 4.43.0
+Child
+    Hash: 5214d54938ba41f10071
+    Time: 6011ms
+    Built at: 08/15/2020 8:40:58 PM
+      Asset      Size  Chunks             Chunk Names
+    cli.cjs  6.81 MiB       0  [emitted]  cli
+    Entrypoint cli = cli.cjs
+      [1] external "path" 42 bytes {0} [built]
+      [3] external "util" 42 bytes {0} [built]
+      [4] external "fs" 42 bytes {0} [built]
+      [8] (webpack)/lib/Template.js 7.96 KiB {0} [built]
+     [11] external "crypto" 42 bytes {0} [built]
+     [21] external "events" 42 bytes {0} [built]
+     [28] external "assert" 42 bytes {0} [built]
+     [35] (webpack)/lib/dependencies/DependencyReference.js 1.75 KiB {0} [built]
+     [40] (webpack)/lib/util/createHash.js 3.31 KiB {0} [built]
+     [41] (webpack)/lib/Module.js 10.1 KiB {0} [built]
+     [48] (webpack)/lib/ModuleFilenameHelpers.js 5.41 KiB {0} [built]
+     [55] (webpack)/lib/Dependency.js 1.97 KiB {0} [built]
+     [65] ../await-shell/index.js 1.17 KiB {0} [built]
+    [446] ./dev/cli.mjs 11.3 KiB {0} [built]
+    [536] (webpack)/lib/webpack.js 7.79 KiB {0} [built]
+        + 1169 hidden modules
+    
+    WARNING in ./node_modules/terser-webpack-plugin/dist/worker.js 12:130-137
+    Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+     @ ./node_modules/terser-webpack-plugin/dist/TaskRunner.js
+     @ ./node_modules/terser-webpack-plugin/dist/index.js
+     @ ./node_modules/terser-webpack-plugin/dist/cjs.js
+     @ (webpack)/lib/WebpackOptionsDefaulter.js
+     @ (webpack)/lib/webpack.js
+     @ ./dev/cli.mjs
+    
+    WARNING in ./node_modules/loader-runner/lib/loadLoader.js 5:2-28
+    Critical dependency: the request of a dependency is an expression
+     @ ./node_modules/loader-runner/lib/LoaderRunner.js
+     @ (webpack)/lib/NormalModule.js
+     @ (webpack)/lib/AutomaticPrefetchPlugin.js
+     @ (webpack)/lib/webpack.js
+     @ ./dev/cli.mjs
+    
+    WARNING in ./node_modules/worker-farm/lib/child/index.js 53:33-53
+    Critical dependency: the request of a dependency is an expression
+     @ ./node_modules/worker-farm/lib/fork.js
+     @ ./node_modules/worker-farm/lib/farm.js
+     @ ./node_modules/worker-farm/lib/index.js
+     @ ./node_modules/terser-webpack-plugin/dist/TaskRunner.js
+     @ ./node_modules/terser-webpack-plugin/dist/index.js
+     @ ./node_modules/terser-webpack-plugin/dist/cjs.js
+     @ (webpack)/lib/WebpackOptionsDefaulter.js
+     @ (webpack)/lib/webpack.js
+     @ ./dev/cli.mjs
+    
+    WARNING in ./node_modules/loader-runner/lib/loadLoader.js 5:2-28
+    System.import() is deprecated and will be removed soon. Use import() instead.
+    For more info visit https://webpack.js.org/guides/code-splitting/
+     @ ./node_modules/loader-runner/lib/LoaderRunner.js 7:17-40
+     @ (webpack)/lib/NormalModule.js
+     @ (webpack)/lib/AutomaticPrefetchPlugin.js
+     @ (webpack)/lib/webpack.js
+     @ ./dev/cli.mjs
+Child
+    Hash: 15e56e1015db739be767
+    Time: 5985ms
+    Built at: 08/15/2020 8:40:58 PM
+       Asset      Size  Chunks             Chunk Names
+    node.cjs  6.75 MiB       0  [emitted]  node
+    Entrypoint node = node.cjs
+      [1] external "path" 42 bytes {0} [built]
+      [3] external "util" 42 bytes {0} [built]
+      [4] external "fs" 42 bytes {0} [built]
+      [8] (webpack)/lib/Template.js 7.96 KiB {0} [built]
+     [11] external "crypto" 42 bytes {0} [built]
+     [24] external "events" 42 bytes {0} [built]
+     [28] external "assert" 42 bytes {0} [built]
+     [35] (webpack)/lib/dependencies/DependencyReference.js 1.75 KiB {0} [built]
+     [41] (webpack)/lib/util/createHash.js 3.31 KiB {0} [built]
+     [42] (webpack)/lib/Module.js 10.1 KiB {0} [built]
+     [48] (webpack)/lib/ModuleFilenameHelpers.js 5.41 KiB {0} [built]
+     [52] ../await-shell/index.js 1.17 KiB {0} [built]
+     [55] (webpack)/lib/Dependency.js 1.97 KiB {0} [built]
+    [444] ./dev/node.mjs 10.9 KiB {0} [built]
+    [534] (webpack)/lib/webpack.js 7.79 KiB {0} [built]
+        + 1167 hidden modules
+    
+    WARNING in ./node_modules/terser-webpack-plugin/dist/worker.js 12:130-137
+    Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+     @ ./node_modules/terser-webpack-plugin/dist/TaskRunner.js
+     @ ./node_modules/terser-webpack-plugin/dist/index.js
+     @ ./node_modules/terser-webpack-plugin/dist/cjs.js
+     @ (webpack)/lib/WebpackOptionsDefaulter.js
+     @ (webpack)/lib/webpack.js
+     @ ./dev/node.mjs
+    
+    WARNING in ./node_modules/loader-runner/lib/loadLoader.js 5:2-28
+    Critical dependency: the request of a dependency is an expression
+     @ ./node_modules/loader-runner/lib/LoaderRunner.js
+     @ (webpack)/lib/NormalModule.js
+     @ (webpack)/lib/AutomaticPrefetchPlugin.js
+     @ (webpack)/lib/webpack.js
+     @ ./dev/node.mjs
+    
+    WARNING in ./node_modules/worker-farm/lib/child/index.js 53:33-53
+    Critical dependency: the request of a dependency is an expression
+     @ ./node_modules/worker-farm/lib/fork.js
+     @ ./node_modules/worker-farm/lib/farm.js
+     @ ./node_modules/worker-farm/lib/index.js
+     @ ./node_modules/terser-webpack-plugin/dist/TaskRunner.js
+     @ ./node_modules/terser-webpack-plugin/dist/index.js
+     @ ./node_modules/terser-webpack-plugin/dist/cjs.js
+     @ (webpack)/lib/WebpackOptionsDefaulter.js
+     @ (webpack)/lib/webpack.js
+     @ ./dev/node.mjs
+    
+    WARNING in ./node_modules/loader-runner/lib/loadLoader.js 5:2-28
+    System.import() is deprecated and will be removed soon. Use import() instead.
+    For more info visit https://webpack.js.org/guides/code-splitting/
+     @ ./node_modules/loader-runner/lib/LoaderRunner.js 7:17-40
+     @ (webpack)/lib/NormalModule.js
+     @ (webpack)/lib/AutomaticPrefetchPlugin.js
+     @ (webpack)/lib/webpack.js
+     @ ./dev/node.mjs
+Done in 6.90s.

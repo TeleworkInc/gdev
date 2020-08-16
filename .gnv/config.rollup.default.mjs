@@ -6,6 +6,7 @@
  */
 
 import glob from 'glob';
+import commonjs from '@rollup/plugin-commonjs';
 import shebang from 'rollup-plugin-preserve-shebang';
 import exportDefault from 'rollup-plugin-export-default';
 
@@ -22,6 +23,7 @@ export const exportESM = (file) => {
     },
     plugins: [
       shebang(),
+      // commonjs(),
       exportDefault(),
     ],
   };

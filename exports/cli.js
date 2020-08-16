@@ -51,6 +51,7 @@ commander
 commander
     .command('build')
     .description('Build this workspace and output in [dist].')
+    .option('-d, --dev', 'Build the dev bundle.')
     .action(commands.build);
 
 commander
