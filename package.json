@@ -15,19 +15,15 @@
   "scripts": {
 
     "build:dev": "rollup -c .gnv/config.rollup.devEs.mjs && rollup -c .gnv/config.rollup.devCjs.mjs",
-    "build:dist": "rollup -c .gnv/config.rollup.dist.mjs && yarn run:gulp buildAll && yarn run:gulp markClisExecutable",
+    "build:dist": "rollup -c .gnv/config.rollup.distEs.mjs && rollup -c .gnv/config.rollup.distCjs.mjs && yarn run:gulp buildExecutableTarget markClisExecutable",
     
     "prebuild": "yarn clean",
     "build": "yarn build:dev && yarn build:dist",
     "postbuild": "yarn test",
     
     "run:gulp": "gulp -f .gnv/config.gulp.mjs",
-    "run:rollup": "rollup -c .gnv/config.rollup.dev.mjs",
-    "run:webpack": "webpack --config .gnv/config.webpack.cjs",
-    
     "clean": "rm -rf ./dist/* && rm -rf ./dev/*",
     "test": "mocha"
-
   },
   "repository": {
     "type": "git",
@@ -47,6 +43,7 @@
   },
   "homepage": "https://github.com/TeleworkInc/gnv#readme",
   "dependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
