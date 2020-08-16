@@ -70,16 +70,18 @@ export const callCompiler = (options = {}) => {
  * @param {object?} options
  * Additional flags to pass the compiler.
  */
-export const compileCJS = async (file, options = {}) => {
+export const compileCjsToDist = async (file, options = {}) => {
   await callCompiler({
-    // I/O setup.
     js: file,
     js_output_file: file.replace('dev', 'dist'),
 
-    // SIMPLE compilation for CJS to avoid renaming.
+    /** Prevent argument.callee issues. */
+    strict_mode_input: false,
+
+    /** SIMPLE compilation for CJS to avoid renaming. */
     compilation_level: 'SIMPLE',
 
-    // Overrides.
+    /** Overrides */
     ...options,
   });
 };
@@ -94,7 +96,7 @@ export const compileCJS = async (file, options = {}) => {
  * @param {object?} options
  * Additional flags to pass the compiler.
  */
-export const compileESM = async (file, options = {}) => {
+export const compileEsToDist = async (file, options = {}) => {
   await callCompiler({
     // I/O setup.
     js: file,
@@ -147,7 +149,7 @@ export const markClisExecutable = async () => {
  * Compile the exports/cli.js script.
  */
 export const buildCliTarget = async () => {
-  await compileCJS('dev/cli.cjs');
+  await compileCjsToDist('dev/cli.cjs');
 };
 
 
@@ -180,7 +182,7 @@ export const buildExecutableTarget = async () => {
  * Compile a script for `node-async` target.
  */
 export const buildNodeTarget = async () => {
-  await compileCJS('dev/node.cjs');
+  await compileCjsToDist('dev/node.cjs');
 };
 
 
@@ -190,7 +192,7 @@ export const buildNodeTarget = async () => {
  */
 export const buildCustomTargets = async () => {
   await Promise.all(
-      glob.sync('dev/*.cjs').map(async (file) => await compileCJS(file)),
+      glob.sync('dev/*.cjs').map(async (file) => await compileCjsToDist(file)),
   );
 };
 
@@ -199,7 +201,7 @@ export const buildCustomTargets = async () => {
  * Compile dev/universal.js -> dist/universal.cjs
  */
 export const buildUniversalTarget = async () => {
-  await compileCJS('dev/universal.cjs', {
+  await compileCjsToDist('dev/universal.cjs', {
     compilation_level: 'SIMPLE',
     language_in: 'ES_NEXT',
     language_out: 'ECMASCRIPT5_STRICT',
@@ -218,7 +220,7 @@ export const buildEsOutputs = async () => {
   await Promise.all(
       files.map(
           async (file) =>
-            await compileESM(
+            await compileEsToDist(
                 file,
                 { jscomp_off: '*' },
             ),
@@ -254,20 +256,19 @@ export const buildDefaultTargets = gulp.series(
 /**
  * Different entries, different outputs, so can run concurrently.
  */
-export const build = gulp.parallel(
+export const buildAll = gulp.parallel(
     /** Build CLI, universal, and Node targets. */
     buildDefaultTargets,
     /** Build all non-default export targets. */
     buildCustomTargets,
 );
 
-import { addNamedExports } from '../lib/namedExports.js';
-export const addNamedExportsForEsDist = gulp.series(
-    addNamedExports,
-);
+
+export { addNamedExports } from '../lib/namedExports.js';
+
 
 /**
  * Build files from `dev/` -> `dist/`, and handle post-processing like CLI
  * `chmod +x`.
  */
-export default build;
+// export default build;

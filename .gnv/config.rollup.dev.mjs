@@ -10,7 +10,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import shebang from 'rollup-plugin-preserve-shebang';
 import exportDefault from 'rollup-plugin-export-default';
 
-export const exportESM = (file) => {
+const exportESM = (file) => {
   return {
     input: file,
     output: {
@@ -23,13 +23,12 @@ export const exportESM = (file) => {
     },
     plugins: [
       shebang(),
-      // commonjs(),
       exportDefault(),
     ],
   };
 };
 
-export const exportCJS = (file) => {
+const exportCJS = (file) => {
   return {
     input: file,
     output: {
@@ -42,11 +41,30 @@ export const exportCJS = (file) => {
   };
 };
 
+/**
+ * @todo
+ * Move the exportCJS(universal) bit to dist/
+ */
 export default [
   /**
    * Compile ESM builds for everything in the exports/ directory.
    */
   ...glob.sync('exports/*.js').map(exportESM),
+  ...glob.sync(
+      'dev/*.mjs',
+      {
+        ignore: ['./dev/universal.*'],
+      },
+  ).map((file) => ({
+    input: file,
+    output: {
+      file: file.replace('mjs', 'cjs'),
+      format: 'cjs',
+    },
+    plugins: [
+      shebang(),
+    ],
+  })),
   /**
    * Use Rollup to roll the universal CJS bundle since it will contain no Node
    * dependencies by definition.
