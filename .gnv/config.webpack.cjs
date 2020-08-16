@@ -10,6 +10,7 @@
 
 const glob = require('glob');
 const path = require('path');
+const disablePackages = require('webpack-disable-packages');
 
 /**
  * Default config for Webpack exports.
@@ -36,18 +37,6 @@ const EXPORT_DEFAULTS = {
   },
 };
 
-const EXPORT_CJS = {
-  ...EXPORT_DEFAULTS,
-  /**
-   * -> dev/[name].cjs
-   */
-  output: {
-    path: path.resolve(__dirname, '../dev'),
-    filename: '[name].cjs',
-    libraryTarget: 'commonjs',
-  },
-};
-
 const exportCJS = (file) => {
   const name = path.parse(file).name;
   return {
@@ -55,7 +44,18 @@ const exportCJS = (file) => {
       [name]: file,
     },
     target: 'async-node',
-    ...EXPORT_CJS,
+    ...EXPORT_DEFAULTS,
+    /**
+     * -> dev/[name].cjs
+     */
+    output: {
+      path: path.resolve(__dirname, '../dev'),
+      filename: '[name].cjs',
+      libraryTarget: 'commonjs',
+    },
+    plugins: [
+      disablePackages('fsevents'),
+    ],
   };
 };
 
