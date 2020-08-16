@@ -13,7 +13,7 @@
     "require": "./dist/node.cjs"
   },
   "scripts": {
-    "build:dev": "yarn run:rollup && yarn rollup -c .gnv/config.rollup.cjsDist.mjs",
+    "build:dev": "rollup -c .gnv/config.rollup.dev.mjs && rollup -c .gnv/config.rollup.cjsDist.mjs",
     "build:dist": "yarn rollup -c .gnv/config.rollup.dist.mjs && yarn run:gulp buildAll && yarn run:gulp markClisExecutable",
     "build": "yarn clean && yarn build:dev && yarn build:dist && yarn test",
     "clean": "rm -rf ./dist/* && rm -rf ./dev/*",

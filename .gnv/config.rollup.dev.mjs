@@ -65,6 +65,21 @@ export default [
       shebang(),
     ],
   })),
+  ...glob.sync(
+      'dev/*.mjs',
+      {
+        ignore: ['./dev/universal.*'],
+      },
+  ).map((file) => ({
+    input: file,
+    output: {
+      file: file.replace('mjs', 'cjs'),
+      format: 'cjs',
+    },
+    plugins: [
+      shebang(),
+    ],
+  })),
   /**
    * Use Rollup to roll the universal CJS bundle since it will contain no Node
    * dependencies by definition.
