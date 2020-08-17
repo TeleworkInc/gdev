@@ -1,4 +1,4 @@
-# 𝓰𝓷𝓿 ᵇᵉᵗᵃ
+# 𝓰𝓷𝓿 ⁽ᵇᵉᵗᵃ⁾
 Javascript development workspaces built around
 [Rollup](https://github.com/rollup/rollup) and [Closure
 Compiler](https://github.com/google/closure-compiler) with full CJS/ESM interop.
