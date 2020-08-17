@@ -7,10 +7,10 @@
  * party modules.
  */
 
-import { getPackageJson } from './package.js';
+import { readPackageJson } from './package.js';
 import { spawnSync } from 'child_process';
 
-const packageJson = getPackageJson();
+const packageJson = readPackageJson();
 const gnvDependencies = Object.keys(packageJson.gnvDependencies || {});
 const peerDependencies = Object.keys(packageJson.peerDependencies || {});
 

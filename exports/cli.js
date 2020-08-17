@@ -23,6 +23,21 @@ const PROJECT_NAME = basename(CWD);
  */
 
 commander
+    .command('add <pkgs...>')
+    .description('Add the given packages as gnv development dependencies.')
+    .option('-P, --peer', 'Add as a peerDependency instead.', false)
+    .action(commands.add);
+
+
+commander
+    .command('boot')
+    .description(
+        'Install the development dependencies for the current workspace',
+    )
+    .action(commands.boot);
+
+
+commander
     .command('build')
     .description(
         'Build this workspace and run tests when finished. Final output will '
@@ -37,6 +52,7 @@ commander
     .command('clean')
     .description('Clean the gnv workspace.')
     .action(commands.clean);
+
 
 commander
     .command('create <name>')
@@ -54,6 +70,7 @@ commander
     )
     .action(commands.create);
 
+
 commander
     .command('develop')
     .description(
@@ -62,10 +79,12 @@ commander
     )
     .action(commands.develop);
 
+
 commander
     .command('install')
     .description('Install gnv development dependencies.')
     .action(commands.install);
+
 
 commander
     .command(
@@ -77,6 +96,7 @@ commander
       + 'version by [level] (patch, minor, or major). Defaults to patch.',
     )
     .action(commands.publish);
+
 
 commander
     .command('test')
