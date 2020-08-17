@@ -5,12 +5,10 @@ Compiler](https://github.com/google/closure-compiler) with full CJS/ESM interop.
 
 ### Easily build standalone CLI, browser, and Node packages all in one workspace using the latest syntax.
 Build the **smallest** and **fastest** bundles for **multiple targets** with
-**no dependencies**.  
-
-With dependency-free outputs, all of your package's
-dependencies will be baked into the compiled output for each target, so
-`package.json` will contain no `dependencies` or `devDependencies` fields and
-`npm install` will only need to download what is in the `dist/` directory. 
+**no dependencies**.  All of your package's dependencies will be baked into the
+compiled output for each target, so `package.json` will contain no
+`dependencies` or `devDependencies` fields and `npm install` will only need to
+download what is in the `dist/` directory. 
 
 ## Prerequisites 
 This package uses `yarn` for package management, and `gnv create` sets up GitHub
