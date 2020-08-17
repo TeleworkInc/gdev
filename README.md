@@ -38,8 +38,8 @@ Creating a new gnv workspace with `gnv create [organization]/name` will
 initialize a GitHub repository with a `lib/` and an `exports/` directory and
 install it to the current directory (as a submodule, if inside a git repo). gnv
 projects are like modules in that they have **exports** for different
-**targets**, which will create corresponding outputs in `dev/` and `dist/` build
-directories.
+**targets**, which will create corresponding outputs in `dev/` and `dist/`
+directories during the build process.
 
 Think of `lib/` as a sandbox - it is where all internal code will go, and the
 `exports/` folder is where endpoints are *exposed* for each target. Exports will
