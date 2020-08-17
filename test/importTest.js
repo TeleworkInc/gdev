@@ -16,6 +16,11 @@ import * as nodeDist from '../dist/node.mjs';
 
 import * as universalDev from '../dev/universal.mjs';
 import * as universalDist from '../dist/universal.mjs';
+import shell from 'await-shell';
+
+global.SHELL_OPTIONS = {
+  stdio: 'ignore',
+};
 
 describe('ESM import', () => {
   it('should import this npm package', () => {
@@ -30,12 +35,12 @@ describe('ESM import', () => {
     expect(nodeDist.create).to.be.a('function');
   });
 
-  it('should not fail for uncompiled ESM [dev/cli.mjs]', () => {
-    expect(() => cliDev).to.not.throw();
+  it('should exit 0 for uncompiled ESM [dev/cli.mjs]', async () => {
+    await shell('node dev/cli.mjs');
   });
 
-  it('should not fail for compiled ESM [dist/cli.mjs]', () => {
-    expect(() => cliDist).to.not.throw();
+  it('should exit 0 for for compiled ESM [dist/cli.mjs]', async () => {
+    await shell('node dist/cli.mjs');
   });
 
   it('should import test classes from [dev/universal.mjs]', () => {

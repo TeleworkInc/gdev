@@ -171,7 +171,7 @@ export const buildExecutableTarget = async () => {
     // Do not generate exports for an executable
     generate_exports: false,
     js: [
-      'node_modules/google-closure-library/closure/goog/base.js',
+      'google-closure-library/closure/goog/base.js',
       'dev/universal.mjs',
     ],
   });
