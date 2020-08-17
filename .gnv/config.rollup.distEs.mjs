@@ -1,6 +1,6 @@
 import glob from 'glob';
 import closureCompiler from '@ampproject/rollup-plugin-closure-compiler';
-import { plugins } from './rollupPlugins.mjs';
+import { plugins } from './plugins.rollup.mjs';
 
 const distEs = glob.sync('dev/*.mjs');
 
@@ -14,9 +14,7 @@ export default [
           // will help with compiler inlining
           preferConst: true,
         },
-        plugins: [
-          ...plugins,
-        ],
+        plugins: plugins,
       }),
   ),
 ];
