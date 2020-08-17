@@ -80,7 +80,7 @@ the same default settings.
 |--|--|
 | `exports/cli.js` | A CLI that is hooked into the `bin` field of `package.json` and will execute when your package is called from the command line. |
 | `exports/node.js` | A module which will be exposed to Node, i.e. what what users will `import` or `require` from inside a NodeJS script. |
-| `exports/universal.js` | A module which does not rely on *any* Node dependencies and can be run in any environment (browser, Node, etc.). Primarily for browser bundles and pure vanilla JS programs which will benefit from the maximum level of compression offered by the Closure Compiler. The **executable** (see below) will be generated from the **universal** target output.
+| `exports/universal.js` | A module which does not rely on *any* Node dependencies and can be run in any environment (browser, Node, etc.). Primarily for browser bundles and pure vanilla JS programs which will benefit from the maximum level of compression offered by the Closure Compiler. The **executable** ([see below](#how-does-the-universal-export-work-and-whats-exejs)) will be generated from the **universal** target output.
 
 Building the project with `gnv build` will create development and distribution
 folders that look like:
