@@ -2,13 +2,10 @@ import glob from 'glob';
 import closureCompiler from '@ampproject/rollup-plugin-closure-compiler';
 import { plugins } from './rollupPlugins.mjs';
 
+const distEs = glob.sync('dev/*.mjs');
+
 export default [
-  /**
-   * dev/*.mjs -> dist/*.mjs
-   */
-  ...glob.sync(
-      'dev/*.mjs',
-  ).map(
+  ...distEs.map(
       (file) => ({
         input: file,
         output: {
@@ -19,11 +16,6 @@ export default [
         },
         plugins: [
           ...plugins,
-          closureCompiler({
-            compilation_level: 'SIMPLE',
-            language_in: 'ES_NEXT',
-            language_out: 'NO_TRANSPILE',
-          }),
         ],
       }),
   ),
