@@ -1,7 +1,7 @@
 {
   "name": "gnv",
   "version": "6.3.0",
-  "description": "Javascript development workspaces built around Closure Compiler.",
+  "description": "Javascript development workspaces built around Rollup and Closure Compiler.",
   "type": "module",
   "bin": {
     "gnv": "./dist/cli.cjs",
