@@ -8,9 +8,6 @@
 import 'chai/register-expect.js';
 import * as thisPackage from 'gnv';
 
-import * as cliDev from '../dev/cli.mjs';
-import * as cliDist from '../dist/cli.mjs';
-
 import * as nodeDev from '../dev/node.mjs';
 import * as nodeDist from '../dist/node.mjs';
 

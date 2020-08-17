@@ -59,6 +59,11 @@ commander
     .description('Initialize a workspace inside an existing directory.')
     .action(commands.initialize);
 
+commander
+    .command('test')
+    .description('Run mocha tests.')
+    .action(commands.test);
+
 
 /**
  * Log a `--- gnv ---` intro and some information about the project directory.
