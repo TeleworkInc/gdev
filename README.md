@@ -3,9 +3,9 @@ Javascript development workspaces built around
 [Rollup](https://github.com/rollup/rollup) and [Closure
 Compiler](https://github.com/google/closure-compiler) with full CJS/ESM interop.
 
-### Easily build CLI, browser, and Node packages all in one workspace using the latest syntax.
+### Easily build standalone CLI, browser, and Node packages all in one workspace using the latest syntax.
 Build the **smallest** and **fastest** bundles for **multiple targets** with
-**no dependencies**¹.  
+**no dependencies**.  
 
 With dependency-free outputs, all of your package's
 dependencies will be baked into the compiled output for each target, so
@@ -307,14 +307,6 @@ Compiler optimization.
 console.log("a is 10");
 ```
 
-# Ignore for now
-This section explains the logistics of dependency-free packages. This
-functionality is not yet live while issues with the Rollup engine are resolved.
-Using gnv packages presently requires running `yarn install`, and copies of very
-large dependencies will be stored in each project directory for now: `eslint`,
-`babel-eslint`, `google-closure-compiler`, etc. Eliminating this redundancy is a
-main goal of gnv in the first place.
-
 ## How do I use third party modules if I want to keep my `package.json` free of dependencies? 
 We're used to doing `yarn add [pkg]` / `npm install [pkg]` when we need to use a
 new third party module in our project. The solution is to the packages globally
@@ -345,11 +337,3 @@ packages globally offered the following reasoning:
 However, since our dependencies are rolled into the compiled output, this is no
 longer a concern, and we can save the user a step and ship them only the code
 that they will actually be executing.
-
-# Footnotes
-¹ Dependency-free outputs will be available once [full Rollup-Node
-coverage](https://github.com/TeleworkInc/rollup-node-testing) is complete.
-Presently, CommonJS output (`dist/*.cjs`) will have all dependencies rolled in,
-but because ES6 modules do not (completely) support Node module resolution,
-`package.json` will still contain `dependencies` and `devDependencies` fields
-until Rollup issues are resolved.
