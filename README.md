@@ -28,7 +28,7 @@ install global npm dependencies (including `mocha` for testing) with:
 yarn global add rollup google-closure-compiler google-closure-library mocha
 ```
 
-#### Why doesn't gnv roll up Closure Compiler and Rollup into its executable?
+#### Why doesn't gnv roll up Closure Compiler and Rollup into its executable instead of requiring global dependencies?
 It *will*, eventually (at least for Rollup). This is actually *almost* possible
 at present, except rolling the entire J2CL-compiled Closure Compiler requires
 raising Node's memory limit manually, and the native version is much faster.
