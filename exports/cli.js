@@ -23,6 +23,17 @@ const PROJECT_NAME = basename(CWD);
  */
 
 commander
+    .command('build')
+    .description(
+        'Build this workspace and run tests when finished. Final output will ',
+        + 'be in dist/.',
+    )
+    .option('-d, --dev', 'Build the dev bundle.')
+    .option('-s, --skip-tests', 'Do not run tests after build is finished.')
+    .action(commands.build);
+
+
+commander
     .command('clean')
     .description('Clean the gnv workspace.')
     .action(commands.clean);
@@ -52,14 +63,9 @@ commander
     .action(commands.develop);
 
 commander
-    .command('build')
-    .description(
-        'Build this workspace and run tests when finished. Final output will ',
-        + 'be in dist/.',
-    )
-    .option('-d, --dev', 'Build the dev bundle.')
-    .option('-s, --skip-tests', 'Do not run tests after build is finished.')
-    .action(commands.build);
+    .command('install')
+    .description('Install gnv development dependencies.')
+    .action(commands.install);
 
 commander
     .command(
