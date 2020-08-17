@@ -52,6 +52,7 @@ commander
     .command('build')
     .description('Build this workspace and output in [dist].')
     .option('-d, --dev', 'Build the dev bundle.')
+    .option('-s, --skip-tests', 'Do not run tests after build is finished.')
     .action(commands.build);
 
 commander
