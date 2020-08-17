@@ -263,9 +263,8 @@ settings allow for this:
 The **executable** output is generated from the **universal** target. While
 **universal** specifies exports that can be `import`'d and `require`'d, `exe.js`
 is the most compressed version of this module which exports nothing and aims to
-only produce the same *side effects* as the `exports/universal.js`. What this
-means is that the codebase is boiled down to only *what would actually execute*
-in the JS runtime when `universal.js` is run.
+only produce the same *side effects* as the `exports/universal.js`, removing any
+unused code, mangling variable names, and so on.
 
 For example:
 
