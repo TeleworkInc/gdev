@@ -4,7 +4,8 @@
   "description": "Javascript development workspaces built around Rollup and Closure Compiler.",
   "type": "module",
   "bin": {
-    "gnv": "./dist/cli.cjs"
+    "gnv": "./dist/cli.cjs",
+    "gnv-dev": "./exports/cli.js"
   },
   "main": "./dist/node.cjs",
   "exports": {
@@ -66,9 +67,6 @@
     "mocha": "^8.0.1",
     "rollup": "^2.21.0",
     "rollup-plugin-export-default": "^1.4.0",
-    "rollup-plugin-preserve-shebang": "^1.0.1",
-    "shebang-loader": "^0.0.1",
-    "webpack": "~4.43.0",
-    "webpack-cli": "~3.3.12"
+    "rollup-plugin-preserve-shebang": "^1.0.1"
   }
 }

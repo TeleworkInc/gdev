@@ -45,20 +45,32 @@ commander
 
 commander
     .command('develop')
-    .description('Start developing and build when changes are made.')
+    .description(
+        'Start developing, and rebuild dev bundles when changes are made to '
+      + 'the workspace.',
+    )
     .action(commands.develop);
 
 commander
     .command('build')
-    .description('Build this workspace and output in [dist].')
+    .description(
+        'Build this workspace and run tests when finished. Final output will ',
+        + 'be in dist/.',
+    )
     .option('-d, --dev', 'Build the dev bundle.')
     .option('-s, --skip-tests', 'Do not run tests after build is finished.')
     .action(commands.build);
 
 commander
-    .command('init [directory]')
-    .description('Initialize a workspace inside an existing directory.')
-    .action(commands.initialize);
+    .command(
+        'publish [level]',
+    )
+    .description(
+        'Publish this package to NPM using `yarn publish`. Removes dev CLI '
+      + 'from package.json to prevent installation issues and bumps the '
+      + 'version by [level] (patch, minor, or major). Defaults to patch.',
+    )
+    .action(commands.publish);
 
 commander
     .command('test')

@@ -1,5 +1,5 @@
 # ignore everything
 **/**
 
-# except dist
+# except dist/
 !dist/*
