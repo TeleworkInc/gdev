@@ -11,10 +11,27 @@ dependencies will be baked into the compiled output for each target, so
 `npm install` will only need to download what is in the `dist/` directory. 
 
 ## Prerequisites 
-| Package      | Description |
+This package uses `yarn` for package management, and `gnv create` sets up GitHub
+repositories by default using `hub` (can be disabled with `--no-github` flag).
+
+### System
+
+| Package     | Description |
 | ----------- | ----------- |
 | `yarn`      | A performant Node package manager developed by Facebook. **[Install](https://classic.yarnpkg.com/en/docs/install)** |
 | `hub`   | A CLI for managing GitHub repositories developed by GitHub. **[Install](https://github.com/github/hub#installation)**<br>*(Optional: Use `--no-github` flag to disable.)* |
+
+### npm (global)
+gnv relies on Rollup and Closure Compiler to generate its outputs. Please
+install global npm dependencies (including `mocha` for testing) with:
+```bash
+yarn global add rollup google-closure-compiler google-closure-library mocha
+```
+
+#### Why doesn't gnv roll up Closure Compiler and Rollup into its executable?
+It *will*, eventually (at least for Rollup). This is actually *almost* possible
+at present, except rolling the entire J2CL-compiled Closure Compiler requires
+raising Node's memory limit manually, and the native version is much faster.
 
 ## Usage
 Creating a new gnv workspace with `gnv create [organization]/name` will
