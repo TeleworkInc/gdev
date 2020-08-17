@@ -13,14 +13,11 @@
     "require": "./dist/node.cjs"
   },
   "scripts": {
-
     "build:dev": "rollup -c .gnv/config.rollup.devEs.mjs && rollup -c .gnv/config.rollup.devCjs.mjs",
     "build:dist": "rollup -c .gnv/config.rollup.distEs.mjs && rollup -c .gnv/config.rollup.distCjs.mjs && yarn run:gulp buildExecutableTarget markClisExecutable",
-    
     "prebuild": "yarn clean",
     "build": "yarn build:dev && yarn build:dist",
     "postbuild": "yarn test",
-    
     "run:gulp": "gulp -f .gnv/config.gulp.mjs",
     "clean": "rm -rf ./dist/* && rm -rf ./dev/*",
     "test": "mocha"

@@ -10,7 +10,9 @@ export const plugins = [
   commonjs({
     transformMixedEsModules: true,
   }),
-  disablePackages('fsevents'),
   json(),
-  nodeResolve(),
+  disablePackages('fsevents'),
+  nodeResolve({
+    preferBuiltins: true,
+  }),
 ];
