@@ -25,8 +25,8 @@ const PROJECT_NAME = basename(CWD);
 commander
     .command('build')
     .description(
-        'Build this workspace and run tests when finished. Final output will ',
-        + 'be in dist/.',
+        'Build this workspace and run tests when finished. Final output will '
+      + 'be in dist/.',
     )
     .option('-d, --dev', 'Build the dev bundle.')
     .option('-s, --skip-tests', 'Do not run tests after build is finished.')
