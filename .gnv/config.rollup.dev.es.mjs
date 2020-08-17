@@ -1,12 +1,12 @@
 /**
  * @license MIT
- *
+ */
+/**
  * @fileoverview
- * Uses Rollup for ESM bundling, primarily for dev refresh on save.
+ * Rollup ES dev config.
  */
 
 import glob from 'glob';
-import commonjs from '@rollup/plugin-commonjs';
 import shebang from 'rollup-plugin-preserve-shebang';
 import exportDefault from 'rollup-plugin-export-default';
 
@@ -41,10 +41,6 @@ const exportCJS = (file) => {
   };
 };
 
-/**
- * @todo
- * Move the exportCJS(universal) bit to dist/
- */
 export default [
   /**
    * Compile ESM builds for everything in the exports/ directory.

@@ -1,5 +1,12 @@
+/**
+ * @license MIT
+ */
+/**
+ * @fileoverview
+ * Rollup CJS dist config.
+ */
+
 import glob from 'glob';
-import closureCompiler from '@ampproject/rollup-plugin-closure-compiler';
 import { plugins } from './plugins.rollup.mjs';
 
 const distCjs = glob.sync(

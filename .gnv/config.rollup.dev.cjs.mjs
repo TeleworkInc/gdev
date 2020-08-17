@@ -1,3 +1,11 @@
+/**
+ * @license MIT
+ */
+/**
+ * @fileoverview
+ * Rollup CJS dev config.
+ */
+
 import glob from 'glob';
 import shebang from 'rollup-plugin-preserve-shebang';
 
