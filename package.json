@@ -1,6 +1,6 @@
 {
   "name": "gnv",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "description": "Javascript development workspaces built around Rollup and Closure Compiler.",
   "type": "module",
   "bin": {
