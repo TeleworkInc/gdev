@@ -307,19 +307,38 @@ console.log("a is 10");
 
 ## How do I use third party modules if I want to keep my `package.json` free of dependencies? 
 We're used to doing `yarn add [pkg]` / `npm install [pkg]` when we need to use a
-new third party module in our project. The solution is to the packages globally
-with `npm i -g [pkg]` or `yarn global add [pkg]`, and then use them as you
-normally would in your code. This will also prevent you from downloading the
-same packages over and over again into a thousand different folders, and you
-will be free to import them without thinking. 
+new third party module in our project. However, since our outputs do not depend
+on anything, we want to avoid adding any standard dependencies to package.json.
+The only time dependencies are needed are if we're actively developing in the
+workspace, or running the dev version of the CLI, or otherwise executing source
+code directly (which will contain `import` and/or `require` statements). In this
+case, we install the needed development dependencies with `gnv boot`.
 
-It may seem like a waste of disk space to hold onto a cumulative copy of the NPM
-database, but you'll end up downloading those packages either way - the only
-thing that will vary is whether or not you store it a thousand different times.
-Ultimately, this is a more efficient approach.
+## How do I add/install development dependencies?
+
+| Package     | Description |
+| ----------- | ----------- |
+| `gnv add pkg[@latest]`    | Add a package to package.json's `gnvDependencies` field, install with `npm i -g --no-save`, and link with `npm link`. |
+| `gnv boot`  | Install and link all of the packages in package.json's `gnvDependencies` field in the same manner as `gnv add`. |
+
+Development dependencies for a gnv workspace can be added with `gnv add
+my-dependency`, which installs the package globally with `npm i -g --no-save`
+and then links in the workspace with `npm link`. It is also added to custom
+field in package.json called `gnvDependencies`, which will be installed along
+with `peerDependencies` on a call to `gnv boot` (which just calls a bootloader
+script that installs all of the needed development dependencies specified in
+package.json).
+
+This workflow prevents us from needing to re-install the same dependencies over
+and over in multiple folders, while assuring the dev build of a workspace freeze
+will be consistent over time. The one caveat to this is that `gnv add pkg@1.0.0`
+does not accept semantic versioning, only explicit versions or tags (i.e. `gnv
+add pkg@latest`). 
 
 You can always add dependencies locally rather than globally and ship the
-package as-is, if your priorities are different.
+package as-is, if your priorities are different. gnv will not modify
+package.json except to bump the version and remove (then re-add) the development
+CLI from package.json's `bin` field on `gnv publish`. 
 
 ## Aren't global NPM installs bad?
 No. The most popular article explaining why it might be a bad idea to install
@@ -334,4 +353,6 @@ packages globally offered the following reasoning:
 
 However, since our dependencies are rolled into the compiled output, this is no
 longer a concern, and we can save the user a step and ship them only the code
-that they will actually be executing.
+that they will actually be executing. A call to `gnv boot` will allow a
+developer to install the global and local dependencies needed to run the source
+without adding them to package.json's standard dependency fields. 
