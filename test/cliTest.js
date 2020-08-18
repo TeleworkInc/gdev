@@ -6,10 +6,12 @@
  */
 
 import 'chai/register-expect.js';
+
 import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
 import shell from 'await-shell';
+
 import { runInThisContext } from 'vm';
 
 /**
@@ -22,7 +24,7 @@ describe('Compiled executable', () => {
 });
 
 describe('CLIs in export/, dev/, and dist/', async () => {
-  glob.sync('{dev,dist}/cli.*').map(
+  glob.sync('{export,dev,dist}/cli.*').map(
       (cli) => {
         it(`should execute without errors for ${cli}`, async () => {
           global.SHELL_OPTIONS = {
