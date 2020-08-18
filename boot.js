@@ -31,6 +31,7 @@ const callNpm = (...args) => spawnSync(
     },
 );
 
+
 /**
  * Install gnvDependencies in this folder without updating package.json.
  */
@@ -39,6 +40,7 @@ if (gnvDependencies.length) {
   console.log(...gnvDependencies, '\n');
   callNpm('i', '--no-save', ...gnvDependencies);
 }
+
 
 /**
  * Globally install all peerDependencies without updating package.json, then
@@ -51,7 +53,6 @@ if (peerDependencies.length) {
    */
   const anyVersionPeerDeps = Object.keys(packageJson.peerDependencies);
 
-
   /**
    * Install peerDeps globally.
    */
@@ -62,7 +63,6 @@ if (peerDependencies.length) {
   /**
    * Link peerDeps locally.
    */
-  // callNpm('unlink', '-f', '--no-save', ...anyVersionPeerDeps);
   callNpm('link', '-f', '--no-save', ...anyVersionPeerDeps);
 
   console.log(

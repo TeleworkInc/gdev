@@ -4,7 +4,8 @@
   "description": "Javascript development workspaces built around Rollup and Closure Compiler.",
   "type": "module",
   "bin": {
-    "gnv": "./dist/cli.cjs"
+    "gnv": "./dist/cli.cjs",
+    "gnv-dev": "./exports/cli.js"
   },
   "main": "./dist/node.cjs",
   "exports": {
