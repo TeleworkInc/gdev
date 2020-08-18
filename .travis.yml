@@ -10,4 +10,4 @@ before_install:
 install: yarn boot
 script:
   - gnv-dev build
-  - gnv build
+  # - gnv build

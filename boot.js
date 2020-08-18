@@ -34,7 +34,10 @@ const callNpm = (...args) => {
       'npm',
       args,
       {
-        stdio: 'inherit',
+        /**
+         * Only inherit exit codes.
+         */
+        stdio: ['ignore', 'ignore', 'inherit'],
       },
   );
 };
