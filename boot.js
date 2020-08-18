@@ -67,7 +67,7 @@ if (peerDependencies.length) {
    */
   console.log('Adding global peerDeps:\n');
   console.log(...peerDependencies, '\n');
-  callNpm('i', '-fg', '--no-save', ...peerDependencies);
+  callNpm('i', '-f', '-g', '--no-save', ...peerDependencies);
 
   /**
    * Link peerDeps locally. Also links this package so that CLIs are available.
