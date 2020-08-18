@@ -46,7 +46,7 @@ const callNpm = (...args) => {
  * run after installing peerDeps or gnvDeps.
  */
 spacer('Linking this package to global bin...');
-callNpm('link', '-f', ...NPM_FLAGS);
+callNpm('link', '-f', '--no-save');
 
 
 /**
