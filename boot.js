@@ -29,7 +29,7 @@ const peerDependencies = versionString(packageJson.peerDependencies);
 
 const NPM_FLAGS = ['--no-save', '--silent'];
 const callNpm = (...args) => {
-  console.log(`\n    >  npm ${args.join(' ')}\n`);
+  console.log(`\n>  npm ${args.join(' ')}\n`);
   spawnSync(
       'npm',
       args,
