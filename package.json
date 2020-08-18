@@ -13,15 +13,17 @@
     "require": "./dist/node.cjs"
   },
   "scripts": {
-    "boot": "npm run create-bin && node boot.js",
-    "create-bin": "mkdir -p dist && touch dist/cli.cjs",
     "cold-start": "npm run boot && npm run build",
+    "create-bin": "mkdir -p dist && touch dist/cli.cjs",
+    "boot": "npm run create-bin && node boot.js",
+    
+    "prebuild": "npm run clean",
+    "build": "npm run build:dev && npm run build:dist && npm run build:exe && npm run format-clis",    
     "build:dev": "rollup -c .gnv/rollup.dev.es.js && rollup -c .gnv/rollup.dev.cjs.js",
     "build:dist": "rollup -c .gnv/rollup.dist.es.js && rollup -c .gnv/rollup.dist.cjs.js && rollup -c .gnv/rollup.dist.minify.js",
     "build:exe": "node .gnv/buildExe.js",
-    "prebuild": "npm run clean",
-    "build": "npm run build:dev && npm run build:dist && npm run build:exe && npm run format-clis",
     "postbuild": "npm run test",
+    
     "format-clis": "sed -i '1i #!/usr/bin/env node' dist/cli.* && (chmod -f +x exports/cli.* dev/cli.* dist/cli.* || true)",
     "clean": "rm -rf dist/* && rm -rf dev/*",
     "test": "mocha"
