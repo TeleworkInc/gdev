@@ -14,6 +14,7 @@
   },
   "scripts": {
     "boot": "node boot.js",
+    "create-bin": "touch dist/cli.cjs",
     "cold-start": "npm run boot && npm run build",
     "build:dev": "rollup -c .gnv/rollup.dev.es.js && rollup -c .gnv/rollup.dev.cjs.js",
     "build:dist": "rollup -c .gnv/rollup.dist.es.js && rollup -c .gnv/rollup.dist.cjs.js && rollup -c .gnv/rollup.dist.minify.js",
