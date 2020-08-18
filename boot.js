@@ -54,8 +54,9 @@ callNpm('link', ...NPM_FLAGS);
  */
 if (gnvDependencies.length) {
   spacer('Adding local gnv deps to node_modules/:');
-  callNpm('i', '--no-save', ...gnvDependencies);
+  callNpm('i', ...NPM_FLAGS, ...gnvDependencies);
 }
+
 
 /**
  * Globally install all peerDependencies without updating package.json, then
