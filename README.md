@@ -3,6 +3,9 @@ Javascript development workspaces built around
 [Rollup](https://github.com/rollup/rollup) and [Closure
 Compiler](https://github.com/google/closure-compiler) with full CJS/ESM interop.
 
+[![Build
+Status](https://travis-ci.org/TeleworkInc/gnv.svg?branch=master)](https://travis-ci.org/TeleworkInc/gnv)
+
 ### Easily build standalone CLI, browser, and Node packages all in one workspace using the latest syntax.
 Build the **smallest** and **fastest** bundles for **multiple targets** with
 **no dependencies**.  All of your package's dependencies will be baked into the
