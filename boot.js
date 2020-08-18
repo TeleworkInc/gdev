@@ -57,12 +57,12 @@ if (peerDependencies.length) {
    */
   console.log('Adding global peerDeps:', '\n');
   console.log(...peerDependencies, '\n');
-  callNpm('i', '-g', '--no-save', ...peerDependencies);
+  callNpm('i', '-fg', '--no-save', ...peerDependencies);
 
   /**
    * Link peerDeps locally.
    */
-  callNpm('link', '--no-save', ...anyVersionPeerDeps);
+  callNpm('link', '-f', '--no-save', ...anyVersionPeerDeps);
 
   console.log(
       '\nDone! Your development CLI should be ready at `gnv-dev`.\n',
