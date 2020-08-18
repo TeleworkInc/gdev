@@ -8,4 +8,6 @@ before_install:
   - export PATH="$HOME/.yarn/bin:$PATH"
 
 install: yarn boot
-script: gnv-dev build
+script:
+  - gnv-dev build
+  - gnv build
