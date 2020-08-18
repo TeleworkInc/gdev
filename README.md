@@ -22,10 +22,16 @@ repositories by default using `hub` (can be disabled with `--no-github` flag).
 | `hub`   | A CLI for managing GitHub repositories developed by GitHub. **[Install](https://github.com/github/hub#installation)**<br>*(Optional: Use `--no-github` flag to disable.)* |
 
 ### npm (global)
-gnv relies on Rollup and Closure Compiler to generate its outputs. Please
-install global npm dependencies (including `mocha` for testing) with:
+gnv relies on Rollup and Closure Compiler to generate its outputs. To use gnv,
+first install it with:
 ```bash
-yarn global add rollup google-closure-compiler google-closure-library mocha
+npm i -g gnv
+```
+
+And install the necessary peerDependencies (Rollup, Closure Compiler several
+plugins, etc.) with:
+```bash
+gnv add-peer-deps
 ```
 
 #### Why doesn't gnv roll up Closure Compiler and Rollup into its executable instead of requiring global dependencies?
