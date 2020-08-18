@@ -5,6 +5,8 @@
  * @fileoverview
  * Install gnvDependencies and peerDependencies. This file cannot use third
  * party modules.
+ *
+ * @author Christian Lewis <hello@trytelework.com>
  */
 
 import { readPackageJson } from './package.js';
@@ -12,16 +14,14 @@ import { spawnSync } from 'child_process';
 
 const packageJson = readPackageJson();
 
-const gnvDependencies = (
-  Object.entries(packageJson.gnvDependencies || {}).map(
+const versionString = (deps = {}) => (
+  Object.entries(deps || {}).map(
       ([key, val]) => `${key}@${val}`,
   )
 );
-const peerDependencies = (
-  Object.entries(packageJson.peerDependencies || {}).map(
-      ([key, val]) => `${key}@${val}`,
-  )
-);
+
+const gnvDependencies = versionString(packageJson.gnvDependencies);
+const peerDependencies = versionString(packageJson.peerDependencies);
 
 const callNpm = (...args) => spawnSync(
     'npm',
@@ -51,12 +51,6 @@ if (peerDependencies.length) {
    */
   const anyVersionPeerDeps = Object.keys(packageJson.peerDependencies);
 
-  // console.log(
-  //     'Removing any previously linked peerDeps...\n',
-  //     ...anyVersionPeerDeps,
-  // );
-  // callNpm('unlink', ['unlink', '-f', '--no-save', ...anyVersionPeerDeps]);
-
 
   /**
    * Install peerDeps globally.
@@ -71,6 +65,6 @@ if (peerDependencies.length) {
   callNpm('link', '--no-save', ...anyVersionPeerDeps);
 
   console.log(
-      '\nDone! Your development CLI should be ready at `gnv`.\n',
+      '\nDone! Your development CLI should be ready at `gnv-dev`.\n',
   );
 }
