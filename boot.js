@@ -54,8 +54,7 @@ callNpm('link', ...NPM_FLAGS);
  */
 if (gnvDependencies.length) {
   spacer('Adding local gnv deps to node_modules/:');
-  callNpm('i', ...NPM_FLAGS, ...gnvDependencies);
-}
+  callNpm('i', '--no-save', ...gnvDependencies);
 
 
 /**
