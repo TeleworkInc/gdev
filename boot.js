@@ -33,6 +33,15 @@ const callNpm = (...args) => spawnSync(
 
 
 /**
+ * Link this package. This has to be done before everything else due to the
+ * weird behavior of npm, which will delete necessary dependencies if this is
+ * run after installing peerDeps or gnvDeps.
+ */
+console.log('Linking this package to global bin...\n');
+callNpm('link', '-f', '--no-save');
+
+
+/**
  * Install gnvDependencies in this folder without updating package.json.
  */
 if (gnvDependencies.length) {
@@ -56,13 +65,14 @@ if (peerDependencies.length) {
   /**
    * Install peerDeps globally.
    */
-  console.log('Adding global peerDeps:', '\n');
+  console.log('Adding global peerDeps:\n');
   console.log(...peerDependencies, '\n');
   callNpm('i', '-fg', '--no-save', ...peerDependencies);
 
   /**
-   * Link peerDeps locally.
+   * Link peerDeps locally. Also links this package so that CLIs are available.
    */
+  console.log('Linking peer dependencies locally...\n');
   callNpm('link', '-f', '--no-save', ...anyVersionPeerDeps);
 
   console.log(
