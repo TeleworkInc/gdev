@@ -1,6 +1,6 @@
 {
   "name": "gnv",
-  "version": "8.0.0",
+  "version": "8.1.0",
   "description": "Javascript development workspaces built around Rollup and Closure Compiler.",
   "type": "module",
   "bin": {
@@ -52,13 +52,13 @@
   },
   "peerDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "0.26.0",
+    "@rollup/plugin-commonjs": "15.0.0",
+    "@rollup/plugin-json": "4.1.0",
+    "@rollup/plugin-node-resolve": "9.0.0",
     "google-closure-compiler": "20200719.0.0",
     "google-closure-library": "20200719.0.0",
     "mocha": "8.0.1",
     "rollup": "2.21.0",
-    "@rollup/plugin-commonjs": "15.0.0",
-    "@rollup/plugin-json": "4.1.0",
-    "@rollup/plugin-node-resolve": "9.0.0",
     "rollup-plugin-disable-packages": "2.2.0",
     "rollup-plugin-export-default": "1.4.0",
     "rollup-plugin-preserve-shebang": "1.0.1"
