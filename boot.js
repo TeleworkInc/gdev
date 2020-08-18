@@ -20,16 +20,23 @@ const versionString = (deps = {}) => (
   )
 );
 
+const spacer = (...strs) => console.log(
+    ...strs.map((str) => `[𝓰𝓷𝓿]  ${str}\n`),
+);
+
 const gnvDependencies = versionString(packageJson.gnvDependencies);
 const peerDependencies = versionString(packageJson.peerDependencies);
 
-const callNpm = (...args) => spawnSync(
-    'npm',
-    args,
-    {
-      stdio: 'inherit',
-    },
-);
+const callNpm = (...args) => {
+  console.log(`\n    >  npm ${args.join(' ')}\n`);
+  spawnSync(
+      'npm',
+      args,
+      {
+        stdio: 'inherit',
+      },
+  );
+};
 
 
 /**
@@ -37,7 +44,7 @@ const callNpm = (...args) => spawnSync(
  * weird behavior of npm, which will delete necessary dependencies if this is
  * run after installing peerDeps or gnvDeps.
  */
-console.log('Linking this package to global bin...\n');
+spacer('Linking this package to global bin...');
 callNpm('link', '-f', '--no-save');
 
 
@@ -45,8 +52,7 @@ callNpm('link', '-f', '--no-save');
  * Install gnvDependencies in this folder without updating package.json.
  */
 if (gnvDependencies.length) {
-  console.log('Adding local gnv deps to node_modules/:', '\n');
-  console.log(...gnvDependencies, '\n');
+  spacer('Adding local gnv deps to node_modules:');
   callNpm('i', '--no-save', ...gnvDependencies);
 }
 
@@ -65,17 +71,17 @@ if (peerDependencies.length) {
   /**
    * Install peerDeps globally.
    */
-  console.log('Adding global peerDeps:\n');
-  console.log(...peerDependencies, '\n');
+  spacer('Adding global peerDeps:');
   callNpm('i', '-f', '-g', '--no-save', ...peerDependencies);
 
   /**
    * Link peerDeps locally. Also links this package so that CLIs are available.
    */
-  console.log('Linking peer dependencies locally...\n');
+  spacer('Linking peer dependencies locally...');
   callNpm('link', '-f', '--no-save', ...anyVersionPeerDeps);
 
-  console.log(
-      '\nDone! Your development CLI should be ready at `gnv-dev`.\n',
-  );
+  /**
+   * Everything was successful!
+   */
+  spacer('Done! Your development CLI should be ready at `gnv-dev`.');
 }
