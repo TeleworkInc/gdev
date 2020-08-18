@@ -13,12 +13,13 @@
     "require": "./dist/node.cjs"
   },
   "scripts": {
+    "boot": "node boot.js",
+    "cold-start": "",
     "build:dev": "rollup -c .gnv/config.rollup.dev.es.mjs && rollup -c .gnv/config.rollup.dev.cjs.mjs",
-    "build:dist": "rollup -c .gnv/config.rollup.dist.es.mjs && rollup -c .gnv/config.rollup.dist.cjs.mjs && yarn run:gulp buildExecutableTarget markClisExecutable",
-    "prebuild": "yarn clean",
-    "build": "yarn build:dev && yarn build:dist",
-    "postbuild": "yarn test",
-    "run:gulp": "gulp -f .gnv/config.gulp.mjs",
+    "build:dist": "rollup -c .gnv/config.rollup.dist.es.mjs && rollup -c .gnv/config.rollup.dist.cjs.mjs && rollup -c .gnv/config.rollup.minify.mjs",
+    "prebuild": "npm run clean",
+    "build": "npm run build:dev && npm run build:dist",
+    "postbuild": "npm run test",
     "clean": "rm -rf ./dist/* && rm -rf ./dev/*",
     "test": "mocha"
   },
@@ -40,28 +41,27 @@
   },
   "homepage": "https://github.com/TeleworkInc/gnv#readme",
   "gnvDependencies": {
-    "await-shell": "^1.26.0",
-    "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
-    "commander": "^6.0.0",
-    "chalk": "^4.1.0",
-    "chokidar": "^3.4.0",
-    "ora": "^4.0.4",
-    "tree-node-cli": "^1.4.0"
+    "await-shell": "1.26.0",
+    "chai": "4.2.0",
+    "chai-as-promised": "7.1.1",
+    "commander": "6.0.0",
+    "chalk": "4.1.0",
+    "chokidar": "3.4.0",
+    "ora": "4.0.4",
+    "tree-node-cli": "1.4.0"
   },
   "peerDependencies": {
-    "google-closure-compiler": "^20200719.0.0",
-    "mocha": "^8.0.1",
-    "rollup": "^2.21.0",
-    
-    "google-closure-library": "^20200719.0.0",
-
-    "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
-    "@rollup/plugin-commonjs": "^15.0.0",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^9.0.0",
-    "rollup-plugin-disable-packages": "^2.2.0",
-    "rollup-plugin-export-default": "^1.4.0",
-    "rollup-plugin-preserve-shebang": "^1.0.1"
-  }
+    "@ampproject/rollup-plugin-closure-compiler": "0.26.0",
+    "google-closure-compiler": "20200719.0.0",
+    "google-closure-library": "20200719.0.0",
+    "mocha": "8.0.1",
+    "rollup": "2.21.0",
+    "@rollup/plugin-commonjs": "15.0.0",
+    "@rollup/plugin-json": "4.1.0",
+    "@rollup/plugin-node-resolve": "9.0.0",
+    "rollup-plugin-disable-packages": "2.2.0",
+    "rollup-plugin-export-default": "1.4.0",
+    "rollup-plugin-preserve-shebang": "1.0.1"
+  },
+  "dependencies": {}
 }
