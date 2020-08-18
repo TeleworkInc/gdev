@@ -62,7 +62,7 @@ commander
     )
     .option(
         '-ng, --no-github',
-        'Do not use GitHub integration.',
+        'Do not use GitHub integration. Implies -ns flag.',
     )
     .option(
         '-ns, --no-submodule',
