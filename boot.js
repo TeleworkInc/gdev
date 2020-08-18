@@ -62,6 +62,7 @@ if (peerDependencies.length) {
   /**
    * Link peerDeps locally.
    */
+  // callNpm('unlink', '-f', '--no-save', ...anyVersionPeerDeps);
   callNpm('link', '-f', '--no-save', ...anyVersionPeerDeps);
 
   console.log(
