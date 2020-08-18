@@ -52,7 +52,8 @@
     "glob": "7.1.6",
     "ora": "4.0.4",
     "tree-node-cli": "1.4.0",
-    "rollup-plugin-node-externals": "latest"
+    "rollup-plugin-node-externals": "latest",
+    "builtin-modules": "latest"
   },
   "peerDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "0.26.0",
