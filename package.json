@@ -53,7 +53,8 @@
     "chokidar": "3.4.0",
     "glob": "7.1.6",
     "ora": "4.0.4",
-    "tree-node-cli": "1.4.0"
+    "tree-node-cli": "1.4.0",
+    "rollup-plugin-bundle-size": "latest"
   },
   "peerDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "0.26.0",

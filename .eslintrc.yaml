@@ -37,6 +37,9 @@ rules:
     - error
     - always
 
+  jsdoc/require-param-description: 0
+  jsdoc/require-returns-description: 0
+
   jsdoc/require-file-overview: 
     - error
     - {
