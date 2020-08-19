@@ -19,9 +19,10 @@
     "prebuild": "npm run clean",
     "build": "npm run build:dev && npm run build:dist && npm run build:exe && npm run format-clis",
     "build:dev": "rollup -c .gnv/rollup.dev.es.js && rollup -c .gnv/rollup.dev.cjs.js",
-    "build:dist": "rollup -c .gnv/rollup.dist.es.js && rollup -c .gnv/rollup.dist.cjs.js && rollup -c .gnv/rollup.dist.minify.js",
+    "build:dist": "rollup -c .gnv/rollup.dist.es.js && rollup -c .gnv/rollup.dist.cjs.js",
     "build:exe": "node .gnv/buildExe.js",
     "postbuild": "npm run test",
+    "minify:dist": "rollup -c .gnv/rollup.dist.minify.js",
     "format-clis": "sed -i '1i #!/usr/bin/env node' dist/cli.* && (chmod -f +x exports/cli.* dev/cli.* dist/cli.* || true)",
     "clean": "rm -rf dist/* && rm -rf dev/*",
     "test": "mocha"
