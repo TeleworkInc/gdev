@@ -4,7 +4,7 @@ node_js:
   - lts/*
 
 # Install necessary local/global deps.
-install: yarn boot
+install: npm run boot
 script:
   # Build the release CLI at dist/cli.cjs
   # using the dev CLI source at dev/cli.js.

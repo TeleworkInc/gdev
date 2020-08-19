@@ -3,11 +3,18 @@
  */
 /**
  * @fileoverview
- * Get package.json object.
+ * Get package.json object. This is depended on by `boot.js`, and cannot contain
+ * any third-party modules.
  */
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+/**
+ * The absolute dirname of this package.
+ */
+export const PACKAGE_ROOT = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * Read the package.json object from the current directory.

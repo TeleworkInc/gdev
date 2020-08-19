@@ -27,7 +27,7 @@ const spacer = (str) => console.log(
 const gnvDependencies = versionString(packageJson.gnvDependencies);
 const peerDependencies = versionString(packageJson.peerDependencies);
 
-const NPM_FLAGS = ['--no-save', '--silent'];
+const NPM_FLAGS = ['-f', '--no-save'];
 const callNpm = (...args) => {
   console.log(`\n> npm ${args.join(' ')}\n`);
   spawnSync(
@@ -52,7 +52,7 @@ console.log();
  * run after installing peerDeps or gnvDeps.
  */
 spacer('Linking this package to global bin...');
-callNpm('link', '-f', '--no-save', '--silent');
+callNpm('link', ...NPM_FLAGS, '--silent');
 
 
 /**
@@ -60,7 +60,7 @@ callNpm('link', '-f', '--no-save', '--silent');
  */
 if (gnvDependencies.length) {
   spacer('Adding local gnv deps to node_modules:');
-  callNpm('i', ...NPM_FLAGS, ...gnvDependencies);
+  callNpm('i', '-f', '--no-save', ...gnvDependencies);
 }
 
 

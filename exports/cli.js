@@ -81,17 +81,17 @@ commander
 
 
 commander
-    .command('install')
-    .description('Install gnv development dependencies.')
-    .action(commands.install);
+    .command('install-peer-deps')
+    .description(
+        'Install the relevant global deps (Rollup, Closure Compiler), etc.',
+    )
+    .action(commands.installPeerDeps);
 
 
 commander
-    .command(
-        'publish [level]',
-    )
+    .command('publish [level]')
     .description(
-        'Publish this package to NPM using `yarn publish`. Removes dev CLI '
+        'Publish this package to NPM using `npm publish`. Removes dev CLI '
       + 'from package.json to prevent installation issues and bumps the '
       + 'version by [level] (patch, minor, or major). Defaults to patch.',
     )
