@@ -1,4 +1,5 @@
-# 𝓰𝓷𝓿 ᵇᵉᵗᵃ
+![gnv logo](https://user-images.githubusercontent.com/1657236/90679677-22480000-e226-11ea-9bb7-ad26c7cf9938.png)
+
 Javascript development workspaces built around
 [Rollup](https://github.com/rollup/rollup) and [Closure
 Compiler](https://github.com/google/closure-compiler) with full CJS/ESM interop.
@@ -21,7 +22,6 @@ repositories by default using `hub` (can be disabled with `--no-github` flag).
 
 | Package     | Description |
 | ----------- | ----------- |
-| `yarn`      | A performant Node package manager developed by Facebook. **[Install](https://classic.yarnpkg.com/en/docs/install)** |
 | `hub`   | A CLI for managing GitHub repositories developed by GitHub. **[Install](https://github.com/github/hub#installation)**<br>*(Optional: Use `--no-github` flag to disable.)* |
 
 ### npm (global)
@@ -224,19 +224,14 @@ source code in `exports/`, whereas the production version will point to the
 compiled output at `dist/cli.cjs`.
 
 ### Example
-Create a new project:
+Create a new project (linking to bin is done automatically):
 ```bash
-gnv create my-package
+gnv create my-package # use --no-github to skip GitHub integration
 ```
 
 Enter the directory and build the project:
 ```bash
 cd my-package && gnv build
-```
-
-Link the package to your local bin to emulate a global install:
-```bash
-yarn link
 ```
 
 Call your built program (`./dist/cli.cjs`):
@@ -321,14 +316,15 @@ on anything, we want to avoid adding any standard dependencies to package.json.
 The only time dependencies are needed are if we're actively developing in the
 workspace, or running the dev version of the CLI, or otherwise executing source
 code directly (which will contain `import` and/or `require` statements). In this
-case, we install the needed development dependencies with `gnv boot`.
+case, we can bootstrap our workspace and download all needed dependencies with `gnv boot`. The dev CLI source at `exports/cli.js` will then be functional and ready for debugging.
 
 ## How do I add/install development dependencies?
 
 | Package     | Description |
 | ----------- | ----------- |
-| `gnv add pkg[@latest]`    | Add a package to package.json's `gnvDependencies` field, install with `npm i -g --no-save`, and link with `npm link`. |
-| `gnv boot`  | Install and link all of the packages in package.json's `gnvDependencies` field in the same manner as `gnv add`. |
+| `gnv add pkg[@latest]`    | Adds a package to package.json's `gnvDependencies` field. |
+| `gnv add -P pkg[@latest]` | Adds a peer dependency to package.json's `peerDependencies` field. |
+| `gnv boot`  | Installs all `gnvDependencies` in the local `node_modules/` without touching package.json using `npm i --no-save`, and installs all global `peerDependencies` with `npm i -g --no-save`, links all global peer dependencies into the local `node_modules/` with `npm link --no-save`.
 
 Development dependencies for a gnv workspace can be added with `gnv add
 my-dependency`, which installs the package globally with `npm i -g --no-save`
