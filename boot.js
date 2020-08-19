@@ -21,7 +21,7 @@ const versionString = (deps = {}) => (
 );
 
 const spacer = (str) => console.log(
-    '\x1b[35m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${str}`, '\n',
+    '\x1b[35m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${str}`,
 );
 
 const gnvDependencies = versionString(packageJson.gnvDependencies);
