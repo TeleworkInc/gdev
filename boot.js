@@ -22,7 +22,7 @@ const versionString = (deps = {}) => (
 
 const spacer = (...strs) => console.log(
     ...strs.map((str) => `[𝓰𝓷𝓿]  ${str}\n`),
-); // test
+);
 
 const gnvDependencies = versionString(packageJson.gnvDependencies);
 const peerDependencies = versionString(packageJson.peerDependencies);
