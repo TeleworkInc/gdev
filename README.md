@@ -1,25 +1,22 @@
 ![gnv logo](https://user-images.githubusercontent.com/1657236/90679677-22480000-e226-11ea-9bb7-ad26c7cf9938.png)
 
-Javascript development workspaces built around
-[Rollup](https://github.com/rollup/rollup) and [Closure
-Compiler](https://github.com/google/closure-compiler) with full CJS/ESM interop.
-
 [![Build
 Status](https://travis-ci.org/TeleworkInc/gnv.svg?branch=master)](https://travis-ci.org/TeleworkInc/gnv)
 
 ### Easily build standalone CLI, browser, and Node packages all in one workspace using the latest syntax.
-Build the **smallest** and **fastest** bundles for **multiple targets** with
-**no dependencies**.  All of your package's dependencies will be baked into the
-compiled output for each target, so `package.json` will contain no
-`dependencies` or `devDependencies` fields and `npm install` will only need to
-download what is in the `dist/` directory. 
+Build the **smallest** and **fastest** NPM packages for **multiple targets**
+with **no dependencies** and **full backwards compatibility**.  All of your
+package's dependencies will be baked into the compiled output for each target,
+so `package.json` will contain no `dependencies` or `devDependencies` fields and
+`npm install` will only need to download what is in the `dist/` directory. 
 
 ## Prerequisites 
-This package uses `yarn` for package management, and `gnv create` sets up GitHub
-repositories by default using `hub` (can be disabled with `--no-github` flag).
+This package has no mandatory dependencies by default aside from Rollup and
+Closure Compiler. `gnv create` sets up GitHub repositories by default using
+`hub`, but this can be disabled with `--no-github` flag.
 
 ### System
-
+It is recommended to install these.
 | Package     | Description |
 | ----------- | ----------- |
 | `hub`   | A CLI for managing GitHub repositories developed by GitHub. **[Install](https://github.com/github/hub#installation)**<br>*(Optional: Use `--no-github` flag to disable.)* |
@@ -34,13 +31,8 @@ npm i -g gnv
 And install the necessary peerDependencies (Rollup, Closure Compiler several
 plugins, etc.) with:
 ```bash
-gnv add-peer-deps
+gnv add-peer-deps # calls npm i -g
 ```
-
-#### Why doesn't gnv roll up Closure Compiler and Rollup into its executable instead of requiring global dependencies?
-It *will*, eventually (at least for Rollup). This is actually *almost* possible
-at present, except rolling the entire J2CL-compiled Closure Compiler requires
-raising Node's memory limit manually, and the native version is much faster.
 
 ## Usage
 Creating a new gnv workspace with `gnv create [organization]/name` will
@@ -316,7 +308,9 @@ on anything, we want to avoid adding any standard dependencies to package.json.
 The only time dependencies are needed are if we're actively developing in the
 workspace, or running the dev version of the CLI, or otherwise executing source
 code directly (which will contain `import` and/or `require` statements). In this
-case, we can bootstrap our workspace and download all needed dependencies with `gnv boot`. The dev CLI source at `exports/cli.js` will then be functional and ready for debugging.
+case, we can bootstrap our workspace and download all needed dependencies with
+`gnv boot`. The dev CLI source at `exports/cli.js` will then be functional and
+ready for debugging.
 
 ## How do I add/install development dependencies?
 

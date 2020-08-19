@@ -1,20 +1,45 @@
 /**
+ * @typedef {string}
+ */
+let AnimalName;
+
+/**
+ * @enum {string}
+ */
+const AnimalSize = {
+  SMALL: 'small',
+  MEDIUM: 'medium',
+  LARGE: 'large',
+};
+
+/**
  * @typedef {{
- *  name: string,
- *  size: string,
+ *  name: AnimalName,
+ *  size: AnimalSize,
  * }} Animal
  * An animal type.
  */
 let Animal;
 
-// const cat {Animal: my favorite} = new Cat();
+// type AnimalName string;
+// enum AnimalSize {
+//   SMALL: 'small',
+//   MEDIUM: 'medium',
+//   LARGE: 'large'
+// };
+// type Animal {
+//   AnimalName name: The name of this animal,
+//   AnimalSize size: The size of this animal
+// };
+
+// const Animal myCat = new Cat();
 
 /**
  * @type {Animal}
  */
 const myCat = {
   name: 'Mittens',
-  size: 4,
+  size: AnimalSize.MEDIUM,
 };
 
 console.log(myCat);
