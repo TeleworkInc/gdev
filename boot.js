@@ -27,7 +27,7 @@ const spacer = (str) => console.log(
 const gnvDependencies = versionString(packageJson.gnvDependencies);
 const peerDependencies = versionString(packageJson.peerDependencies);
 
-const NPM_FLAGS = ['-f', '--no-save'];
+const NO_SAVE = ['-f', '--no-save'];
 const callNpm = (...args) => {
   console.log(`\n> npm ${args.join(' ')}\n`);
   spawnSync(
@@ -52,7 +52,7 @@ console.log();
  * run after installing peerDeps or gnvDeps.
  */
 spacer('Linking this package to global bin...');
-callNpm('link', ...NPM_FLAGS, '--silent');
+callNpm('link', ...NO_SAVE, '--silent');
 
 
 /**
@@ -60,7 +60,7 @@ callNpm('link', ...NPM_FLAGS, '--silent');
  */
 if (gnvDependencies.length) {
   spacer('Adding local gnv deps to node_modules:');
-  callNpm('i', '-f', '--no-save', ...gnvDependencies);
+  callNpm('i', ...NO_SAVE, '--silent', ...gnvDependencies);
 }
 
 
@@ -79,13 +79,13 @@ if (peerDependencies.length) {
    * Install peerDeps globally.
    */
   spacer('Adding global peerDeps:');
-  callNpm('i', '-f', '-g', ...NPM_FLAGS, ...peerDependencies);
+  callNpm('i', '-g', ...NO_SAVE, ...peerDependencies);
 
   /**
    * Link peerDeps locally. Also links this package so that CLIs are available.
    */
   spacer('Linking peer dependencies locally...');
-  callNpm('link', '-f', ...NPM_FLAGS, ...anyVersionPeerDeps);
+  callNpm('link', ...NO_SAVE, ...anyVersionPeerDeps);
 
   /**
    * Everything was successful!
