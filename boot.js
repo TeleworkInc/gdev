@@ -35,7 +35,7 @@ const callNpm = (...args) => {
       args,
       {
         /**
-         * Only inherit exit codes.
+         * Only inherit stderr.
          */
         stdio: ['ignore', 'ignore', 'inherit'],
       },
@@ -48,12 +48,8 @@ const callNpm = (...args) => {
  * weird behavior of npm, which will delete necessary dependencies if this is
  * run after installing peerDeps or gnvDeps.
  */
-/**
- * @todo
- * `touch` dist/cli.cjs so that `yarn link` points to something.
- */
 spacer('Linking this package to global bin...');
-callNpm('link', '-f', '--no-save');
+callNpm('link', '-f', '--no-save', '--silent');
 
 
 /**
