@@ -20,8 +20,8 @@ const versionString = (deps = {}) => (
   )
 );
 
-const spacer = (...strs) => console.log(
-    ...strs.map((str) => `[𝓰𝓷𝓿]  ${str}\n`),
+const spacer = (str) => console.log(
+    '\x1b[35m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${str}`, '\n',
 );
 
 const gnvDependencies = versionString(packageJson.gnvDependencies);
@@ -41,6 +41,9 @@ const callNpm = (...args) => {
       },
   );
 };
+
+/** Remove visual clutter. */
+console.log();
 
 
 /**
