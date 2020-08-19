@@ -21,7 +21,7 @@ const versionString = (deps = {}) => (
 );
 
 const spacer = (str) => console.log(
-    '\x1b[35m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${str}`,
+    '\x1b[96m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${str}`,
 );
 
 const gnvDependencies = versionString(packageJson.gnvDependencies);
@@ -90,5 +90,5 @@ if (peerDependencies.length) {
   /**
    * Everything was successful!
    */
-  spacer('Done! Your development CLI should be ready at `gnv-dev`.');
+  spacer('Done! Your development CLI should be ready at `gnv-dev`.\n');
 }
