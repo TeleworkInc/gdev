@@ -3,11 +3,12 @@ node_js:
   - 14
   - lts/*
 
-before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s
-  - export PATH="$HOME/.yarn/bin:$PATH"
-
+# Install necessary local/global deps.
 install: yarn boot
 script:
+  # Build the release CLI at dist/cli.cjs
+  # using the dev CLI source at dev/cli.js.
   - gnv-dev build
+  # Re-build the release CLI *using* the 
+  # release CLI.
   - gnv build
