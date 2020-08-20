@@ -1,6 +1,6 @@
 {
   "name": "gnv",
-  "version": "10.3.1",
+  "version": "10.3.2",
   "description": "Javascript development workspaces built around Rollup and Closure Compiler.",
   "type": "module",
   "bin": {
@@ -14,7 +14,7 @@
   "scripts": {
     "cold-start": "npm run boot && npm run build",
     "create-bin": "mkdir -p dist && touch dist/cli.cjs",
-    "boot": "npm run create-bin && node boot.js",
+    "boot": "npm run create-bin && node .gnv/boot.js",
     "prebuild": "npm run clean",
     "build": "npm run build:dev && npm run build:dist && npm run build:exe && npm run format-clis",
     "build:dev": "rollup -c .gnv/rollup.dev.es.js && rollup -c .gnv/rollup.dev.cjs.js",
@@ -53,9 +53,7 @@
     "chokidar": "3.4.0",
     "glob": "7.1.6",
     "ora": "4.0.4",
-    "tree-node-cli": "1.4.0",
-    "rollup-plugin-bundle-size": "latest",
-    "rollup-plugin-import-meta-url": "latest"
+    "tree-node-cli": "1.4.0"
   },
   "peerDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "0.26.0",
@@ -68,7 +66,9 @@
     "rollup": "2.21.0",
     "rollup-plugin-disable-packages": "3.0.0",
     "rollup-plugin-export-default": "1.4.0",
-    "rollup-plugin-preserve-shebang": "1.0.1"
+    "rollup-plugin-preserve-shebang": "1.0.1",
+    "rollup-plugin-bundle-size": "latest",
+    "rollup-plugin-import-meta-url": "latest"
   },
   "dependencies": {}
 }

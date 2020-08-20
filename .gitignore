@@ -1,11 +1,3 @@
-# gnv dev/ and dist/ dirs
-./dev/
-./dist/
-./test.js
-
-# potential debug file
-debug.txt
-
 # Logs
 logs
 *.log
