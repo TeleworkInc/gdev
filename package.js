@@ -59,3 +59,10 @@ export const writePackageJson = (obj, toRoot = false, spaces = 2) => (
       JSON.stringify(obj, null, 2),
   )
 );
+
+/**
+ * Get the version of this package as defined in package.json.
+ *
+ * @return {string} version
+ */
+export const getVersion = () => readPackageJson(true).version;

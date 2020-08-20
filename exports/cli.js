@@ -129,10 +129,8 @@ const TREE = (
   : ''
 );
 
-/**
- * @param {string...} test
- */
-console.log('\n', chalk.grey('--- 𝓰𝓷𝓿 ---'), '\n');
+import { getVersion } from '../package.js';
+console.log('\n', chalk.grey(`--- 𝓰𝓷𝓿 ${getVersion()} ---`), '\n');
 
 if (HEAD) console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
 if (TREE) console.log(chalk.blueBright(TREE), '\n');
