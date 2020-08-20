@@ -31,7 +31,7 @@ npm i -g gnv
 And install the necessary peerDependencies (Rollup, Closure Compiler several
 plugins, etc.) with:
 ```bash
-gnv add-peer-deps # calls npm i -g
+gnv install-peer-deps # calls npm i -g
 ```
 
 ## Usage
