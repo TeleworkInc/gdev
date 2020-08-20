@@ -9,12 +9,14 @@
 
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
 /**
- * The absolute dirname of this package.
+ * Using `import.meta.url` to store an absolute reference to this directory.
+ * rollup-plugin-import-meta-url will effectively hack around limitations by
+ * encoding invalid relative URLs that would not be accepted by
+ * `url.fileURLToPath`, such as `file://fileInThisDir.js`.
  */
-export const PACKAGE_ROOT = path.dirname(fileURLToPath(import.meta.url));
+export const PACKAGE_ROOT = path.dirname(import.meta.url.substr(7));
 
 /**
  * Read the package.json object from the current directory.
