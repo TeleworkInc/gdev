@@ -28,8 +28,7 @@ first install it with:
 npm i -g gnv
 ```
 
-And install the necessary peerDependencies (Rollup, Closure Compiler several
-plugins, etc.) with:
+And install the necessary peerDependencies (Rollup / plugins, Closure Compiler, etc.) with:
 ```bash
 gnv install-peer-deps # calls npm i -g
 ```
