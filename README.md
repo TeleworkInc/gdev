@@ -15,7 +15,7 @@ This package has no mandatory dependencies aside from Rollup and Closure
 Compiler. `gnv create` sets up GitHub repositories by default using `hub`, but
 this can be disabled with `--no-github` flag.
 
-### Note: This package relies on POSIX commands
+### Note: This package relies on POSIX commands.
 Linux & MacOS should work out of the box. Use [Windows Subsystem for
 Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) if a real
 operating system is not available.
