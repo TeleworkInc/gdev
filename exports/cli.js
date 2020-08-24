@@ -81,11 +81,29 @@ commander
 
 
 commander
+    .command('install')
+    .description('Install the dependencies in package.json.')
+    .option(
+        '--this',
+        'Install the dependencies in this package\'s package.json.',
+    )
+    .action(commands.install);
+
+
+commander
+    .command('install-local-deps')
+    .description(
+        'Install the gnvDependencies in the working directory\'s package.json.',
+    )
+    .action(commands.installGnvDependencies);
+
+
+commander
     .command('install-peer-deps')
     .description(
         'Install the relevant global deps (Rollup, Closure Compiler), etc.',
     )
-    .action(commands.installPeerDeps);
+    .action(commands.installPeerDependencies);
 
 
 commander

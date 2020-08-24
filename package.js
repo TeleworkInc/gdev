@@ -81,62 +81,106 @@ export const getPackageStrings = (deps) => (
   )
 );
 
-export const installGnvDependencies = () => {
-  const packageJson = readPackageJson();
-  const gnvDependencies = getPackageStrings(packageJson.gnvDependencies);
-
-  if (gnvDependencies.length) {
-    spacer('Adding local gnv deps to node_modules:');
-    callNpm('i', '-f', '--no-save', '--silent', ...gnvDependencies);
+export const install = (command) => {
+  /**
+   * If installing this package, only install peerDependencies.
+   */
+  if (command.this) {
+    spacer('Installing own peer dependencies.');
+    installPeerDependencies(true);
   }
+  /**
+   * Otherwise, install global and local dependencies for the package.json in
+   * the current working directory.
+   */
+  else {
+    installGnvDependencies();
+    installPeerDependencies();
+  };
 };
 
-export const installPeerDependencies = () => {
-  const packageJson = readPackageJson();
+/**
+ * Install gnvDependencies for a package.json.
+ *
+ * @param {boolean} absolute
+ * Set to `true` to to reference package.json in the parent directory with
+ * respect to this file, rather than the package.json in the current working
+ * directory as indicated by `process.cwd()`.
+ *
+ * @return {void}
+ */
+export const installGnvDependencies = (absolute = false) => {
+  const packageJson = readPackageJson(absolute);
+  const gnvDependencies = getPackageStrings(packageJson.gnvDependencies);
+
+  if (!gnvDependencies.length) {
+    return spacer('No gnvDependencies to install.');
+  }
+
+  spacer('Adding local gnv deps to node_modules:');
+  callNpm('i', '-f', '--no-save', '--silent', ...gnvDependencies);
+  spacer(`Installed ${gnvDependencies.length} packages.`);
+};
+
+/**
+ * Install peerDependencies for a package.json.
+ *
+ * @param {boolean} absolute
+ * Set to `true` to to reference package.json in the parent directory with
+ * respect to this file, rather than the package.json in the current working
+ * directory as indicated by `process.cwd()`.
+ *
+ * @return {void}
+ */
+export const installPeerDependencies = (absolute = false) => {
+  const packageJson = readPackageJson(absolute);
   const peerDependencies = getPackageStrings(packageJson.peerDependencies);
 
-  if (peerDependencies.length) {
-    /**
-     * Make sure no previous versions of this package are linked in this
-     * workspace.
-     */
-    const anyVersionPeerDeps = Object.keys(packageJson.peerDependencies);
-
-    /**
-     * Install peerDeps globally.
-     */
-    spacer('Adding global peerDeps:');
-    callNpm('i', '-g', '--no-save', ...peerDependencies);
-
-    /**
-     * Link peerDeps locally. Also links this package so that CLIs are
-     * available.
-     */
-    spacer('Linking peer dependencies locally...');
-    callNpm('link', '-f', '--no-save', ...anyVersionPeerDeps);
-
-    /**
-     * Everything was successful!
-     */
-    spacer('Done! Your development CLI should be ready at `gnv-dev`.\n');
+  if (!peerDependencies.length) {
+    return spacer('No peerDependencies to install.');
   }
+
+  /**
+   * Make sure no previous versions of this package are linked in this
+   * workspace.
+   */
+  const anyVersionPeerDeps = Object.keys(packageJson.peerDependencies);
+
+  /**
+   * Install peerDeps globally.
+   */
+  spacer('Adding global peerDeps:');
+  callNpm('i', '-g', '--no-save', '--silent', ...peerDependencies);
+
+  /**
+   * Link peerDeps locally. Also links this package so that CLIs are
+   * available.
+   */
+  spacer('Linking peer dependencies locally...');
+  callNpm('link', '-f', '--no-save', ...anyVersionPeerDeps);
+
+  /**
+   * Everything was successful!
+   */
+  spacer('Done! Your development CLI should be ready at `gnv-dev`.\n');
 };
 
 
 /**
  * Read the package.json object from the current directory.
  *
- * @param {boolean} fromRoot
- * Set to `true` to refer to gnv's package.json, not the package.json in the
- * current working directory as indicated by `process.cwd()`.
+ * @param {boolean} absolute
+ * Set to `true` to to reference package.json in the parent directory with
+ * respect to this file, rather than the package.json in the current working
+ * directory as indicated by `process.cwd()`.
  *
  * @return {object} package
  * The package.json object.
  */
-export const readPackageJson = (fromRoot = false) => JSON.parse(
+export const readPackageJson = (absolute = false) => JSON.parse(
     fs.readFileSync(
         path.resolve((
-            fromRoot
+            absolute
                 ? PACKAGE_ROOT
                 : process.cwd()
         ),
@@ -145,25 +189,26 @@ export const readPackageJson = (fromRoot = false) => JSON.parse(
 );
 
 /**
- * @param {object} obj
- * The new package.json object to serialize and write.
+ * @param {object} obj The new package.json object to serialize and write.
  *
- * @param {boolean} toRoot
- * Set to `true` to write to gnv's package.json, rather than the package.json in
- * the current working directory as indicated by `process.cwd()`.
+ * @param {boolean} absolute
+ * Set to `true` to to reference package.json in the parent directory with
+ * respect to this file, rather than the package.json in the current working
+ * directory as indicated by `process.cwd()`.
  *
- * @param {number} spaces
- * The number of spaces to use for tabs in JSON.stringify. Defaults to 2.
+ * @param {number} spaces The number of spaces to use for tabs in
+ * JSON.stringify. Defaults to 2.
+ *
  * @return {void}
  */
-export const writePackageJson = (obj, toRoot = false, spaces = 2) => (
+export const writePackageJson = (obj, absolute = false, spaces = 2) => (
   fs.writeFileSync(
       path.resolve((
-        toRoot
+        absolute
             ? PACKAGE_ROOT
             : process.cwd()
       ), 'package.json'),
-      JSON.stringify(obj, null, 2),
+      JSON.stringify(obj, null, spaces),
   )
 );
 
