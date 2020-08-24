@@ -63,9 +63,11 @@ let PackageInfo;
  * Using `import.meta.url` to store an absolute reference to this directory.
  * rollup-plugin-import-meta-url will effectively hack around limitations by
  * encoding invalid relative URLs that would not be accepted by
- * `url.fileURLToPath`, such as `file://fileInThisDir.js`.
+ * `url.fileURLToPath`, such as `file://fileInThisDir` -> `./fileInThisDir`.
  */
-export const PACKAGE_ROOT = path.dirname(import.meta.url.substr(7));
+export const PACKAGE_ROOT = path.dirname(
+    import.meta.url.replace('file://', ''),
+);
 
 /**
  * Turn a package.json-like dependencies object into a list of `PackageString`s.
