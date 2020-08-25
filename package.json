@@ -1,6 +1,6 @@
 {
   "name": "gnv",
-  "version": "12.0.2",
+  "version": "12.0.3",
   "description": "Javascript development workspaces built around Rollup and Closure Compiler.",
   "type": "module",
   "bin": {
@@ -70,7 +70,7 @@
     "rollup-plugin-export-default": "1.4.0",
     "rollup-plugin-preserve-shebang": "1.0.1",
     "rollup-plugin-bundle-size": "latest",
-    "rollup-plugin-import-meta-url": "4.0.0"
+    "rollup-plugin-import-meta-url": "5.0.0"
   },
   "dependencies": {}
 }
