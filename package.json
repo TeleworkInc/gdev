@@ -70,7 +70,7 @@
     "rollup-plugin-export-default": "1.4.0",
     "rollup-plugin-preserve-shebang": "1.0.1",
     "rollup-plugin-bundle-size": "latest",
-    "rollup-plugin-import-meta-url": "latest"
+    "rollup-plugin-import-meta-url": "4.0.0"
   },
   "dependencies": {}
 }

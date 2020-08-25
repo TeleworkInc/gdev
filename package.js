@@ -160,9 +160,7 @@ export const PACKAGE_NAME = readPackageJson().name || '';
  * encoding invalid relative URLs that would not be accepted by
  * `url.fileURLToPath`, such as `file://fileInThisDir` -> `./fileInThisDir`.
  */
-export const PACKAGE_ROOT = path.dirname(
-    import.meta.url.replace('file://', ''),
-);
+export const PACKAGE_ROOT = path.dirname(import.meta.url.substr(7));
 
 
 /**
