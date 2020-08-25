@@ -50,14 +50,14 @@
     "chalk": "4.1.0",
     "chokidar": "3.4.0",
     "ora": "4.0.4",
-    "tree-node-cli": "1.4.0",
-    "await-shell": "latest"
+    "tree-node-cli": "1.4.0"
   },
   "peerDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "0.26.0",
     "@rollup/plugin-commonjs": "15.0.0",
     "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-node-resolve": "9.0.0",
+    "await-shell": "latest",
     "builtin-modules": "latest",
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
