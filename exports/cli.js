@@ -23,18 +23,18 @@ const PROJECT_NAME = basename(CWD);
  */
 
 commander
+    .command('postinstall')
+    .description(
+        'Add the needed global dependencies for this package.\n\n',
+    )
+    .action(commands.boot);
+
+
+commander
     .command('add <pkgs...>')
     .description('Add the given packages as gnv development dependencies.')
     .option('-P, --peer', 'Add as a peerDependency instead.', false)
     .action(commands.add);
-
-
-commander
-    .command('boot')
-    .description(
-        'Install the development dependencies for the current workspace',
-    )
-    .action(commands.boot);
 
 
 commander
@@ -82,10 +82,8 @@ commander
 
 commander
     .command('install')
-    .description('Install the dependencies in package.json.')
-    .option(
-        '--this',
-        'Install the dependencies in this package\'s package.json.',
+    .description(
+        'Install all dependencies in $CWD/package.json.',
     )
     .action(commands.install);
 
@@ -93,15 +91,15 @@ commander
 commander
     .command('install-local-deps')
     .description(
-        'Install the gnvDependencies in the working directory\'s package.json.',
+        'Install the gnvDependencies in $CWD/package.json.',
     )
     .action(commands.installGnvDependencies);
 
 
 commander
-    .command('install-peer-deps')
+    .command('install-global-deps')
     .description(
-        'Install the relevant global deps (Rollup, Closure Compiler), etc.',
+        'Install the peerDependencies in $CWD/package.json.',
     )
     .action(commands.installPeerDependencies);
 

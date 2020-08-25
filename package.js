@@ -82,7 +82,7 @@ export const boot = async () => {
   /**
    * Install gnvDependencies for the package.json in the parent folder.
    */
-  await installGnvDependencies(true);
+  // await installGnvDependencies(true);
 
 
   /**
