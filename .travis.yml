@@ -4,7 +4,7 @@ node_js:
   - lts/*
 
 # Install necessary local/global deps.
-install: npm run gnv-get
+install: npm run gnv-install-dev
 
 script:
 

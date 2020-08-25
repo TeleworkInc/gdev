@@ -15,8 +15,8 @@
   "scripts": {
     "create-bin": "mkdir -p dist && touch dist/cli.cjs",
     "cold-start": "npm run gnv-get && gnv-dev build",
-    "gnv-get": "npm run create-bin && node .gnv/npm/get.js",
-    "gnv-install": "node .gnv/npm/install.js",
+    "gnv-install": "npm run create-bin && node .gnv/npm/install.js",
+    "gnv-install-dev": "npm run create-bin && node .gnv/npm/installDev.js",
     "prebuild": "npm run clean",
     "build": "npm run build:dev && npm run build:dist && npm run build:exe && npm run format-clis",
     "build:dev": "rollup -c .gnv/rollup.dev.es.js && rollup -c .gnv/rollup.dev.cjs.js",
