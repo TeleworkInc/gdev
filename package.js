@@ -221,7 +221,7 @@ export const getLocalDeps = async (absolute = false) => {
 
   spacer('Adding local gnv deps to node_modules:');
   await callNpm('i', '-f', '--no-save', '--silent', ...gnvDependencies);
-  spacer(`Installed ${gnvDependencies.length} packages.\n`);
+  spacer(`Installed ${gnvDependencies.length} packages.`);
 };
 
 /**
