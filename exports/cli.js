@@ -102,7 +102,7 @@ commander
     .description(
         'Install the gnvDependencies in $CWD/package.json.',
     )
-    .action(commands.installGnvDependencies);
+    .action(commands.getLocalDeps);
 
 
 commander
@@ -110,7 +110,7 @@ commander
     .description(
         'Install the peerDependencies in $CWD/package.json.',
     )
-    .action(commands.installPeerDependencies);
+    .action(commands.getGlobalDeps);
 
 
 commander
