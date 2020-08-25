@@ -85,8 +85,51 @@ const spacer = (msg) => console.log(
 );
 
 /**
- * EXPORTS BELOW
+ * Read the package.json object from the current directory.
+ *
+ * @param {boolean} absolute
+ * Set to `true` to to reference package.json in the parent directory with
+ * respect to this file, rather than the package.json in the current working
+ * directory as indicated by `process.cwd()`.
+ *
+ * @return {object} package
+ * The package.json object.
  */
+export const readPackageJson = (absolute = false) => JSON.parse(
+    fs.readFileSync(
+        path.resolve((
+          absolute
+              ? PACKAGE_ROOT
+              : process.cwd()
+        ),
+        'package.json'),
+    ),
+);
+
+
+/**
+ * @param {object} obj The new package.json object to serialize and write.
+ *
+ * @param {boolean} absolute
+ * Set to `true` to to reference package.json in the parent directory with
+ * respect to this file, rather than the package.json in the current working
+ * directory as indicated by `process.cwd()`.
+ *
+ * @param {number} spaces The number of spaces to use for tabs in
+ * JSON.stringify. Defaults to 2.
+ *
+ * @return {void}
+ */
+export const writePackageJson = (obj, absolute = false, spaces = 2) => (
+  fs.writeFileSync(
+      path.resolve((
+      absolute
+          ? PACKAGE_ROOT
+          : process.cwd()
+      ), 'package.json'),
+      JSON.stringify(obj, null, spaces),
+  )
+);
 
 /**
  * A package string of the form @org/packageName@ver
@@ -292,51 +335,3 @@ export const getGlobalDeps = async (absolute = false) => {
  * @return {string} version
  */
 export const getVersion = () => readPackageJson(true).version;
-
-
-/**
- * Read the package.json object from the current directory.
- *
- * @param {boolean} absolute
- * Set to `true` to to reference package.json in the parent directory with
- * respect to this file, rather than the package.json in the current working
- * directory as indicated by `process.cwd()`.
- *
- * @return {object} package
- * The package.json object.
- */
-export const readPackageJson = (absolute = false) => JSON.parse(
-    fs.readFileSync(
-        path.resolve((
-            absolute
-                ? PACKAGE_ROOT
-                : process.cwd()
-        ),
-        'package.json'),
-    ),
-);
-
-
-/**
- * @param {object} obj The new package.json object to serialize and write.
- *
- * @param {boolean} absolute
- * Set to `true` to to reference package.json in the parent directory with
- * respect to this file, rather than the package.json in the current working
- * directory as indicated by `process.cwd()`.
- *
- * @param {number} spaces The number of spaces to use for tabs in
- * JSON.stringify. Defaults to 2.
- *
- * @return {void}
- */
-export const writePackageJson = (obj, absolute = false, spaces = 2) => (
-  fs.writeFileSync(
-      path.resolve((
-        absolute
-            ? PACKAGE_ROOT
-            : process.cwd()
-      ), 'package.json'),
-      JSON.stringify(obj, null, spaces),
-  )
-);
