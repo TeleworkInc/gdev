@@ -13,7 +13,7 @@
     "require": "./dist/node.cjs"
   },
   "scripts": {
-    "cold-start": "npm run boot && npm run build",
+    "cold-start": "npm run get-deps && npm run build",
     "create-bin": "mkdir -p dist && touch dist/cli.cjs",
     "get-deps": "npm run create-bin && node .gnv/npm/getDeps.js",
     "prebuild": "npm run clean",
