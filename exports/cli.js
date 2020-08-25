@@ -13,18 +13,20 @@ import treeNodeCli from 'tree-node-cli';
 import chalk from 'chalk';
 
 import * as commands from '../lib/commands.js';
+
 import { basename } from 'path';
+import { error } from '../lib/utils.js';
+import { existsSync } from 'fs';
+import { getVersion } from '../package.js';
 
 const CWD = process.cwd();
 const PROJECT_NAME = basename(CWD);
 
-/**
- * Assign actions to CLI commands.
- */
+if (!commands.checkInsideProject()) {
+  error('\nDirectory is not a gnv workspace.');
+  process.exit(1);
+}
 
-/**
- * Install the dependencies for this package.
- */
 commander
     .command('postinstall')
     .description(
@@ -140,7 +142,9 @@ const HEAD = (
 );
 
 const TREE = (
-  commands.checkInsideProject()
+  commands.checkInsideProject() &&
+  existsSync('./lib') &&
+  existsSync('./exports')
   ? (
       '\n'
       + treeNodeCli('./lib', {
@@ -151,15 +155,13 @@ const TREE = (
         dirsFirst: true,
       })
     )
-  : ''
+  : '\n'
 );
 
-import { getVersion } from '../package.js';
 console.log('\n', chalk.grey(`--- 𝓰𝓷𝓿 ${getVersion()} ---`), '\n');
 
 if (HEAD) console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
 if (TREE) console.log(chalk.blueBright(TREE), '\n');
-
 
 /**
  * Parse command line arguments. Use try {...} catch {...} and
