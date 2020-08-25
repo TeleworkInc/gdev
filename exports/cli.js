@@ -22,12 +22,15 @@ const PROJECT_NAME = basename(CWD);
  * Assign actions to CLI commands.
  */
 
+/**
+ * Install the dependencies for this package.
+ */
 commander
     .command('postinstall')
     .description(
         'Add the needed global dependencies for this package.\n\n',
     )
-    .action(commands.boot);
+    .action(async () => await commands.install(true));
 
 
 commander

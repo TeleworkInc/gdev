@@ -12,87 +12,6 @@ import path from 'path';
 import { spawnSync } from 'child_process';
 
 /**
- * A utility for dependency-less colored logging.
- *
- * @param {string} msg
- * @return {void}
- */
-export const spacer = (msg) => console.log(
-    '\x1b[96m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${msg}`,
-);
-
-/**
- * Add the given packages to package.json's gnvDependencies field.
- *
- * @param {...PackageString} packageStrings
- * The packages to add.
- *
- * @param {*} command
- * Command metadata.
- */
-export const add = async (packageStrings, command) => {
-  const packageJson = readPackageJson();
-  for (const packageString of packageStrings) {
-    const {
-      name,
-      org,
-      version,
-    } = getPackageInfo(packageString);
-
-    const pkgString = (
-        org
-          ? `@${org}/${name}`
-          : name
-    );
-
-    /**
-     * Add to peerDependencies if -P flag set, otherwise add to gnvDependencies.
-     */
-    (command.peer
-          ? packageJson.peerDependencies
-          : packageJson.gnvDependencies
-    )[pkgString] = version;
-
-    /**
-     * Write to package.json/
-     */
-    writePackageJson(packageJson);
-  }
-
-  /**
-   * Print success and start boot.
-   */
-  console.log('Added', ...packageStrings, 'to package.json.');
-  await boot();
-};
-
-/**
- * Call the boot script.
- */
-export const boot = async () => {
-  /**
-   * Link this package. This has to be done before everything else due to the
-   * weird behavior of npm, which will delete necessary dependencies if this is
-   * run after installing peerDeps or gnvDeps.
-   */
-  spacer('Linking this package to global bin...');
-  await callNpm('link', '-f', '--no-save', '--silent');
-
-
-  /**
-   * Install gnvDependencies for the package.json in the parent folder.
-   */
-  // await installGnvDependencies(true);
-
-
-  /**
-   * Install peerDependencies for the package.json in the parent folder, and
-   * link into local `node_modules`.
-   */
-  await installPeerDependencies(true);
-};
-
-/**
  * Call the `npm` client.
  *
  * @param  {...string} args
@@ -183,11 +102,68 @@ export const getPackageStrings = (deps = {}) => (
   )
 );
 
-export const install = async (command) => {
+/**
+ * A utility for dependency-less colored logging.
+ *
+ * @param {string} msg
+ * @return {void}
+ */
+export const spacer = (msg) => console.log(
+    '\x1b[96m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${msg}`,
+);
+
+/**
+ * Add the given packages to package.json's gnvDependencies field.
+ *
+ * @param {...PackageString} packageStrings
+ * The packages to add.
+ *
+ * @param {*} command
+ * Command metadata.
+ */
+export const add = async (packageStrings, command) => {
+  const packageJson = readPackageJson();
+  for (const packageString of packageStrings) {
+    const {
+      name,
+      org,
+      version,
+    } = getPackageInfo(packageString);
+
+    const pkgString = (
+        org
+          ? `@${org}/${name}`
+          : name
+    );
+
+    /**
+     * Add to peerDependencies if -P flag set, otherwise add to gnvDependencies.
+     */
+    (command.peer
+          ? packageJson.peerDependencies
+          : packageJson.gnvDependencies
+    )[pkgString] = version;
+
+    /**
+     * Write to package.json/
+     */
+    writePackageJson(packageJson);
+  }
+
+  /**
+   * Print success and start boot.
+   */
+  console.log('Added', ...packageStrings, 'to package.json.');
+  await boot();
+};
+
+export const remove = async () => {};
+
+export const install = async (installThis = false) => {
   /**
    * If installing this package, only install peerDependencies.
    */
-  if (command.this) {
+  if (installThis) {
     spacer('Installing own peer dependencies.');
     await installPeerDependencies(true);
   }
@@ -199,6 +175,32 @@ export const install = async (command) => {
     await installGnvDependencies();
     await installPeerDependencies();
   };
+};
+
+/**
+ * Get ALL dependencies for a package.
+ */
+export const get = async () => {
+  /**
+   * Link this package. This has to be done before everything else due to the
+   * weird behavior of npm, which will delete necessary dependencies if this is
+   * run after installing peerDeps or gnvDeps.
+   */
+  spacer('Linking this package to global bin...');
+  await callNpm('link', '-f', '--no-save', '--silent');
+
+
+  /**
+   * Install gnvDependencies for the package.json in the parent folder.
+   */
+  await installGnvDependencies(true);
+
+
+  /**
+   * Install peerDependencies for the package.json in the parent folder, and
+   * link into local `node_modules`.
+   */
+  await installPeerDependencies(true);
 };
 
 /**
