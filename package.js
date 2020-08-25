@@ -159,21 +159,20 @@ export const add = async (packageStrings, command) => {
 
 export const remove = async () => {};
 
-export const install = async (installThis = false) => {
+export const install = async (command) => {
   /**
-   * If installing this package, only install peerDependencies.
+   * If not in dev mode, install just the peer deps.
    */
-  if (installThis) {
+  if (!command.dev) {
     spacer('Installing own peer dependencies.');
-    await installPeerDependencies(true);
+    await installPeerDependencies(command.self);
   }
   /**
-   * Otherwise, install global and local dependencies for the package.json in
-   * the current working directory.
+   * Otherwise, install global and local dependencies for the package.json.
    */
   else {
-    await installGnvDependencies();
-    await installPeerDependencies();
+    await installGnvDependencies(command.self);
+    await installPeerDependencies(command.self);
   };
 };
 
@@ -324,4 +323,4 @@ export const writePackageJson = (obj, absolute = false, spaces = 2) => (
  *
  * @return {string} version
  */
-export const getVersion = async () => readPackageJson(true).version;
+export const getVersion = () => readPackageJson(true).version;

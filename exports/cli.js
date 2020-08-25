@@ -88,6 +88,12 @@ commander
     .description(
         'Install all dependencies in $CWD/package.json.',
     )
+    .option('-d, --dev', 'Use dev mode.')
+    .option(
+        '-s, --self',
+        'Install the dependencies for this program\'s package.json, rather '
+      + 'than the one in `process.cwd()`.',
+    )
     .action(commands.install);
 
 

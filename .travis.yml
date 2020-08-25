@@ -12,10 +12,10 @@ script:
   # dev/cli.js.
   - gnv-dev build
 
-  # Check that the compiled gnv can run without deps.
-  - echo 'Testing without deps...'
+  # Check that the compiled gnv can run without only global deps.
   - npm uninstall * -f --no-save --silent
   - npm uninstall -fg --no-save --silent *
+  - npm run gnv-install
   - gnv
   
   # Re-build the release CLI *using* the freshly-built release CLI.
