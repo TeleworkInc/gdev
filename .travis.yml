@@ -3,24 +3,20 @@ node_js:
   - 14
   - lts/*
 
-jobs:
-  include:
+# Install necessary local/global deps.
+install: npm run get-deps
 
-    # Test the dev and release CLIs.
-    - script:
+script:
 
-      # Install necessary local/global deps.
-      - npm run get-deps
+  # Build the release CLI at dist/cli.cjs using the dev CLI source at
+  # dev/cli.js.
+  - gnv-dev build
 
-      # Build the release CLI at dist/cli.cjs using the dev CLI source at
-      # dev/cli.js.
-      - gnv-dev build
-
-      # Check that the compiled gnv can run without deps.
-      - echo 'Testing without deps...'
-      - npm uninstall * -f --no-save --silent
-      - npm uninstall -fg --no-save --silent *
-      - gnv
-      
-      # Re-build the release CLI *using* the freshly-built release CLI.
-      - gnv build
+  # Check that the compiled gnv can run without deps.
+  - echo 'Testing without deps...'
+  - npm uninstall * -f --no-save --silent
+  - npm uninstall -fg --no-save --silent *
+  - gnv
+  
+  # Re-build the release CLI *using* the freshly-built release CLI.
+  - gnv build
