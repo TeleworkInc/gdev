@@ -17,7 +17,7 @@ import { spawnSync } from 'child_process';
  * @param  {...string} args
  * The arguments to pass to npm.
  */
-export const callNpm = async (...args) => {
+const callNpm = async (...args) => {
   console.log(`\n> npm ${args.join(' ')}\n`);
   await spawnSync(
       'npm',
@@ -30,34 +30,6 @@ export const callNpm = async (...args) => {
       },
   );
 };
-
-/**
- * A package string of the form @org/packageName@ver
- *
- * @typedef {string} PackageString
- */
-let PackageString;
-
-/**
- * An object containing information about an NPM package.
- *
- * @typedef {{
- *  name: string,
- *  org: string,
- *  version: string,
- * }} PackageInfo
- */
-let PackageInfo;
-
-/**
- * Using `import.meta.url` to store an absolute reference to this directory.
- * rollup-plugin-import-meta-url will effectively hack around limitations by
- * encoding invalid relative URLs that would not be accepted by
- * `url.fileURLToPath`, such as `file://fileInThisDir` -> `./fileInThisDir`.
- */
-export const PACKAGE_ROOT = path.dirname(
-    import.meta.url.replace('file://', ''),
-);
 
 /**
  * Get the package info from a PackageString.
@@ -96,7 +68,7 @@ const getPackageInfo = (packageString) => {
  *
  * @return {Array<PackageString>}
  */
-export const getPackageStrings = (deps = {}) => (
+const getPackageStrings = (deps = {}) => (
   Object.entries(deps).map(
       ([key, val]) => `${key}@${val}`,
   )
@@ -108,9 +80,47 @@ export const getPackageStrings = (deps = {}) => (
  * @param {string} msg
  * @return {void}
  */
-export const spacer = (msg) => console.log(
+const spacer = (msg) => console.log(
     '\x1b[96m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${msg}`,
 );
+
+/**
+ * EXPORTS BELOW
+ */
+
+/**
+ * A package string of the form @org/packageName@ver
+ *
+ * @typedef {string} PackageString
+ */
+let PackageString;
+
+/**
+ * An object containing information about an NPM package.
+ *
+ * @typedef {{
+ *  name: string,
+ *  org: string,
+ *  version: string,
+ * }} PackageInfo
+ */
+let PackageInfo;
+
+/**
+ * The name of this package.
+ */
+export const PACKAGE_NAME = readPackageJson().name || '';
+
+/**
+ * Using `import.meta.url` to store an absolute reference to this directory.
+ * rollup-plugin-import-meta-url will effectively hack around limitations by
+ * encoding invalid relative URLs that would not be accepted by
+ * `url.fileURLToPath`, such as `file://fileInThisDir` -> `./fileInThisDir`.
+ */
+export const PACKAGE_ROOT = path.dirname(
+    import.meta.url.replace('file://', ''),
+);
+
 
 /**
  * Add the given packages to package.json's gnvDependencies field.
@@ -157,7 +167,9 @@ export const add = async (packageStrings, command) => {
   await boot();
 };
 
+
 export const remove = async () => {};
+
 
 export const install = async (command = {}) => {
   /**
@@ -184,6 +196,7 @@ export const install = async (command = {}) => {
   };
 };
 
+
 /**
  * Get ALL dependencies for a package.
  */
@@ -200,6 +213,7 @@ export const getAllDeps = async () => {
    */
   await getGlobalDeps(true);
 };
+
 
 /**
  * Install gnvDependencies for a package.json.
@@ -223,6 +237,7 @@ export const getLocalDeps = async (absolute = false) => {
   await callNpm('i', '-f', '--no-save', '--silent', ...gnvDependencies);
   spacer(`Installed ${gnvDependencies.length} packages.`);
 };
+
 
 /**
  * Install peerDependencies for a package.json.
@@ -266,9 +281,17 @@ export const getGlobalDeps = async (absolute = false) => {
    */
   spacer(
       `Installed and linked ${peerDependencies.length} packages. `
-    + `Your development CLI should be ready at \`gnv-dev\`.\n`,
+    + `Your development CLI should be ready at \`${PACKAGE_NAME}-dev\`.\n`,
   );
 };
+
+
+/**
+ * Get the version of this package as defined in package.json.
+ *
+ * @return {string} version
+ */
+export const getVersion = () => readPackageJson(true).version;
 
 
 /**
@@ -293,6 +316,7 @@ export const readPackageJson = (absolute = false) => JSON.parse(
     ),
 );
 
+
 /**
  * @param {object} obj The new package.json object to serialize and write.
  *
@@ -316,10 +340,3 @@ export const writePackageJson = (obj, absolute = false, spaces = 2) => (
       JSON.stringify(obj, null, spaces),
   )
 );
-
-/**
- * Get the version of this package as defined in package.json.
- *
- * @return {string} version
- */
-export const getVersion = () => readPackageJson(true).version;
