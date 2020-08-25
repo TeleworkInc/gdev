@@ -11,6 +11,13 @@ script:
   # Build the release CLI at dist/cli.cjs using the dev CLI source at
   # dev/cli.js.
   - gnv-dev build
+  # Run gnv and test.
+  - gnv
+
+  # Re-build the release CLI *using* the freshly-built release CLI.
+  - gnv build
+  # Run gnv and test.
+  - gnv
 
   # Check that the compiled gnv can run with only global deps.
   ## 1. Remove all deps. 
@@ -19,9 +26,4 @@ script:
   ## 2. Install release dependencies only.
   - npm run gnv-install
   ## 3. Run gnv and test.
-  - gnv
-  
-  # Re-build the release CLI *using* the freshly-built release CLI.
-  - gnv build
-  # Run gnv and test.
   - gnv
