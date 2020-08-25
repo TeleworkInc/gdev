@@ -13,12 +13,12 @@ script:
   - gnv-dev build
 
   # Check that the compiled gnv can run with only global deps.
-  ## Remove all deps. 
+  ## 1. Remove all deps. 
   - npm uninstall * -f --no-save --silent
   - npm uninstall * -fg --no-save --silent
-  ## Install release dependencies only.
+  ## 2. Install release dependencies only.
   - npm run gnv-install
-  ## Run gnv and test.
+  ## 3. Run gnv and test.
   - gnv
   
   # Re-build the release CLI *using* the freshly-built release CLI.
