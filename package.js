@@ -22,14 +22,85 @@ export const spacer = (msg) => console.log(
 );
 
 /**
+ * Add the given packages to package.json's gnvDependencies field.
+ *
+ * @param {...PackageString} packageStrings
+ * The packages to add.
+ *
+ * @param {*} command
+ * Command metadata.
+ */
+export const add = async (packageStrings, command) => {
+  const packageJson = readPackageJson();
+  for (const packageString of packageStrings) {
+    const {
+      name,
+      org,
+      version,
+    } = getPackageInfo(packageString);
+
+    const pkgString = (
+        org
+          ? `@${org}/${name}`
+          : name
+    );
+
+    /**
+     * Add to peerDependencies if -P flag set, otherwise add to gnvDependencies.
+     */
+    (command.peer
+          ? packageJson.peerDependencies
+          : packageJson.gnvDependencies
+    )[pkgString] = version;
+
+    /**
+     * Write to package.json/
+     */
+    writePackageJson(packageJson);
+  }
+
+  /**
+   * Print success and start boot.
+   */
+  console.log('Added', ...packageStrings, 'to package.json.');
+  await boot();
+};
+
+/**
+ * Call the boot script.
+ */
+export const boot = async () => {
+  /**
+   * Link this package. This has to be done before everything else due to the
+   * weird behavior of npm, which will delete necessary dependencies if this is
+   * run after installing peerDeps or gnvDeps.
+   */
+  spacer('Linking this package to global bin...');
+  await callNpm('link', '-f', '--no-save', '--silent');
+
+
+  /**
+   * Install gnvDependencies for the package.json in the parent folder.
+   */
+  await installGnvDependencies(true);
+
+
+  /**
+   * Install peerDependencies for the package.json in the parent folder, and
+   * link into local `node_modules`.
+   */
+  await installPeerDependencies(true);
+};
+
+/**
  * Call the `npm` client.
  *
  * @param  {...string} args
  * The arguments to pass to npm.
  */
-export const callNpm = (...args) => {
+export const callNpm = async (...args) => {
   console.log(`\n> npm ${args.join(' ')}\n`);
-  spawnSync(
+  await spawnSync(
       'npm',
       args,
       {
@@ -70,6 +141,35 @@ export const PACKAGE_ROOT = path.dirname(
 );
 
 /**
+ * Get the package info from a PackageString.
+ *
+ * @param {PackageString} packageString
+ *
+ * @return {PackageInfo}
+ */
+const getPackageInfo = (packageString) => {
+  let orgString;
+  let version;
+
+  if (packageString[0] === '@') {
+    [orgString, packageString] = packageString.split('/');
+  }
+
+  [packageString, version] = packageString.split('@');
+
+  /**
+   * Add @latest flag if no version present.
+   */
+  if (!version) version = 'latest';
+
+  return {
+    name: packageString,
+    org: (orgString || '').substr(1),
+    version,
+  };
+};
+
+/**
  * Turn a package.json-like dependencies object into a list of `PackageString`s.
  *
  * @param {object} deps
@@ -77,27 +177,27 @@ export const PACKAGE_ROOT = path.dirname(
  *
  * @return {Array<PackageString>}
  */
-export const getPackageStrings = (deps) => (
+export const getPackageStrings = (deps = {}) => (
   Object.entries(deps).map(
       ([key, val]) => `${key}@${val}`,
   )
 );
 
-export const install = (command) => {
+export const install = async (command) => {
   /**
    * If installing this package, only install peerDependencies.
    */
   if (command.this) {
     spacer('Installing own peer dependencies.');
-    installPeerDependencies(true);
+    await installPeerDependencies(true);
   }
   /**
    * Otherwise, install global and local dependencies for the package.json in
    * the current working directory.
    */
   else {
-    installGnvDependencies();
-    installPeerDependencies();
+    await installGnvDependencies();
+    await installPeerDependencies();
   };
 };
 
@@ -111,7 +211,7 @@ export const install = (command) => {
  *
  * @return {void}
  */
-export const installGnvDependencies = (absolute = false) => {
+export const installGnvDependencies = async (absolute = false) => {
   const packageJson = readPackageJson(absolute);
   const gnvDependencies = getPackageStrings(packageJson.gnvDependencies);
 
@@ -120,8 +220,8 @@ export const installGnvDependencies = (absolute = false) => {
   }
 
   spacer('Adding local gnv deps to node_modules:');
-  callNpm('i', '-f', '--no-save', '--silent', ...gnvDependencies);
-  spacer(`Installed ${gnvDependencies.length} packages.`);
+  await callNpm('i', '-f', '--no-save', '--silent', ...gnvDependencies);
+  spacer(`Installed ${gnvDependencies.length} packages.\n`);
 };
 
 /**
@@ -134,7 +234,7 @@ export const installGnvDependencies = (absolute = false) => {
  *
  * @return {void}
  */
-export const installPeerDependencies = (absolute = false) => {
+export const installPeerDependencies = async (absolute = false) => {
   const packageJson = readPackageJson(absolute);
   const peerDependencies = getPackageStrings(packageJson.peerDependencies);
 
@@ -152,19 +252,22 @@ export const installPeerDependencies = (absolute = false) => {
    * Install peerDeps globally.
    */
   spacer('Adding global peerDeps:');
-  callNpm('i', '-g', '--no-save', '--silent', ...peerDependencies);
+  await callNpm('i', '-g', '--no-save', '--silent', ...peerDependencies);
 
   /**
    * Link peerDeps locally. Also links this package so that CLIs are
    * available.
    */
   spacer('Linking peer dependencies locally...');
-  callNpm('link', '-f', '--no-save', ...anyVersionPeerDeps);
+  await callNpm('link', '-f', '--no-save', '--silent', ...anyVersionPeerDeps);
 
   /**
    * Everything was successful!
    */
-  spacer('Done! Your development CLI should be ready at `gnv-dev`.\n');
+  spacer(
+      `Installed and linked ${peerDependencies.length} packages. `
+    + `Your development CLI should be ready at \`gnv-dev\`.\n`,
+  );
 };
 
 
@@ -219,4 +322,4 @@ export const writePackageJson = (obj, absolute = false, spaces = 2) => (
  *
  * @return {string} version
  */
-export const getVersion = () => readPackageJson(true).version;
+export const getVersion = async () => readPackageJson(true).version;
