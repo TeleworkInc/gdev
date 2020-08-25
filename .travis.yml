@@ -23,3 +23,5 @@ script:
   
   # Re-build the release CLI *using* the freshly-built release CLI.
   - gnv build
+  # Run gnv and test.
+  - gnv
