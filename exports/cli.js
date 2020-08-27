@@ -15,24 +15,22 @@ import chalk from 'chalk';
 import * as commands from '../lib/commands.js';
 
 import { basename } from 'path';
-import { error } from '../lib/utils.js';
 import { existsSync } from 'fs';
 import { getVersion } from '../package.js';
 
 const CWD = process.cwd();
 const PROJECT_NAME = basename(CWD);
 
-if (!commands.checkInsideProject()) {
-  error('\nDirectory is not a gnv workspace.');
-  process.exit(1);
-}
-
+/**
+ * Install the global release dependencies for this package.
+ */
 commander
     .command('postinstall')
     .description(
-        'Add the needed global dependencies for this package.\n\n',
+        'Add the global release dependencies for this program. You can also '
+      + 'install the peerDependencies manually.',
     )
-    .action(async () => await commands.install(true));
+    .action(commands.postinstall);
 
 
 commander
@@ -102,9 +100,15 @@ commander
 commander
     .command('install-local-deps')
     .description(
-        'Install the gnvDependencies in $CWD/package.json.',
+        'Install the gnvDependencies in $CWD/package.json. Use --self to'
+      + 'install for this package.',
     )
-    .action(commands.getLocalDeps);
+    .option(
+        '-s, --self',
+        'Install the dependencies for this program\'s package.json, rather '
+    + 'than the one in `process.cwd()`.',
+    )
+    .action(commands.installLocalDeps);
 
 
 commander
@@ -112,7 +116,12 @@ commander
     .description(
         'Install the peerDependencies in $CWD/package.json.',
     )
-    .action(commands.getGlobalDeps);
+    .option(
+        '-s, --self',
+        'Install the dependencies for this program\'s package.json, rather '
+    + 'than the one in `process.cwd()`.',
+    )
+    .action(commands.installGlobalDeps);
 
 
 commander
