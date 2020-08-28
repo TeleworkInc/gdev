@@ -25,12 +25,12 @@ const PROJECT_NAME = basename(CWD);
  * Install the global release dependencies for this package.
  */
 commander
-    .command('postinstall')
+    .command('get-peer-deps')
     .description(
-        'Add the global release dependencies for this program. You can also '
+        'Install the global peer dependencies for this program. You can also '
       + 'install the peerDependencies manually.',
     )
-    .action(commands.postinstall);
+    .action(commands.getPeerDeps);
 
 
 commander
@@ -38,6 +38,13 @@ commander
     .description('Add the given packages as gnv development dependencies.')
     .option('-P, --peer', 'Add as a peerDependency instead.', false)
     .action(commands.add);
+
+
+commander
+    .command('remove <pkgs...>')
+    .description('Remove the given packages from gnv development dependencies.')
+    .option('-P, --peer', 'Remove from peerDependencies instead.', false)
+    .action(commands.remove);
 
 
 commander

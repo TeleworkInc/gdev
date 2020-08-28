@@ -18,7 +18,7 @@ import {
 } from 'fs';
 
 const spacer = (msg) => console.log(
-    '\x1b[96m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${msg}`,
+    '\x1b[96m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${msg}\n`,
 );
 
 const getPackageStrings = (deps = {}) => (
@@ -144,6 +144,29 @@ const getPackageInfo = (packageString) => {
 };
 
 /**
+ * Exits if not inside a project. Pass `silent = true` to return false instead.
+ *
+ * @param {boolean} silent
+ * Set to `true` to return `false` instead of throwing an error.
+ *
+ * @return {boolean}
+ * `true` if insideProject.
+ */
+export const checkInsideProject = (silent) => {
+  const configExists = fs.existsSync(
+      path.resolve(process.cwd(), '.gnv'),
+  );
+  if (!configExists) {
+    if (silent) return false;
+    else {
+      spacer('Oops! Not inside a gnv project.');
+      process.exit(1);
+    }
+  }
+  return true;
+};
+
+/**
  * Using `import.meta.url` to store an absolute reference to this directory.
  * rollup-plugin-import-meta-url will effectively hack around limitations by
  * encoding invalid relative URLs that would not be accepted by
@@ -173,7 +196,7 @@ export const PACKAGE_NAME = PACKAGE_JSON.name || '';
  * Command metadata.
  */
 export const add = async (packageStrings, {
-  directory = process.cwd(),
+  directory = '',
   peer = false,
 }) => {
   const packageJson = readPackageJson(directory);
@@ -205,42 +228,43 @@ export const add = async (packageStrings, {
       directory,
     });
   }
-
-  /**
-   * Print success and start boot.
-   */
-  console.log('Added', ...packageStrings, 'to package.json.');
-  await boot();
 };
 
 /**
- * Exits if not inside a project. Pass `silent = true` to return false instead.
+ * Remove the given packages to package.json's gnvDependencies field.
  *
- * @param {boolean} silent
- * Set to `true` to return `false` instead of throwing an error.
+ * @param {...PackageString} packageStrings
+ * The packages to remove.
  *
- * @return {boolean}
- * `true` if insideProject.
+ * @param {{
+ *  peer: boolean,
+ * }} options
+ * Command metadata.
  */
-export const checkInsideProject = (silent) => {
-  const configExists = fs.existsSync(
-      path.resolve(process.cwd(), '.gnv'),
-  );
-  if (!configExists) {
-    if (silent) return false;
-    else {
-      spacer('Oops! Not inside a gnv project.\n');
-      process.exit(1);
-    }
+export const remove = async (packageStrings, {
+  directory = '',
+  peer = false,
+}) => {
+  const packageJson = readPackageJson(directory);
+  for (const packageString of packageStrings) {
+    const {
+      name,
+      org,
+    } = getPackageInfo(packageString);
+
+    const pkgString = (
+      org
+        ? `@${org}/${name}`
+        : name
+    );
+
+    delete (
+      peer
+        ? packageJson.peerDependencies
+        : packageJson.gnvDependencies
+    )[pkgString];
   }
-  return true;
 };
-
-/**
- * @todo
- * Implement
- */
-export const remove = async () => {};
 
 /**
  * Install the dependencies for the package.json in `process.cwd()`. Use `dev`
@@ -254,9 +278,10 @@ export const remove = async () => {};
  * }} options
  * Command-line options.
  */
-export const install = async (directory = '.', {
-  dev = false,
-}) => {
+export const install = async (
+  directory = '.',
+  { dev } = { dev: false },
+) => {
   /**
    * Cache original working directory, cd into install dir.
    */
@@ -287,6 +312,10 @@ export const install = async (directory = '.', {
     spacer('Dev mode: Installing local & peer dependencies.');
     await installLocalDeps();
     await installGlobalDeps();
+    spacer(
+        `Done! Your development CLI should be ready at `
+      + `\`${PACKAGE_NAME}-dev\`.`,
+    );
   };
   /**
    * cd back into original directory.
@@ -343,7 +372,6 @@ export const installGlobalDeps = async (directory) => {
    */
   spacer('Adding global peerDeps:');
   await callNpm('i', '-g', '--no-save', '--silent', ...peerDependencies);
-  spacer(`Installed ${peerDependencies.length} packages.`);
 
   /**
    * Link peerDeps locally. Also links this package so that CLIs are
@@ -351,14 +379,7 @@ export const installGlobalDeps = async (directory) => {
    */
   spacer('Linking peer dependencies locally...');
   await callNpm('link', '-f', '--no-save', '--silent', ...anyVersionPeerDeps);
-
-  /**
-   * Everything was successful!
-   */
-  spacer(
-      `Done! Your development CLI should be ready at \`${PACKAGE_NAME}-dev\`.`,
-      '\n',
-  );
+  spacer(`Installed and linked ${peerDependencies.length} packages.`);
 };
 
 
@@ -370,8 +391,9 @@ export const installGlobalDeps = async (directory) => {
 export const getVersion = () => readPackageJson(PACKAGE_ROOT).version;
 
 /**
- * Install the global dependencies for this program.
+ * Install the global dependencies for this program. Same as
+ * .gnv/npm/install.js.
  */
 export const getPeerDeps = async () => {
-  await commands.installGlobalDeps(PACKAGE_ROOT);
+  await installGlobalDeps(PACKAGE_ROOT);
 };

@@ -27,16 +27,29 @@ It is recommended to install these.
 | `hub`   | A CLI for managing GitHub repositories developed by GitHub. **[Install](https://github.com/github/hub#installation)**<br>*(Optional: Use `--no-github` flag to disable.)* |
 
 ### npm (global)
-gnv relies on Rollup and Closure Compiler to generate its outputs. To use gnv,
-first install it with:
+To use gnv, first install it with:
 ```bash
 npm i -g gnv
 ```
 
-And install the necessary peerDependencies (Rollup / plugins, Closure Compiler, etc.) with:
+Then install the necessary peer dependencies for `gnv`, which relies on Rollup
+and Closure Compiler binaries, with `gnv get-peer-deps`. This will call `npm i
+-g` to install the needed global deps and then link them in the workspace with
+`npm link`. You could manually install and link the peer deps yourself, but this
+is much easier.
+
+(Most compiled gnv projects will not have peer dependencies, but `gnv` itself
+relies on native Closure Compiler binaries, and it is all around more performant
+to just include these tools as peerDeps in this case. Rollup will be bundled
+into `gnv`, rather than added as a peerDep, shortly.)
 ```bash
-gnv postinstall # calls npm i -g
+gnv get-peer-deps
 ```
+
+![gnv add-peer-deps](https://i.imgur.com/RG0cehw.gif) 
+
+The project skeleton, listing JS files in `lib/` and `exports/`, is visible
+because the CLI was called inside a gnv project (its own source code).
 
 ## Usage
 Creating a new gnv workspace with `gnv create [organization]/name` will
