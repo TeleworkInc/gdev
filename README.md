@@ -46,7 +46,7 @@ into `gnv`, rather than added as a peerDep, shortly.)
 gnv get-peer-deps
 ```
 
-![gnv add-peer-deps](https://i.imgur.com/RG0cehw.gif) 
+![gnv add-peer-deps](https://i.imgur.com/6giWmjx.gif) 
 
 The project skeleton, listing JS files in `lib/` and `exports/`, is visible
 because the CLI was called inside a gnv project (its own source code).
@@ -61,14 +61,14 @@ directories during the build process.
 
 Think of `lib/` as a sandbox - it is where all internal code will go, and the
 `exports/` folder is where endpoints are *exposed* for each target. Exports will
-typically `import` different things from `lib/` and then expose some information
-to a given target. To expose exports for a given **target**, `export` values
-from `exports/[target].js`.
+typically `import` different things from `lib/` and then expose different
+information for different targets at `exports/[target].js`.
 
-For instance, gnv's `create()` function in `lib/commands.js` is used to
-initialize new projects for the CLI, but is also exported for usage in Node
-programs at `exports/node.js`. It can then be required and imported via `import
-{ create } from 'gnv'` in third party packages.
+For instance, gnv's `create()` function in `lib/commands.js` is exposed to the
+CLI at `exports/cli.js` for initializing new projects at the command line. It is
+also exported for usage in Node programs at `exports/node.js`, and can then be
+required and imported in the form `import { create } from 'gnv'` in third party
+Node packages.
 
 ### Basic structure
 The general structure of a gnv project involves a `lib/` directory for storing
