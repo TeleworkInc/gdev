@@ -84,44 +84,13 @@ commander
 
 
 commander
-    .command('install')
+    .command('install [directory]')
     .description(
-        'Install all dependencies in $CWD/package.json.',
+        'Install all dependencies in [directory]/package.json. Defaults to '
+      + 'working directory.',
     )
     .option('-d, --dev', 'Use dev mode.')
-    .option(
-        '-s, --self',
-        'Install the dependencies for this program\'s package.json, rather '
-      + 'than the one in `process.cwd()`.',
-    )
     .action(commands.install);
-
-
-commander
-    .command('install-local-deps')
-    .description(
-        'Install the gnvDependencies in $CWD/package.json. Use --self to'
-      + 'install for this package.',
-    )
-    .option(
-        '-s, --self',
-        'Install the dependencies for this program\'s package.json, rather '
-    + 'than the one in `process.cwd()`.',
-    )
-    .action(commands.installLocalDeps);
-
-
-commander
-    .command('install-global-deps')
-    .description(
-        'Install the peerDependencies in $CWD/package.json.',
-    )
-    .option(
-        '-s, --self',
-        'Install the dependencies for this program\'s package.json, rather '
-    + 'than the one in `process.cwd()`.',
-    )
-    .action(commands.installGlobalDeps);
 
 
 commander
@@ -145,13 +114,13 @@ commander
  */
 
 const HEAD = (
-  commands.checkInsideProject()
+  commands.checkInsideProject(true)
   ? ` ${PROJECT_NAME} `
   : ''
 );
 
 const TREE = (
-  commands.checkInsideProject() &&
+  commands.checkInsideProject(true) &&
   existsSync('./lib') &&
   existsSync('./exports')
   ? (
@@ -164,7 +133,7 @@ const TREE = (
         dirsFirst: true,
       })
     )
-  : '\n'
+  : ''
 );
 
 console.log('\n', chalk.grey(`--- 𝓰𝓷𝓿 ${getVersion()} ---`), '\n');

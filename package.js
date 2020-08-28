@@ -7,7 +7,9 @@
  * any third-party modules.
  */
 
+import fs from 'fs';
 import path from 'path';
+
 import { spawnSync } from 'child_process';
 import {
   existsSync,
@@ -48,8 +50,16 @@ const callNpm = async (...args) => {
  * @return {object} package
  * The package.json object.
  */
-export const readPackageJson = (directory = process.cwd()) => {
-  const fileName = path.resolve(directory, 'package.json');
+export const readPackageJson = (directory = '.') => {
+  /**
+   * Resolve from the CWD to the relative (or absolute) `directory`, then read
+   * package.json.
+   */
+  const fileName = path.resolve(
+      process.cwd(),
+      directory,
+      'package.json',
+  );
 
   return existsSync(fileName)
       ? JSON.parse(readFileSync(fileName))
@@ -68,10 +78,14 @@ export const readPackageJson = (directory = process.cwd()) => {
  * @return {void}
  */
 export const writePackageJson = (obj, {
-  directory = process.cwd(),
+  directory = '.',
   spaces = 2,
 }) => {
-  const fileName = path.resolve(directory, 'package.json');
+  const fileName = path.resolve(
+      process.cwd(),
+      directory,
+      'package.json',
+  );
 
   if (existsSync(fileName)) {
     writeFileSync(
@@ -200,6 +214,29 @@ export const add = async (packageStrings, {
 };
 
 /**
+ * Exits if not inside a project. Pass `silent = true` to return false instead.
+ *
+ * @param {boolean} silent
+ * Set to `true` to return `false` instead of throwing an error.
+ *
+ * @return {boolean}
+ * `true` if insideProject.
+ */
+export const checkInsideProject = (silent) => {
+  const configExists = fs.existsSync(
+      path.resolve(process.cwd(), '.gnv'),
+  );
+  if (!configExists) {
+    if (silent) return false;
+    else {
+      spacer('Oops! Not inside a gnv project.\n');
+      process.exit(1);
+    }
+  }
+  return true;
+};
+
+/**
  * @todo
  * Implement
  */
@@ -209,15 +246,26 @@ export const remove = async () => {};
  * Install the dependencies for the package.json in `process.cwd()`. Use `dev`
  * flag to also install dev dependencies.
  *
+ * @param {string} [directory]
+ * The directory containing package.json.
+ *
  * @param {{
  *  dev: boolean,
- *  dir: string,
  * }} options
- * Runtime options.
+ * Command-line options.
  */
-export const install = async ({
+export const install = async (directory = '.', {
   dev = false,
 }) => {
+  /**
+   * Cache original working directory, cd into install dir.
+   */
+  const originalCwd = process.cwd();
+  process.chdir(path.resolve(originalCwd, directory));
+  /**
+   * Exit if not inside project.
+   */
+  checkInsideProject();
   /**
    * Link this package. This has to be done before everything else due to the
    * weird behavior of npm, which will delete necessary dependencies if this is
@@ -225,7 +273,6 @@ export const install = async ({
    */
   spacer('Linking this package to global bin...');
   await callNpm('link', '-f', '--no-save', '--silent');
-
   /**
    * If not in dev mode, install just the peer deps.
    */
@@ -237,42 +284,25 @@ export const install = async ({
    * Otherwise, install global and local dependencies for the package.json.
    */
   else {
+    spacer('Dev mode: Installing local & peer dependencies.');
     await installLocalDeps();
     await installGlobalDeps();
   };
-};
-
-
-/**
- * Get ALL dependencies for a package.
- *
- * @param {string} directory
- * The directory to load the package.json from. Defaults to `process.cwd()`.
- */
-export const installAllDeps = async (directory = process.cwd()) => {
   /**
-   * Install gnvDependencies for the package.json in the parent folder.
+   * cd back into original directory.
    */
-  await installLocalDeps(directory);
-
-
-  /**
-   * Install peerDependencies for the package.json in the parent folder, and
-   * link into local `node_modules`.
-   */
-  await installGlobalDeps(directory);
+  process.chdir(originalCwd);
 };
-
 
 /**
  * Install gnvDependencies for a package.json.
  *
- * @param {string} directory
+ * @param {string} [directory]
  * The directory to load the package.json from. Defaults to `process.cwd()`.
  *
  * @return {void}
  */
-export const installLocalDeps = async (directory = process.cwd()) => {
+export const installLocalDeps = async (directory) => {
   const packageJson = readPackageJson(directory);
   const gnvDependencies = getPackageStrings(packageJson.gnvDependencies);
 
@@ -289,12 +319,12 @@ export const installLocalDeps = async (directory = process.cwd()) => {
 /**
  * Install peerDependencies for a package.json.
  *
- * @param {string} directory
+ * @param {string} [directory]
  * The directory to load the package.json from. Defaults to `process.cwd()`.
  *
  * @return {void}
  */
-export const installGlobalDeps = async (directory = process.cwd()) => {
+export const installGlobalDeps = async (directory) => {
   const packageJson = readPackageJson(directory);
   const peerDependencies = getPackageStrings(packageJson.peerDependencies);
 
