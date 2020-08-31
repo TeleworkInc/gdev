@@ -66,6 +66,7 @@ A gnv project contains:
 - a `lib/` directory for storing library code
 - an `exports/` folder for exposing data to export targets
 
+The structure of the actual codebase generally looks like:
 <pre>
 lib
 ├── commands.js
@@ -103,7 +104,11 @@ directories during the build process.
 ### Building a project
 Building the project with `gnv build` will create development and distribution
 folders. The modules in `dev` are simply Rollup outputs, and they build very
-quickly as they do not resolve Node modules. The outputs in `dist` 
+quickly as they do not resolve Node modules. The outputs in `dist` are the final
+compiled outputs of a project, and will resolve all third party dependencies and
+Closure Compile the outputs.
+
+Here is what the generated `dev` and `dist` directories look like:
 
 ```
 dev
