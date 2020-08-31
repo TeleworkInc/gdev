@@ -60,22 +60,21 @@ now).
 ## Usage
 You can create, build, and develop gnv workspaces with the `gnv` CLI.
 
-### Workspace structure
-CLI commands (excluding `get-peer-deps`)
+### Commands (excluding `get-peer-deps`):
+
 | Package     | Description |
 | ----------- | ----------- |
-  add [options] <pkgs...> | Add the given packages as gnv development dependencies. |
-  build [options] | Build this workspace and run tests when finished. Final output will be in dist/. |
-  clean | Clean the gnv workspace. |
-  create [options] <name> | Create a new gnv workspace and push to GitHub. Use <organization/name>to create for an organization. Requires `hub` package or -ng flag. |
-  develop | Start developing, and rebuild dev bundles when changes are made to the workspace. |
-  install [options] [directory] | Install all dependencies in [directory]/package.json. Defaults to working directory. |
-  publish [level] | Publish this package to NPM using `npm publish`. Removes dev
-  CLI from package.json to prevent installation issues and bumps the version by
-  [level] (patch, minor, or major). Defaults to patch. |
-  remove [options] <pkgs...> | Remove the given packages from gnv development dependencies. |
-  test | Run mocha tests. |
+  `add [options] <pkgs...>` | Add the given packages as gnv development dependencies. |
+  `build [options]` | Build this workspace and run tests when finished. Final output will be in dist/. |
+  `clean | Clean the gnv workspace.` |
+  `create [options] <name>` | Create a new gnv workspace and push to GitHub. Use <organization/name>to create for an organization. Requires `hub` package or -ng flag. |
+  `develop` | Start developing, and rebuild dev bundles when changes are made to the workspace. |
+  `install [options] [directory]` | Install all dependencies in [directory]/package.json. Defaults to working directory. |
+  `publish [level]` | Publish this package to NPM using `npm publish`. Removes dev CLI from package.json to prevent installation issues and bumps the version by  [level] (patch, minor, or major). Defaults to patch. |
+  `remove [options] <pkgs...>` | Remove the given packages from gnv development dependencies. |
+  `test` | Run mocha tests. |
 
+### Workspace structure
 A gnv project contains: 
 - a `.gnv` folder that contains configuration information and Rollup scripts
 - a `lib/` directory for storing library code
@@ -116,8 +115,8 @@ projects are like modules in that they have **exports** for different
 **targets**, which will create corresponding outputs in `dev/` and `dist/`
 directories during the build process.
 
-### Building a project
-Building the project with `gnv build` will create development and distribution
+### Building a workspace
+Building the workspace with `gnv build` will create development and distribution
 folders. The modules in `dev` are simply Rollup outputs, and they build very
 quickly as they do not resolve Node modules. The outputs in `dist` are the final
 compiled outputs of a project, and will resolve all third party dependencies and
