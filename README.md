@@ -124,23 +124,23 @@ Closure Compile the outputs.
 
 Here is what the generated `dev` and `dist` directories look like:
 
-```
+<pre>
 dev
-├── **cli.cjs**
-├── **cli.mjs**
+├── <b>cli.cjs</b>
+├── <b>cli.mjs</b>
 ├── node.cjs
 ├── node.mjs
 ├── universal.cjs
 └── universal.mjs
 dist
-├── **cli.cjs**
-├── **cli.mjs**
+├── <b>cli.cjs</b>
+├── <b>cli.mjs</b>
 ├── exe.js
 ├── node.cjs
 ├── node.mjs
 ├── universal.cjs
 └── universal.mjs
-```
+</pre>
 
 ## Reserved build targets
 There are three **reserved targets**, which will build with special assumptions.
