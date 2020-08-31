@@ -61,6 +61,21 @@ now).
 You can create, build, and develop gnv workspaces with the `gnv` CLI.
 
 ### Workspace structure
+CLI commands (excluding `get-peer-deps`)
+| Package     | Description |
+| ----------- | ----------- |
+  add [options] <pkgs...> | Add the given packages as gnv development dependencies. |
+  build [options] | Build this workspace and run tests when finished. Final output will be in dist/. |
+  clean | Clean the gnv workspace. |
+  create [options] <name> | Create a new gnv workspace and push to GitHub. Use <organization/name>to create for an organization. Requires `hub` package or -ng flag. |
+  develop | Start developing, and rebuild dev bundles when changes are made to the workspace. |
+  install [options] [directory] | Install all dependencies in [directory]/package.json. Defaults to working directory. |
+  publish [level] | Publish this package to NPM using `npm publish`. Removes dev
+  CLI from package.json to prevent installation issues and bumps the version by
+  [level] (patch, minor, or major). Defaults to patch. |
+  remove [options] <pkgs...> | Remove the given packages from gnv development dependencies. |
+  test | Run mocha tests. |
+
 A gnv project contains: 
 - a `.gnv` folder that contains configuration information and Rollup scripts
 - a `lib/` directory for storing library code
