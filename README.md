@@ -66,7 +66,7 @@ You can create, build, and develop gnv workspaces with the `gnv` CLI.
 | ----------- | ----------- |
   `add [options] <pkgs...>` | Add the given packages as gnv development dependencies. |
   `build [options]` | Build this workspace and run tests when finished. Final output will be in dist/. |
-  `clean | Clean the gnv workspace.` |
+  `clean` | Clean the gnv workspace. |
   `create [options] <name>` | Create a new gnv workspace and push to GitHub. Use <organization/name>to create for an organization. Requires `hub` package or -ng flag. |
   `develop` | Start developing, and rebuild dev bundles when changes are made to the workspace. |
   `install [options] [directory]` | Install all dependencies in [directory]/package.json. Defaults to working directory. |
