@@ -31,7 +31,7 @@ It is recommended to install these.
 
 ### npm (global)
 To use gnv, first install it with:
-```shell
+```console
 npm i -g gnv
 ```
 
@@ -40,7 +40,7 @@ anything without Closure Compiler and Rollup, as mentioned above. A convenience
 command is built into the CLI to save time, and you can install the necessary
 peer dependencies for gnv (or any gnv package) with: 
 
-```shell
+```console
 gnv get-peer-deps
 ```
 
@@ -173,23 +173,23 @@ compiled output at `dist/cli.cjs`.
 If you want to test live changes to the `exports/cli.js` file, a development
 version of the CLI is linked to `my-package-dev`:
 
-```shell
+```console
 $ my-package-dev
 Logging without rebuilding!
 ```
 
 Create a new project (linking to bin is done automatically):
-```shell
+```console
 $ gnv create my-package # use --no-github to skip GitHub integration
 ```
 
 Enter the directory and build the project:
-```shell
+```console
 $ cd my-package && gnv build
 ```
 
 Call your built program (`./dist/cli.cjs`):
-```shell
+```console
 $ my-package
 Hello world!
 ```
