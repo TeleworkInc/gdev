@@ -173,6 +173,7 @@ export const checkInsideProject = (silent) => {
  * `url.fileURLToPath`, such as `file://fileInThisDir` -> `./fileInThisDir`.
  */
 export const PACKAGE_ROOT = path.dirname(import.meta.url.substr(7));
+// console.log({ PACKAGE_ROOT });
 
 /**
  * Export the value of the absolute package.json for easy access.
@@ -388,7 +389,7 @@ export const installGlobalDeps = async (directory) => {
  *
  * @return {string} version
  */
-export const getVersion = () => readPackageJson(PACKAGE_ROOT).version;
+export const getVersion = () => readPackageJson(PACKAGE_ROOT).version || '';
 
 /**
  * Install the global dependencies for this program. Same as
