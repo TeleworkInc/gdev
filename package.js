@@ -373,14 +373,14 @@ export const installGlobalDeps = async (directory) => {
    * Install peerDeps globally.
    */
   spacer('Adding global peerDeps:');
-  await callNpm('i', '-g', '--no-save', '--silent', ...anyVersionPeerDeps);
+  await callNpm('i', '-g', '--no-save', '--silent', ...peerDependencies);
 
   /**
    * Link peerDeps locally. Also links this package so that CLIs are
    * available.
    */
   spacer('Linking peer dependencies locally...');
-  await callNpm('link', '-f', '--no-save', '--silent', ...peerDependencies);
+  await callNpm('link', '-f', '--no-save', '--silent', ...anyVersionPeerDeps);
   spacer(`Installed and linked ${peerDependencies.length} packages.`);
 };
 
