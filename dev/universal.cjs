@@ -7,5 +7,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
  */
 
 const TEST_STRING = 'HELLO WORLD!';
+var universal = { TEST_STRING };
 
 exports.TEST_STRING = TEST_STRING;
+exports.default = universal;
