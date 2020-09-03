@@ -18,7 +18,7 @@ import { basename } from 'path';
 import { existsSync } from 'fs';
 import { PACKAGE_ROOT, PACKAGE_VERSION } from '../package.js';
 
-console.log({ PACKAGE_ROOT });
+// console.log({ PACKAGE_ROOT });
 
 const CWD = process.cwd();
 const PROJECT_NAME = basename(CWD);
@@ -145,7 +145,8 @@ const TREE = (
   : ''
 );
 
-console.log('\n', chalk.grey(`--- 𝓰𝓷𝓿 ${PACKAGE_VERSION} ---`), '\n');
+console.log('\n', chalk.grey(`--- 𝓰𝓷𝓿 ---`), '\n');
+// console.log('\n', chalk.grey(`--- 𝓰𝓷𝓿 ${PACKAGE_VERSION} ---`), '\n');
 
 if (HEAD) console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
 if (TREE) console.log(chalk.blueBright(TREE), '\n');
