@@ -16,7 +16,7 @@ import * as commands from '../lib/commands.js';
 
 import { basename } from 'path';
 import { existsSync } from 'fs';
-import { PACKAGE_ROOT, PACKAGE_VERSION } from '../package.js';
+// import { PACKAGE_ROOT, PACKAGE_VERSION } from '../package.js';
 
 // console.log({ PACKAGE_ROOT });
 

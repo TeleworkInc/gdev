@@ -18,7 +18,7 @@ import {
 } from 'fs';
 
 const spacer = (...msgs) => console.log(
-    '\x1b[96m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${msgs.join(' ')}\n`,
+    '\x1b[96m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${msgs.join(' ')}`,
 );
 
 const getPackageStrings = (deps = {}) => (
@@ -36,7 +36,7 @@ const callNpm = async (...args) => {
         /**
          * Only inherit stderr.
          */
-        stdio: ['ignore', 'ignore', 'inherit'],
+        stdio: ['ignore', 'inherit', 'inherit'],
       },
   );
 };
@@ -373,7 +373,7 @@ export const installGlobalDeps = async (directory) => {
    * Install peerDeps globally.
    */
   spacer('Adding global peerDeps:');
-  await callNpm('i', '-g', '--no-save', '--silent', ...peerDependencies);
+  await callNpm('i', '-g', '--no-save', '--silent', ...anyVersionPeerDeps);
 
   /**
    * Link peerDeps locally. Also links this package so that CLIs are
