@@ -17,8 +17,8 @@ import {
   writeFileSync,
 } from 'fs';
 
-const spacer = (msg) => console.log(
-    '\x1b[96m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${msg}\n`,
+const spacer = (...msgs) => console.log(
+    '\x1b[96m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${msgs.join(' ')}\n`,
 );
 
 const getPackageStrings = (deps = {}) => (
@@ -80,7 +80,7 @@ export const readPackageJson = (directory = '.') => {
 export const writePackageJson = (obj, {
   directory = '.',
   spaces = 2,
-}) => {
+} = {}) => {
   const fileName = path.resolve(
       process.cwd(),
       directory,
@@ -202,7 +202,7 @@ export const PACKAGE_NAME = PACKAGE_JSON.name || '';
  */
 export const add = async (packageStrings, {
   peer = false,
-}) => {
+} = {}) => {
   const packageJson = readPackageJson();
   for (const packageString of packageStrings) {
     const {
@@ -229,6 +229,7 @@ export const add = async (packageStrings, {
      * Write to package.json.
      */
     writePackageJson(packageJson);
+    spacer('Added', packageStrings.length, 'packages.');
   }
 };
 
@@ -245,7 +246,7 @@ export const add = async (packageStrings, {
  */
 export const remove = async (packageStrings, {
   peer = false,
-}) => {
+} = {}) => {
   const packageJson = readPackageJson();
   for (const packageString of packageStrings) {
     const {
@@ -281,7 +282,7 @@ export const remove = async (packageStrings, {
  */
 export const install = async (
   directory = '.',
-  { dev } = { dev: false },
+  { dev = false } = {},
 ) => {
   /**
    * Cache original working directory, cd into install dir.
@@ -315,7 +316,7 @@ export const install = async (
     await installGlobalDeps();
     spacer(
         `Done! Your development CLI should be ready at `
-      + `\`${PACKAGE_NAME}-dev\`.`,
+      + `\`${path.basename(process.cwd())}-dev\`.`,
     );
   };
   /**
@@ -379,7 +380,7 @@ export const installGlobalDeps = async (directory) => {
    * available.
    */
   spacer('Linking peer dependencies locally...');
-  await callNpm('link', '-f', '--no-save', '--silent', ...anyVersionPeerDeps);
+  await callNpm('link', '-f', '--no-save', '--silent', ...peerDependencies);
   spacer(`Installed and linked ${peerDependencies.length} packages.`);
 };
 
