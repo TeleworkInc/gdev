@@ -1,0 +1,1 @@
+export default {TEST_STRING:"HELLO WORLD!"};var TEST_STRING="HELLO WORLD!";export{TEST_STRING}

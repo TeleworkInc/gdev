@@ -10,8 +10,3 @@
  * Expose data from `lib/`.
  */
 export { TEST_STRING } from '../lib/templates.js';
-
-/**
- * This is a side effect that won't get removed due to dead code elimination.
- */
-console.log('Welcome to gnv!');
