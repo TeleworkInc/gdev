@@ -13,3 +13,4 @@ console.log('Welcome to gnv!');
 
 const myTest = new TestClass();
 console.log(myTest.hello, myTest.world);
+export default {  };
