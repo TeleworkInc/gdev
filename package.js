@@ -172,8 +172,12 @@ export const checkInsideProject = (silent) => {
  * encoding invalid relative URLs that would not be accepted by
  * `url.fileURLToPath`, such as `file://fileInThisDir` -> `./fileInThisDir`.
  */
-export const PACKAGE_ROOT = path.dirname(import.meta.url.substr(7));
-// console.log({ PACKAGE_ROOT });
+export const PACKAGE_ROOT = path.resolve(
+    /** Resolve relative to `process.cwd()`. */
+    process.cwd(),
+    /** Dir containing package.js. */
+    path.dirname(import.meta.url.substr(7)),
+);
 
 /**
  * Export the value of the absolute package.json for easy access.
@@ -197,10 +201,9 @@ export const PACKAGE_NAME = PACKAGE_JSON.name || '';
  * Command metadata.
  */
 export const add = async (packageStrings, {
-  directory = '',
   peer = false,
 }) => {
-  const packageJson = readPackageJson(directory);
+  const packageJson = readPackageJson();
   for (const packageString of packageStrings) {
     const {
       name,
@@ -225,9 +228,7 @@ export const add = async (packageStrings, {
     /**
      * Write to package.json.
      */
-    writePackageJson(packageJson, {
-      directory,
-    });
+    writePackageJson(packageJson);
   }
 };
 
@@ -243,10 +244,9 @@ export const add = async (packageStrings, {
  * Command metadata.
  */
 export const remove = async (packageStrings, {
-  directory = '',
   peer = false,
 }) => {
-  const packageJson = readPackageJson(directory);
+  const packageJson = readPackageJson();
   for (const packageString of packageStrings) {
     const {
       name,
@@ -389,7 +389,7 @@ export const installGlobalDeps = async (directory) => {
  *
  * @return {string} version
  */
-export const getVersion = () => readPackageJson(PACKAGE_ROOT).version || '';
+export const PACKAGE_VERSION = readPackageJson(PACKAGE_ROOT).version || '';
 
 /**
  * Install the global dependencies for this program. Same as
