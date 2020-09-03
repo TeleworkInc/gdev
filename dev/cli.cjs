@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var commander = _interopDefault(require('commander'));
@@ -40,7 +38,7 @@ const callNpm = async (...args) => {
         /**
          * Only inherit stderr.
          */
-        stdio: ['ignore', 'inherit', 'inherit'],
+        stdio: ['ignore', 'ignore', 'inherit'],
       },
   );
 };
@@ -866,6 +864,3 @@ catch (e) {
    */
   console.log('\n');
 }
-var cli = {  };
-
-exports.default = cli;

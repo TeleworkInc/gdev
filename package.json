@@ -26,7 +26,7 @@
     "minify:dist": "rollup -c .gnv/rollup.dist.minify.js",
     "format-clis": "sed -i '1i #!/usr/bin/env node' dist/cli.* && (chmod -f +x exports/cli.* dev/cli.* dist/cli.* || true)",
     "clean": "rm -rf dist/* && rm -rf dev/*",
-    "test": "mocha"
+    "test": "mocha && enable-browser-mode dist/exe.js"
   },
   "repository": {
     "type": "git",

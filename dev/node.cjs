@@ -51,7 +51,7 @@ const callNpm = async (...args) => {
         /**
          * Only inherit stderr.
          */
-        stdio: ['ignore', 'inherit', 'inherit'],
+        stdio: ['ignore', 'ignore', 'inherit'],
       },
   );
 };

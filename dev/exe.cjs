@@ -1,3 +1,5 @@
+'use strict';
+
 /** @license MIT */
 /**
  * This is a side effect that won't get removed due to dead code elimination.
