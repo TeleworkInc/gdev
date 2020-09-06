@@ -81,7 +81,9 @@ typings/
 # Nuxt.js build / generate output
 .nuxt
 # dist
-# dev
+
+# Ignore dev
+dev
 
 # Gatsby files
 .cache/

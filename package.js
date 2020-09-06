@@ -281,8 +281,8 @@ export const remove = async (packageStrings, {
  * Command-line options.
  */
 export const install = async (
-  directory = '.',
-  { dev = false } = {},
+    directory = '.',
+    { dev = false } = {},
 ) => {
   /**
    * Cache original working directory, cd into install dir.

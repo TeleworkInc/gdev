@@ -21,7 +21,7 @@
     "build": "npm run build:dev && npm run build:dist && npm run build:exe && npm run format-clis",
     "build:dev": "rollup -c .gnv/rollup.dev.es.js && rollup -c .gnv/rollup.dev.cjs.js",
     "build:dist": "rollup -c .gnv/rollup.dist.es.js && rollup -c .gnv/rollup.dist.cjs.js && npm run minify:dist",
-    "build:exe": "node .gnv/npm/buildExe.js",
+    "build:exe": "node .gnv/npm/buildExes.js",
     "postbuild": "npm run test",
     "minify:dist": "rollup -c .gnv/rollup.dist.minify.js",
     "format-clis": "sed -i '1i #!/usr/bin/env node' dist/cli.* && (chmod -f +x exports/cli.* dev/cli.* dist/cli.* || true)",
