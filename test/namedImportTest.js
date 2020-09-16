@@ -8,10 +8,10 @@
  */
 
 import 'chai/register-expect.js';
-import { TEST_STRING } from '../dist/universal.mjs';
+import { build } from '../dist/node.mjs';
 
 describe('Named ESM import', () => {
-  it('should import TEST_STRING from [dist/universal.mjs]', () => {
-    expect(TEST_STRING).to.not.be.undefined;
+  it('should import TEST_STRING from [dist/node.mjs]', () => {
+    expect(build).to.not.be.undefined;
   });
 });

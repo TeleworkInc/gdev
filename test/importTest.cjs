@@ -28,14 +28,4 @@ describe('CJS require()', () => {
   it('should not fail for compiled CLI bundle [dist/cli.cjs]', async () => {
     await shell('node dist/cli.cjs');
   });
-
-  it('should import test classes from [dev/universal.cjs]', () => {
-    const mod = require('../dev/universal.cjs');
-    expect(mod.TEST_STRING).to.not.be.undefined;
-  });
-
-  it('should import test classes from [dist/universal.cjs]', () => {
-    const mod = require('../dist/universal.cjs');
-    expect(mod.TEST_STRING).to.not.be.undefined;
-  });
 });

@@ -8,7 +8,7 @@
 
 require('chai/register-expect');
 
-const { callCompiler } = require('../dev/node.cjs');
+const distNode = require('../dev/node.cjs');
 const devNode = require('../dev/node.cjs');
 
 describe('Default CJS import from [dev/node.cjs]', () => {
@@ -19,6 +19,6 @@ describe('Default CJS import from [dev/node.cjs]', () => {
 
 describe('Named CJS import from [dev/node.cjs]', () => {
   it('should be non-null', () => {
-    expect(callCompiler).to.not.be.undefined;
+    expect(distNode).to.not.be.undefined;
   });
 });

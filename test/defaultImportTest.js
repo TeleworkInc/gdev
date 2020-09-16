@@ -8,7 +8,7 @@
 
 import 'chai/register-expect.js';
 import devNode from '../dev/node.mjs';
-import { callCompiler } from '../dev/node.mjs';
+import distNode from '../dev/node.mjs';
 
 describe('Default ESM import from [dev/node.mjs]', () => {
   it('should be non-null', () => {
@@ -18,6 +18,6 @@ describe('Default ESM import from [dev/node.mjs]', () => {
 
 describe('Named ESM import from [dev/node.mjs]', () => {
   it('should be non-null', () => {
-    expect(callCompiler).to.not.be.undefined;
+    expect(distNode).to.not.be.undefined;
   });
 });

@@ -7,9 +7,9 @@
 
 require('chai/register-expect');
 
-const { TEST_STRING } = require('../dist/universal.cjs');
+const { build } = require('../dist/node.cjs');
 describe('Named CJS import', () => {
-  it('should import TEST_STRING from [dist/universal.cjs]', () => {
-    expect(TEST_STRING).to.not.be.undefined;
+  it('should import TEST_STRING from [dist/node.cjs]', () => {
+    expect(build).to.not.be.undefined;
   });
 });

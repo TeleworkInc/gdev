@@ -18,15 +18,15 @@
     "gnv-install": "npm run create-bin && node .gnv/npm/install.js",
     "gnv-install-dev": "npm run create-bin && node .gnv/npm/installDev.js",
     "prebuild": "npm run clean",
-    "build": "npm run build:dev && npm run build:dist && npm run build:exe && npm run format-clis",
+    "build": "npm run build:dev && npm run build:dist && npm run minify:dist && npm run build:exe && npm run format-clis",
     "build:dev": "rollup -c .gnv/rollup.dev.es.js && rollup -c .gnv/rollup.dev.cjs.js",
-    "build:dist": "rollup -c .gnv/rollup.dist.es.js && rollup -c .gnv/rollup.dist.cjs.js && npm run minify:dist",
+    "build:dist": "rollup -c .gnv/rollup.dist.es.js && rollup -c .gnv/rollup.dist.cjs.js",
     "build:exe": "node .gnv/npm/buildExes.js",
     "postbuild": "npm run test",
     "minify:dist": "rollup -c .gnv/rollup.dist.minify.js",
     "format-clis": "sed -i '1i #!/usr/bin/env node' dist/cli.* && (chmod -f +x exports/cli.* dev/cli.* dist/cli.* || true)",
     "clean": "rm -rf dist/* && rm -rf dev/*",
-    "test": "mocha && enable-browser-mode dist/exe.js"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",

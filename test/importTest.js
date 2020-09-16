@@ -11,8 +11,6 @@ import * as thisPackage from 'gnv';
 import * as nodeDev from '../dev/node.mjs';
 import * as nodeDist from '../dist/node.mjs';
 
-import * as universalDev from '../dev/universal.mjs';
-import * as universalDist from '../dist/universal.mjs';
 import shell from 'await-shell';
 
 global.SHELL_OPTIONS = {
@@ -38,13 +36,5 @@ describe('ESM import', () => {
 
   it('should exit 0 for for compiled ESM [dist/cli.mjs]', async () => {
     await shell('node dist/cli.mjs');
-  });
-
-  it('should import test classes from [dev/universal.mjs]', () => {
-    expect(universalDev.TEST_STRING).to.not.be.undefined;
-  });
-
-  it('should import test classes from [dist/universal.mjs]', () => {
-    expect(universalDist.TEST_STRING).to.not.be.undefined;
   });
 });
