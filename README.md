@@ -1,4 +1,4 @@
-![gnv logo](https://user-images.githubusercontent.com/1657236/90679677-22480000-e226-11ea-9bb7-ad26c7cf9938.png)
+![gnv logo](https://repository-images.githubusercontent.com/277466515/e14f0580-f83c-11ea-9022-8f1c93721124)
 
 [![Build
 Status](https://travis-ci.org/TeleworkInc/gnv.svg?branch=master)](https://travis-ci.org/TeleworkInc/gnv)

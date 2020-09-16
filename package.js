@@ -23,7 +23,7 @@ const spacer = (...msgs) => console.log(
 
 const getPackageStrings = (deps = {}) => (
   Object.entries(deps).map(
-      ([key, val]) => `${key}@${val}`,
+      ([ key, val ]) => `${key}@${val}`,
   )
 );
 
@@ -36,7 +36,7 @@ const callNpm = async (...args) => {
         /**
          * Only inherit stderr.
          */
-        stdio: ['ignore', 'ignore', 'inherit'],
+        stdio: [ 'ignore', 'ignore', 'inherit' ],
       },
   );
 };
@@ -126,10 +126,10 @@ const getPackageInfo = (packageString) => {
   let version;
 
   if (packageString[0] === '@') {
-    [orgString, packageString] = packageString.split('/');
+    [ orgString, packageString ] = packageString.split('/');
   }
 
-  [packageString, version] = packageString.split('@');
+  [ packageString, version ] = packageString.split('@');
 
   /**
    * Add @latest flag if no version present.
