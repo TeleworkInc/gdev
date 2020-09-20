@@ -148,7 +148,7 @@ const TREE = (
 console.log('\n', chalk.grey(`--- 𝓰𝓷𝓿 ---`), '\n');
 // console.log('\n', chalk.grey(`--- 𝓰𝓷𝓿 ${PACKAGE_VERSION} ---`), '\n');
 
-if (HEAD) console.log(chalk.bgBlue(chalk.whiteBright(HEAD)));
+if (HEAD) console.log(chalk.bgBlue(chalk.whiteBright(HEAD)), '\n');
 if (TREE) console.log(chalk.blueBright(TREE), '\n');
 
 /**
