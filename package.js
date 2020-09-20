@@ -294,6 +294,13 @@ export const install = async (
    */
   checkInsideProject();
   /**
+   * Make sure files exist.
+   */
+  if (!fs.existsSync('dist')) fs.mkdirSync('dist');
+  if (!fs.existsSync('dist/cli.cjs')) {
+    fs.closeSync(fs.openSync('dist/cli.cjs', 'a'));
+  }
+  /**
    * Link this package. This has to be done before everything else due to the
    * weird behavior of npm, which will delete necessary dependencies if this is
    * run after installing peerDeps or gnvDeps.
