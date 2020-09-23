@@ -17,6 +17,22 @@ import {
   writeFileSync,
 } from 'fs';
 
+/**
+ * Call process.exit(1) on shell failure.
+ */
+global.SHELL_STRICT = true;
+/**
+ * Log commands as they are fed to the shell.
+ */
+global.SHELL_LOG = true;
+/**
+ * Use verbose logging by default.
+ */
+global.SHELL_OPTIONS = {
+  shell: true,
+  stdio: [ 'ignore', 'ignore', 'inherit' ],
+};
+
 const spacer = (...msgs) => console.log(
     '\x1b[96m%s\x1b[0m', `[𝓰𝓷𝓿]` + ` ${msgs.join(' ')}`,
 );
@@ -31,13 +47,13 @@ const callNpm = async (...args) => {
   console.log(`\n> npm ${args.join(' ')}\n`);
   await spawnSync(
       'npm',
-      args,
-      {
-        /**
-         * Only inherit stderr.
-         */
-        stdio: [ 'ignore', 'ignore', 'inherit' ],
-      },
+      [
+        /** Supplied args. */
+        ...args,
+        /** Use ERROR log level. */
+        '--loglevel error',
+      ],
+      global.SHELL_OPTIONS,
   );
 };
 
@@ -349,7 +365,7 @@ export const installLocalDeps = async (directory) => {
   }
 
   spacer('Adding local gnv deps to node_modules:');
-  await callNpm('i', '-f', '--no-save', '--silent', ...gnvDependencies);
+  await callNpm('i', '-f', '--no-save', ...gnvDependencies);
   spacer(`Installed ${gnvDependencies.length} packages.`);
 };
 
@@ -380,14 +396,14 @@ export const installGlobalDeps = async (directory) => {
    * Install peerDeps globally.
    */
   spacer('Adding global peerDeps:');
-  await callNpm('i', '-g', '--no-save', '--silent', ...peerDependencies);
+  await callNpm('i', '-g', '--no-save', ...peerDependencies);
 
   /**
    * Link peerDeps locally. Also links this package so that CLIs are
    * available.
    */
   spacer('Linking peer dependencies locally...');
-  await callNpm('link', '-f', '--no-save', '--silent', ...anyVersionPeerDeps);
+  await callNpm('link', '-f', '--no-save', ...anyVersionPeerDeps);
   spacer(`Installed and linked ${peerDependencies.length} packages.`);
 };
 
