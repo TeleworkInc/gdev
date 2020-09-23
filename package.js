@@ -7,6 +7,8 @@
  * any third-party modules.
  */
 
+import { PRODUCTION } from './lib/globals.js';
+
 import fs from 'fs';
 import path from 'path';
 
@@ -30,7 +32,11 @@ global.SHELL_LOG = true;
  */
 global.SHELL_OPTIONS = {
   shell: true,
-  stdio: [ 'ignore', 'ignore', 'inherit' ],
+  stdio: (
+    PRODUCTION
+      ? [ 'ignore', 'ignore', 'inherit' ]
+      : 'inherit'
+  ),
 };
 
 const spacer = (...msgs) => console.log(
