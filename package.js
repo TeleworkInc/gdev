@@ -87,12 +87,11 @@ export const writePackageJson = (obj, {
       'package.json',
   );
 
-  if (existsSync(fileName)) {
+  if (existsSync(fileName))
     writeFileSync(
         fileName,
         JSON.stringify(obj, null, spaces),
     );
-  }
 };
 
 /**
@@ -125,9 +124,9 @@ const getPackageInfo = (packageString) => {
   let orgString;
   let version;
 
-  if (packageString[0] === '@') {
+  if (packageString[0] === '@')
     [ orgString, packageString ] = packageString.split('/');
-  }
+
 
   [ packageString, version ] = packageString.split('@');
 
@@ -156,13 +155,13 @@ export const checkInsideProject = (silent) => {
   const configExists = fs.existsSync(
       path.resolve(process.cwd(), '.gnv'),
   );
-  if (!configExists) {
+  if (!configExists)
     if (silent) return false;
     else {
       spacer('Oops! Not inside a gnv project.');
       process.exit(1);
     }
-  }
+
   return true;
 };
 
@@ -297,9 +296,9 @@ export const install = async (
    * Make sure files exist.
    */
   if (!fs.existsSync('dist')) fs.mkdirSync('dist');
-  if (!fs.existsSync('dist/cli.cjs')) {
+  if (!fs.existsSync('dist/cli.cjs'))
     fs.closeSync(fs.openSync('dist/cli.cjs', 'a'));
-  }
+
   /**
    * Link this package. This has to be done before everything else due to the
    * weird behavior of npm, which will delete necessary dependencies if this is
@@ -322,8 +321,8 @@ export const install = async (
     await installLocalDeps();
     await installGlobalDeps();
     spacer(
-        `Done! Your development CLI should be ready at `
-      + `\`${path.basename(process.cwd())}-dev\`.`,
+        `Done! Your development CLI should be ready at ` +
+      `\`${path.basename(process.cwd())}-dev\`.`,
     );
   };
   /**
@@ -344,9 +343,9 @@ export const installLocalDeps = async (directory) => {
   const packageJson = readPackageJson(directory);
   const gnvDependencies = getPackageStrings(packageJson.gnvDependencies);
 
-  if (!gnvDependencies.length) {
+  if (!gnvDependencies.length)
     return spacer('No gnvDependencies to install.');
-  }
+
 
   spacer('Adding local gnv deps to node_modules:');
   await callNpm('i', '-f', '--no-save', '--silent', ...gnvDependencies);
@@ -366,9 +365,9 @@ export const installGlobalDeps = async (directory) => {
   const packageJson = readPackageJson(directory);
   const peerDependencies = getPackageStrings(packageJson.peerDependencies);
 
-  if (!peerDependencies.length) {
+  if (!peerDependencies.length)
     return spacer('No peerDependencies to install.');
-  }
+
 
   /**
    * Make sure no previous versions of this package are linked in this
