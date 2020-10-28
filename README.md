@@ -166,7 +166,7 @@ the `-ng, --no-github` or `-ns, --no-submodule` flags respectively.
 
 You will spend most of your time working running `my-project-name-dev` rather
 than `my-project-name`, as the development version of the CLI will run the
-source code in `exports/`, whereas the production version will point to the
+source code in `exports/`, whereas the release version will point to the
 compiled output at `dist/cli.cjs`.
 
 #### CLI development

@@ -7,7 +7,7 @@
  * any third-party modules.
  */
 
-import { PRODUCTION } from './lib/globals.js';
+import { RELEASE } from './lib/globals.js';
 
 import fs from 'fs';
 import path from 'path';
@@ -33,7 +33,7 @@ global.SHELL_LOG = true;
 global.SHELL_OPTIONS = {
   shell: true,
   stdio: (
-    PRODUCTION
+    RELEASE
       ? [ 'ignore', 'ignore', 'inherit' ]
       : 'inherit'
   ),
