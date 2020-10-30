@@ -29,8 +29,8 @@ const PROJECT_NAME = basename(CWD);
 commander
     .command('get-peer-deps')
     .description(
-        'Install the global peer dependencies for this program. You can also '
-      + 'install the peerDependencies manually.',
+        'Install the global peer dependencies for this program. You can also ' +
+        'install the peerDependencies manually.',
     )
     .action(commands.getPeerDeps);
 
@@ -52,8 +52,8 @@ commander
 commander
     .command('build')
     .description(
-        'Build this workspace and run tests when finished. Final output will '
-      + 'be in dist/.',
+        'Build this workspace and run tests when finished. Final output will ' +
+        'be in dist/.',
     )
     .option('-d, --dev', 'Build the dev bundle.')
     .option('-s, --skip-tests', 'Do not run tests after build is finished.')
@@ -69,8 +69,9 @@ commander
 commander
     .command('create <name>')
     .description(
-        'Create a new gnv workspace and push to GitHub. Use <organization/name>'
-      + 'to create for an organization. Requires `hub` package or -ng flag.',
+        'Create a new gnv workspace and push to GitHub. Use ' +
+        '<organization/name> to create for an organization. Requires `hub` ' +
+        'package or -ng flag.',
     )
     .option(
         '-ng, --no-github',
@@ -86,8 +87,8 @@ commander
 commander
     .command('develop')
     .description(
-        'Start developing, and rebuild dev bundles when changes are made to '
-      + 'the workspace.',
+        'Start developing, and rebuild dev bundles when changes are made to ' +
+        'the workspace.',
     )
     .action(commands.develop);
 
@@ -95,8 +96,8 @@ commander
 commander
     .command('install [directory]')
     .description(
-        'Install all dependencies in [directory]/package.json. Defaults to '
-      + 'working directory.',
+        'Install all dependencies in [directory]/package.json. Defaults to ' +
+        'working directory.',
     )
     .option('-d, --dev', 'Use dev mode.')
     .action(commands.install);
@@ -105,9 +106,9 @@ commander
 commander
     .command('publish [level]')
     .description(
-        'Publish this package to NPM using `npm publish`. Removes dev CLI '
-      + 'from package.json to prevent installation issues and bumps the '
-      + 'version by [level] (patch, minor, or major). Defaults to patch.',
+        'Publish this package to NPM using `npm publish`. Removes dev CLI ' +
+        'from package.json to prevent installation issues and bumps the ' +
+        'version by [level] (patch, minor, or major). Defaults to patch.',
     )
     .action(commands.publish);
 
@@ -133,12 +134,12 @@ const TREE = (
   existsSync('./lib') &&
   existsSync('./exports')
   ? (
-      '\n'
-      + treeNodeCli('./lib', {
+      '\n' +
+      treeNodeCli('./lib', {
         dirsFirst: true,
-      })
-      + '\n\n'
-      + treeNodeCli('./exports', {
+      }) +
+      '\n\n' +
+      treeNodeCli('./exports', {
         dirsFirst: true,
       })
     )
