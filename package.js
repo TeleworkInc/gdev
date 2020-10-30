@@ -221,9 +221,7 @@ export const PACKAGE_NAME = PACKAGE_JSON.name || '';
  * }} options
  * Command metadata.
  */
-export const add = async (packageStrings, {
-  peer = false,
-} = {}) => {
+export const add = async (packageStrings, { peer = false } = {}) => {
   const packageJson = readPackageJson();
   for (const packageString of packageStrings) {
     const {
@@ -265,9 +263,7 @@ export const add = async (packageStrings, {
  * }} options
  * Command metadata.
  */
-export const remove = async (packageStrings, {
-  peer = false,
-} = {}) => {
+export const remove = async (packageStrings, { peer = false } = {}) => {
   const packageJson = readPackageJson();
   for (const packageString of packageStrings) {
     const {
