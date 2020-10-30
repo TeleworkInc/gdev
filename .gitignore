@@ -1,6 +1,6 @@
 # Do not include dev/ and dist/ due to annoying merges
-dev/**
-dist/**
+dev/
+dist/
 
 # Logs
 logs
