@@ -63,14 +63,33 @@
     "chai-as-promised": "7.1.1",
     "glob": "7.1.6",
     "google-closure-compiler": "20200719.0.0",
-    "mocha": "8.0.1",
     "rollup": "2.21.0",
-    "rollup-plugin-bundle-size": "latest",
     "rollup-plugin-class-fields-to-getters": "1.0.0",
     "rollup-plugin-disable-packages": "3.0.0",
     "rollup-plugin-export-default": "1.4.0",
     "rollup-plugin-import-meta-url": "5.0.0",
-    "rollup-plugin-preserve-shebang": "1.0.1"
+    "rollup-plugin-preserve-shebang": "1.0.1",
+    "rollup-plugin-bundle-size": "latest",
+    "mocha": "latest",
+    "install-peerdeps": "latest"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "builtin-modules": "^3.1.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "glob": "^7.1.6",
+    "google-closure-compiler": "^20200719.0.0",
+    "mocha": "^8.0.1",
+    "rollup": "^2.21.0",
+    "rollup-plugin-bundle-size": "^1.0.3",
+    "rollup-plugin-class-fields-to-getters": "^1.0.0",
+    "rollup-plugin-disable-packages": "^3.0.0",
+    "rollup-plugin-export-default": "^1.4.0",
+    "rollup-plugin-import-meta-url": "^5.0.0",
+    "rollup-plugin-preserve-shebang": "^1.0.1"
+  }
 }
