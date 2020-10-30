@@ -7,11 +7,11 @@
  * any third-party modules.
  */
 
-import { RELEASE } from './lib/globals.js';
 
 import fs from 'fs';
 import path from 'path';
 
+import { DEV } from './lib/globals.js';
 import { spawnSync } from 'child_process';
 import {
   existsSync,
@@ -28,14 +28,14 @@ global.SHELL_STRICT = true;
  */
 global.SHELL_LOG = true;
 /**
- * Use verbose logging by default.
+ * Use verbose logging in dev mode.
  */
 global.SHELL_OPTIONS = {
   shell: true,
   stdio: (
-    RELEASE
-      ? [ 'ignore', 'ignore', 'inherit' ]
-      : 'inherit'
+    DEV
+      ? 'inherit'
+      : [ 'ignore', 'ignore', 'inherit' ]
   ),
 };
 
@@ -241,10 +241,12 @@ export const add = async (packageStrings, {
     /**
      * Add to peerDependencies if -P flag set, otherwise add to gnvDependencies.
      */
-    (peer
+    const selectedDeps = (
+      peer
           ? packageJson.peerDependencies
           : packageJson.gnvDependencies
-    )[pkgString] = version;
+    );
+    selectedDeps[pkgString] = version;
 
     /**
      * Write to package.json.
