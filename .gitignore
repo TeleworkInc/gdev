@@ -1,3 +1,7 @@
+# Do not include dev/ and dist/ due to annoying merges
+dev/
+dist/
+
 # Logs
 logs
 *.log
