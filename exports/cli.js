@@ -24,7 +24,7 @@ const PROJECT_NAME = basename(CWD);
  * Install the global release dependencies for this package.
  */
 commander
-    .command('get-peer-deps [pkg]')
+    .command('get-peer-deps [pkgs...]')
     .description(
         'Install the global peer dependencies for a package. Defaults to ' +
         'this program.',
