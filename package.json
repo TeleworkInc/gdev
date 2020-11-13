@@ -1,6 +1,6 @@
 {
   "name": "gnv",
-  "version": "12.1.33",
+  "version": "12.1.34",
   "description": "Javascript development workspaces built around Rollup and Closure Compiler.",
   "type": "module",
   "bin": {
@@ -13,10 +13,10 @@
     "require": "./dist/node.cjs"
   },
   "scripts": {
-    "create-bin": "mkdir -p dist && touch dist/cli.cjs",
-    "cold-start": "npm run gnv-install-dev && gnv-dev build",
     "gnv-install": "npm run create-bin && node .gnv/npm/install.js",
     "gnv-install-dev": "npm run create-bin && node .gnv/npm/installDev.js",
+    "create-bin": "mkdir -p dist && touch dist/cli.cjs",
+    "cold-start": "npm run gnv-install-dev && gnv-dev build",
     "prebuild": "npm run clean",
     "build": "npm run build:dev && npm run build:dist && npm run build:exe && npm run format:clis",
     "build:dev": "rollup -c .gnv/rollup/dev.es.js && rollup -c .gnv/rollup/dev.cjs.js",
